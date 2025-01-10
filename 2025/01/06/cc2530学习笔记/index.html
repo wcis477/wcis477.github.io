@@ -247,30 +247,18 @@ SmartRF Flash Programmer
 <p>在程序编写中，引入头文件<code>#include &lt;iocc2530.h&gt;</code></p>
 <p>与通用I/O端口相关的常用寄存器有下面4个：</p>
 <ol>
-<li>
-<p><img src="/img/P1%E7%AB%AF%E5%8F%A3SEL&amp;DIR&amp;INP.jpg" alt="P1端口" /></p>
-</li>
-<li>
-<p>PxSEL: <strong><u>端口功能选择</u></strong>，设置端口是通用I/O还是外设功能端口。置为0，端口设置为通用I/O模式；置为1，端口设置为外设功能</p>
-</li>
-<li>
-<p>PxDIR: <u><strong>端口方向选择</strong></u>，作为通用I/O时，用来<em><strong>设置数据的传输方向</strong></em>。置为0，输入；置为1，输出</p>
-</li>
-<li>
-<p>PxINP: 作为通用输入端口时，<u><strong>选择输入模式</strong></u>是<u><em>上拉</em></u>、<u><em>下拉</em></u>还是<u><em>三态</em></u>(高电平、低电平、高阻态)。置为0，上拉/下拉；置为1，三态</p>
+<li><img src="/img/P1%E7%AB%AF%E5%8F%A3SEL&amp;DIR&amp;INP.jpg" alt="P1端口" /></li>
+<li>PxSEL: <strong><u>端口功能选择</u></strong>，设置端口是通用I/O还是外设功能端口。置为0，端口设置为通用I/O模式；置为1，端口设置为外设功能</li>
+<li>PxDIR: <u><strong>端口方向选择</strong></u>，作为通用I/O时，用来<em><strong>设置数据的传输方向</strong></em>。置为0，输入；置为1，输出</li>
+<li>PxINP: 作为通用输入端口时，<u><strong>选择输入模式</strong></u>是<u><em>上拉</em></u>、<u><em>下拉</em></u>还是<u><em>三态</em></u>(高电平、低电平、高阻态)。置为0，上拉/下拉；置为1，三态
 <ol>
 <li>P0INP，对上拉/下拉控制，需要结合P2INP实现</li>
 <li><img src="/img/P2INP.jpg" alt="" /></li>
 </ol>
 </li>
-<li>
-<p>Px: 数据端口，用来<strong>控制端口的输入</strong>或<strong>获取端口的输入</strong></p>
-</li>
+<li>Px: 数据端口，用来<strong>控制端口的输入</strong>或<strong>获取端口的输入</strong></li>
 </ol>
-<p>P0SEL&amp;=~0x06;</p>
-<p>P0DIR|=0x06;</p>
-<p>P0INP&amp;=~0x06;</p>
-<p>P2INP&amp;=~0x20;</p>
+<figure class="highlight c"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">P0SEL&amp;=~<span class="number">0x06</span>;</span><br><span class="line">P0DIR|=<span class="number">0x06</span>;</span><br><span class="line">P0INP&amp;=~<span class="number">0x06</span>;</span><br><span class="line">P2INP&amp;=~<span class="number">0x20</span>;</span><br></pre></td></tr></table></figure>
 <h2 id="按键扫描"><a class="markdownIt-Anchor" href="#按键扫描"></a> 按键扫描</h2>
 <dl>
 <dt>基本原理：</dt>

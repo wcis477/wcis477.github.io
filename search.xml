@@ -143,6 +143,48 @@
       </tags>
   </entry>
   <entry>
+    <title>Git本地远程推送</title>
+    <url>/2025/01/05/Git%E6%9C%AC%E5%9C%B0%E8%BF%9C%E7%A8%8B%E6%8E%A8%E9%80%81/</url>
+    <content><![CDATA[<h2 id="github-本地配置"><a class="markdownIt-Anchor" href="#github-本地配置"></a> GitHub 本地配置</h2>
+<h3 id="配置本地-git-全局设置"><a class="markdownIt-Anchor" href="#配置本地-git-全局设置"></a> 配置本地 Git 全局设置</h3>
+<p><code>git config --global user.name &quot;your_github_username&quot;``git config --global user.email &quot;your_github_email@outlook.com&quot;</code></p>
+<h3 id="创建一个-github-本地仓库"><a class="markdownIt-Anchor" href="#创建一个-github-本地仓库"></a> 创建一个 GitHub 本地仓库</h3>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> e:\NoteBook                  <span class="comment"># 新建一个文件夹, 使用cd进入</span></span><br><span class="line">git init                        <span class="comment"># 仓库初始化</span></span><br><span class="line">git add *                       <span class="comment"># 把本地仓库中的内容全添加</span></span><br><span class="line">git commit -m <span class="string">&quot;first commit&quot;</span>    <span class="comment"># 提交内容, &quot;first commit&quot;是描述, 不会写就随便填</span></span><br><span class="line">git branch -M main              <span class="comment"># </span></span><br><span class="line">git remote add origin git@github.com:RestorerOfTheWorld/NoteBook.git</span><br><span class="line">git push -u origin main         <span class="comment"># 把本地仓库推送到GitHub仓库上</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>新建后，以后可以用下面的命令把日常更新的内容推送到 GitHub 仓库中去</p>
+</blockquote>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">git add . </span><br><span class="line">git commit -m <span class="string">&quot;commit&quot;</span></span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
+<h3 id="更新同步本地远程-url"><a class="markdownIt-Anchor" href="#更新同步本地远程-url"></a> 更新同步本地/远程 URL</h3>
+<blockquote>
+<p>如果更新了 GitHub 用户名可以使用下面的命令把本地 Git 的用户名同步成 GitHub 上的</p>
+</blockquote>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">git remote -v</span><br><span class="line">git remote set-url origin new_url</span><br><span class="line">git pull origin main</span><br></pre></td></tr></table></figure>
+<h2 id="git-下载"><a class="markdownIt-Anchor" href="#git-下载"></a> Git 下载</h2>
+<p>Windows 下载：<code>winget install Git.Git</code></p>
+<h2 id="linux-下载"><a class="markdownIt-Anchor" href="#linux-下载"></a> Linux 下载</h2>
+<ul>
+<li>
+<p>Debian/Ubuntu：<code>sudo apt install git</code></p>
+</li>
+<li>
+<p>CentOS/Fedora：<code>sudo yum install git 或 sudo dnf install git</code></p>
+</li>
+<li>
+<p>Arch/Manjaro：<code>sudo pacman -S git</code></p>
+</li>
+<li>
+<p>MacOS 下载：<code>brew install git</code></p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Github部署Hexo添加README文件</title>
     <url>/2025/01/10/Github%E9%83%A8%E7%BD%B2Hexo%E6%B7%BB%E5%8A%A0README%E6%96%87%E4%BB%B6/</url>
     <content><![CDATA[<p>在博客的根目录的<code>source</code>目录添加<code>README.md</code>文件</p>
@@ -168,7 +210,7 @@
 <p><code>hexo init blog</code></p>
 <h2 id="创建文章"><a class="markdownIt-Anchor" href="#创建文章"></a> 创建文章</h2>
 <p><code>hexo new text</code></p>
-<h2 id="xxxxxxxxxx9-1-sudo-vim-usrshareapplicationscodedesktop2-添加内容3-desktop-entry4-namevisual-studio-code5-typeapplication6-execoptcodecode7-iconoptcoderesourcesappresourceslinuxcodepng8-terminalfalse9-commentvisual-studio-codebash"><a class="markdownIt-Anchor" href="#xxxxxxxxxx9-1-sudo-vim-usrshareapplicationscodedesktop2-添加内容3-desktop-entry4-namevisual-studio-code5-typeapplication6-execoptcodecode7-iconoptcoderesourcesappresourceslinuxcodepng8-terminalfalse9-commentvisual-studio-codebash"></a> xxxxxxxxxx9 1    sudo vim /usr/share/applications/code.desktop2    # 添加内容3    [Desktop Entry]4    Name=Visual Studio Code5    Type=Application6    Exec=/opt/code/code7    Icon=/opt/code/resources/app/resources/linux/code.png8    Terminal=false9    Comment=Visual Studio Codebash</h2>
+<h2 id="创建页面"><a class="markdownIt-Anchor" href="#创建页面"></a> 创建页面</h2>
 <p><code>hexo new page test</code></p>
 <h2 id="预览和部署网站"><a class="markdownIt-Anchor" href="#预览和部署网站"></a> 预览和部署网站</h2>
 <h3 id="预览网站"><a class="markdownIt-Anchor" href="#预览网站"></a> 预览网站</h3>
@@ -210,45 +252,44 @@
       </tags>
   </entry>
   <entry>
-    <title>Git本地远程推送</title>
-    <url>/2025/01/05/Git%E6%9C%AC%E5%9C%B0%E8%BF%9C%E7%A8%8B%E6%8E%A8%E9%80%81/</url>
-    <content><![CDATA[<h2 id="github-本地配置"><a class="markdownIt-Anchor" href="#github-本地配置"></a> GitHub 本地配置</h2>
-<h3 id="配置本地-git-全局设置"><a class="markdownIt-Anchor" href="#配置本地-git-全局设置"></a> 配置本地 Git 全局设置</h3>
-<p><code>git config --global user.name &quot;your_github_username&quot;``git config --global user.email &quot;your_github_email@outlook.com&quot;</code></p>
-<h3 id="创建一个-github-本地仓库"><a class="markdownIt-Anchor" href="#创建一个-github-本地仓库"></a> 创建一个 GitHub 本地仓库</h3>
-<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> e:\NoteBook                  <span class="comment"># 新建一个文件夹, 使用cd进入</span></span><br><span class="line">git init                        <span class="comment"># 仓库初始化</span></span><br><span class="line">git add *                       <span class="comment"># 把本地仓库中的内容全添加</span></span><br><span class="line">git commit -m <span class="string">&quot;first commit&quot;</span>    <span class="comment"># 提交内容, &quot;first commit&quot;是描述, 不会写就随便填</span></span><br><span class="line">git branch -M main              <span class="comment"># </span></span><br><span class="line">git remote add origin git@github.com:RestorerOfTheWorld/NoteBook.git</span><br><span class="line">git push -u origin main         <span class="comment"># 把本地仓库推送到GitHub仓库上</span></span><br></pre></td></tr></table></figure>
+    <title>PowerShell7</title>
+    <url>/2025/01/06/Powershell7/</url>
+    <content><![CDATA[<h2 id="pwsh-的安装"><a class="markdownIt-Anchor" href="#pwsh-的安装"></a> Pwsh 的安装</h2>
+<p>Pwsh 的安装：</p>
+<figure class="highlight powershell"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># 显示当前powershell版本号</span></span><br><span class="line"><span class="variable">$PSVersionTable</span>.PSVersion</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示当前最新的可用的版本 正常版和预览版</span></span><br><span class="line">winget search Microsoft.PowerShell</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 Winget 安装 PowerShell</span></span><br><span class="line">winget install <span class="literal">--id</span> Microsoft.Powershell <span class="literal">--source</span> winget</span><br></pre></td></tr></table></figure>
+<h2 id="使用-pwshpowershell7"><a class="markdownIt-Anchor" href="#使用-pwshpowershell7"></a> 使用 Pwsh(PowerShell7)</h2>
+<p>win+R 键，打开运行，输入 pwsh，即可</p>
+<h2 id="pwsh-配置"><a class="markdownIt-Anchor" href="#pwsh-配置"></a> Pwsh 配置</h2>
+<p>添加自动补全 (无需 Tab 键):</p>
+<figure class="highlight powershell"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># 已输入过的命令：</span></span><br><span class="line"><span class="built_in">Set-PSReadLineOption</span> <span class="literal">-PredictionSource</span> <span class="built_in">History</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 没有输入过的命令：</span></span><br><span class="line"><span class="built_in">Set-PSReadLineOption</span> <span class="literal">-ShowToolTips</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在pwsh的属性、快捷方式、目标，用下行代码替代，可永久使用智能提示</span></span><br><span class="line"><span class="string">&quot;C:\Program Files\PowerShell\7\pwsh.exe&quot;</span> <span class="literal">-noe</span> <span class="literal">-c</span> <span class="string">&quot;&amp;&#123;  Set-PSReadLineOption -PredictionSource History -ShowToolTips&#125;&quot;</span> <span class="literal">-WorkingDirectory</span> ~</span><br></pre></td></tr></table></figure>
+<dl>
+<dt>设置快捷键：</dt>
+<dd>点击终端标题栏的下三角键</dd>
+<dd>点击<strong>设置</strong>，找到<strong>操作</strong></dd>
+<dd>找到<strong>新建标签页</strong>，修改快捷键为<em>Ctrl+Alt+T</em>，<strong>保存</strong>即可</dd>
+</dl>
 <blockquote>
-<p>新建后，以后可以用下面的命令把日常更新的内容推送到 GitHub 仓库中去</p>
+<p><code>Get-PSReadlineOption</code>可以查看历史命令的保存路径</p>
 </blockquote>
-<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">git add . </span><br><span class="line">git commit -m <span class="string">&quot;commit&quot;</span></span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
-<h3 id="更新同步本地远程-url"><a class="markdownIt-Anchor" href="#更新同步本地远程-url"></a> 更新同步本地/远程 URL</h3>
-<blockquote>
-<p>如果更新了 GitHub 用户名可以使用下面的命令把本地 Git 的用户名同步成 GitHub 上的</p>
-</blockquote>
-<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">git remote -v</span><br><span class="line">git remote set-url origin new_url</span><br><span class="line">git pull origin main</span><br></pre></td></tr></table></figure>
-<h2 id="git-下载"><a class="markdownIt-Anchor" href="#git-下载"></a> Git 下载</h2>
-<p>Windows 下载：<code>winget install Git.Git</code></p>
-<h2 id="linux-下载"><a class="markdownIt-Anchor" href="#linux-下载"></a> Linux 下载</h2>
-<ul>
-<li>
-<p>Debian/Ubuntu：<code>sudo apt install git</code></p>
-</li>
-<li>
-<p>CentOS/Fedora：<code>sudo yum install git 或 sudo dnf install git</code></p>
-</li>
-<li>
-<p>Arch/Manjaro：<code>sudo pacman -S git</code></p>
-</li>
-<li>
-<p>MacOS 下载：<code>brew install git</code></p>
-</li>
-</ul>
-]]></content>
+<h3 id="安装-使用-oh-my-posh"><a class="markdownIt-Anchor" href="#安装-使用-oh-my-posh"></a> 安装、使用 oh-my-posh</h3>
+<figure class="highlight powershell"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># 安装oh-my-posh</span></span><br><span class="line">winget install <span class="built_in">oh</span><span class="literal">-my-posh</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加ohmyposh到启动文件中</span></span><br><span class="line">notepad <span class="variable">$PROFILE</span> <span class="comment"># 使用记事本打开启动文件</span></span><br><span class="line"><span class="built_in">oh</span><span class="literal">-my-posh</span> init pwsh | <span class="built_in">Invoke-Expression</span> <span class="comment"># 把这行代码添加其中保存</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Get-PoshThemes</span> <span class="comment"># 查看已有的主题</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">oh</span><span class="literal">-my-posh</span> init pwsh <span class="literal">--config</span> <span class="string">&quot;<span class="variable">$env:POSH_THEMES_PATH</span>/neko.omp.json&quot;</span> | <span class="built_in">Invoke-Expression</span> <span class="comment"># 把没加--config参数的替换为这行, 添加一个叫neko的主题</span></span><br></pre></td></tr></table></figure>
+<p>把<code>C:\Users\chpw2\AppData\Local\Programs\oh-my-posh\themes</code>这个路径添加为名叫<code>POSH_THEMES_PATH</code>的新建环境变量</p>
+<h2 id="安装字体"><a class="markdownIt-Anchor" href="#安装字体"></a> 安装字体</h2>
+<p><a href="https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/FiraCode.zip">Firacode 字体文件下载地址</a></p>
+<p>安装好<strong>Firacode</strong>字体后在终端设置里修改字体，保存退出</p>
+<h2 id="安装-scoop"><a class="markdownIt-Anchor" href="#安装-scoop"></a> 安装 Scoop</h2>
+<p>具体查看<a href="https://gitee.com/scoop-installer">Scoop</a></p>
+<figure class="highlight powershell"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># 脚本执行策略更改，默认自动同意</span></span><br><span class="line"><span class="built_in">Set-ExecutionPolicy</span> RemoteSigned <span class="literal">-scope</span> CurrentUser <span class="literal">-Force</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行安装命令（默认安装在用户目录下，如需更改请执行“自定义安装目录”命令）</span></span><br><span class="line"><span class="built_in">iwr</span> <span class="literal">-useb</span> scoop.<span class="number">201704</span>.xyz | <span class="built_in">iex</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## 自定义安装目录（注意将目录修改为合适位置)</span></span><br><span class="line"><span class="built_in">irm</span> scoop.<span class="number">201704</span>.xyz <span class="literal">-outfile</span> <span class="string">&#x27;install.ps1&#x27;</span></span><br><span class="line"></span><br><span class="line">.\install.ps1 <span class="literal">-ScoopDir</span> <span class="string">&#x27;E:\Scoop&#x27;</span> <span class="literal">-ScoopGlobalDir</span> <span class="string">&#x27;E:\GlobalScoopApps&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换分支到develop</span></span><br><span class="line">scoop config scoop_branch develop</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重新拉取git</span></span><br><span class="line">scoop update</span><br><span class="line"></span><br><span class="line"><span class="comment"># 基本语法</span></span><br><span class="line">scoop bucket add &lt;别名&gt; &lt;git地址&gt;</span><br><span class="line">scoop bucket <span class="built_in">rm</span> &lt;别名&gt;</span><br><span class="line"></span><br><span class="line">scoop bucket add dorado https://gitee.com/scoop<span class="literal">-installer</span>/dorado</span><br><span class="line">scoop bucket add scoopet https://gitee.com/scoop<span class="literal">-installer</span>/scoopet</span><br><span class="line">scoop bucket add scoopcn https://gitee.com/scoop<span class="literal">-installer</span>/scoopcn</span><br><span class="line">scoop bucket add scoop<span class="literal">-zapps</span> https://gitee.com/scoop<span class="literal">-installer</span>/scoop<span class="literal">-zapps</span></span><br><span class="line">scoop bucket add <span class="built_in">echo</span> https://gitee.com/scoop<span class="literal">-installer</span>/<span class="built_in">echo</span><span class="literal">-scoop</span></span><br><span class="line">scoop bucket add aki https://gitee.com/scoop<span class="literal">-installer</span>/aki<span class="literal">-apps</span></span><br><span class="line">scoop bucket add siku https://gitee.com/scoop<span class="literal">-installer</span>/siku</span><br><span class="line">scoop bucket add lemon https://gitee.com/scoop<span class="literal">-installer</span>/scoop<span class="literal">-lemon</span></span><br><span class="line">scoop bucket add cluttered https://gitee.com/scoop<span class="literal">-installer</span>/Cluttered<span class="literal">-bucket</span></span><br><span class="line">scoop bucket add iszy https://gitee.com/scoop<span class="literal">-installer</span>/scoop<span class="literal">-iszy</span></span><br><span class="line">scoop bucket add tomato https://gitee.com/scoop<span class="literal">-installer</span>/tomato</span><br><span class="line">scoop bucket add muggle https://gitee.com/scoop<span class="literal">-installer</span>/scoop<span class="literal">-muggle</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看已知bucket</span></span><br><span class="line">scoop bucket known</span><br></pre></td></tr></table></figure>
+<h2 id="安装-neovim"><a class="markdownIt-Anchor" href="#安装-neovim"></a> 安装 NeoVim</h2>
+<figure class="highlight powershell"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># 安装必备软件</span></span><br><span class="line">scoop install neovim neovide git lazygit gcc ripgrep fd unzip tree<span class="literal">-sitter</span> luarocks</span><br><span class="line"></span><br><span class="line"><span class="comment"># 下载安装LazyVim配置</span></span><br><span class="line">git clone git@github.com:LazyVim/starter <span class="variable">$env:LOCALAPPDATA</span>\nvim <span class="literal">--depth</span>=<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 为&#x27;nvim&#x27;设置别名为&#x27;vim&#x27;</span></span><br><span class="line"><span class="built_in">Set-Alias</span> <span class="literal">-Name</span> vim <span class="literal">-Value</span> <span class="string">&#x27;nvim&#x27;</span></span><br></pre></td></tr></table></figure>
+<h3 id="nodejs-安装"><a class="markdownIt-Anchor" href="#nodejs-安装"></a> NodeJS 安装</h3>
+<p><a href="https://nodejs.org/zh-cn/download/package-manager">NodeJS 安装方法</a>:</p>
+<figure class="highlight powershell"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># installs fnm (Fast Node Manager)</span></span><br><span class="line">winget install Schniz.fnm</span><br><span class="line"><span class="comment"># configure fnm environment</span></span><br><span class="line">fnm env <span class="literal">--use-on-cd</span> | <span class="built_in">Out-String</span> | <span class="built_in">Invoke-Expression</span></span><br><span class="line"><span class="comment"># download and install Node.js</span></span><br><span class="line">fnm use <span class="literal">--install-if-missing</span> <span class="number">20</span></span><br><span class="line"><span class="comment"># verifies the right Node.js version is in the environment</span></span><br><span class="line">node <span class="literal">-v</span> <span class="comment"># should print `v20.17.0`</span></span><br><span class="line"><span class="comment"># verifies the right npm version is in the environment</span></span><br><span class="line">npm <span class="literal">-v</span> <span class="comment"># should print `10.8.2`</span></span><br></pre></td></tr></table></figure>]]></content>
       <categories>
         <category>笔记</category>
       </categories>
       <tags>
-        <tag>Git</tag>
+        <tag>Powershell7</tag>
       </tags>
   </entry>
   <entry>
@@ -328,47 +369,6 @@
         <tag>Linux</tag>
         <tag>Windows</tag>
         <tag>WSL2</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>PowerShell7</title>
-    <url>/2025/01/06/Powershell7/</url>
-    <content><![CDATA[<h2 id="pwsh-的安装"><a class="markdownIt-Anchor" href="#pwsh-的安装"></a> Pwsh 的安装</h2>
-<p>Pwsh 的安装：</p>
-<figure class="highlight powershell"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># 显示当前powershell版本号</span></span><br><span class="line"><span class="variable">$PSVersionTable</span>.PSVersion</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示当前最新的可用的版本 正常版和预览版</span></span><br><span class="line">winget search Microsoft.PowerShell</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 Winget 安装 PowerShell</span></span><br><span class="line">winget install <span class="literal">--id</span> Microsoft.Powershell <span class="literal">--source</span> winget</span><br></pre></td></tr></table></figure>
-<h2 id="使用-pwshpowershell7"><a class="markdownIt-Anchor" href="#使用-pwshpowershell7"></a> 使用 Pwsh(PowerShell7)</h2>
-<p>win+R 键，打开运行，输入 pwsh，即可</p>
-<h2 id="pwsh-配置"><a class="markdownIt-Anchor" href="#pwsh-配置"></a> Pwsh 配置</h2>
-<p>添加自动补全 (无需 Tab 键):</p>
-<figure class="highlight powershell"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># 已输入过的命令：</span></span><br><span class="line"><span class="built_in">Set-PSReadLineOption</span> <span class="literal">-PredictionSource</span> <span class="built_in">History</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 没有输入过的命令：</span></span><br><span class="line"><span class="built_in">Set-PSReadLineOption</span> <span class="literal">-ShowToolTips</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在pwsh的属性、快捷方式、目标，用下行代码替代，可永久使用智能提示</span></span><br><span class="line"><span class="string">&quot;C:\Program Files\PowerShell\7\pwsh.exe&quot;</span> <span class="literal">-noe</span> <span class="literal">-c</span> <span class="string">&quot;&amp;&#123;  Set-PSReadLineOption -PredictionSource History -ShowToolTips&#125;&quot;</span> <span class="literal">-WorkingDirectory</span> ~</span><br></pre></td></tr></table></figure>
-<dl>
-<dt>设置快捷键：</dt>
-<dd>点击终端标题栏的下三角键</dd>
-<dd>点击<strong>设置</strong>，找到<strong>操作</strong></dd>
-<dd>找到<strong>新建标签页</strong>，修改快捷键为<em>Ctrl+Alt+T</em>，<strong>保存</strong>即可</dd>
-</dl>
-<blockquote>
-<p><code>Get-PSReadlineOption</code>可以查看历史命令的保存路径</p>
-</blockquote>
-<h3 id="安装-使用-oh-my-posh"><a class="markdownIt-Anchor" href="#安装-使用-oh-my-posh"></a> 安装、使用 oh-my-posh</h3>
-<figure class="highlight powershell"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># 安装oh-my-posh</span></span><br><span class="line">winget install <span class="built_in">oh</span><span class="literal">-my-posh</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加ohmyposh到启动文件中</span></span><br><span class="line">notepad <span class="variable">$PROFILE</span> <span class="comment"># 使用记事本打开启动文件</span></span><br><span class="line"><span class="built_in">oh</span><span class="literal">-my-posh</span> init pwsh | <span class="built_in">Invoke-Expression</span> <span class="comment"># 把这行代码添加其中保存</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Get-PoshThemes</span> <span class="comment"># 查看已有的主题</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">oh</span><span class="literal">-my-posh</span> init pwsh <span class="literal">--config</span> <span class="string">&quot;<span class="variable">$env:POSH_THEMES_PATH</span>/neko.omp.json&quot;</span> | <span class="built_in">Invoke-Expression</span> <span class="comment"># 把没加--config参数的替换为这行, 添加一个叫neko的主题</span></span><br></pre></td></tr></table></figure>
-<p>把<code>C:\Users\chpw2\AppData\Local\Programs\oh-my-posh\themes</code>这个路径添加为名叫<code>POSH_THEMES_PATH</code>的新建环境变量</p>
-<h2 id="安装字体"><a class="markdownIt-Anchor" href="#安装字体"></a> 安装字体</h2>
-<p><a href="https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/FiraCode.zip">Firacode 字体文件下载地址</a></p>
-<p>安装好<strong>Firacode</strong>字体后在终端设置里修改字体，保存退出</p>
-<h2 id="安装-scoop"><a class="markdownIt-Anchor" href="#安装-scoop"></a> 安装 Scoop</h2>
-<p>具体查看<a href="https://gitee.com/scoop-installer">Scoop</a></p>
-<figure class="highlight powershell"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># 脚本执行策略更改，默认自动同意</span></span><br><span class="line"><span class="built_in">Set-ExecutionPolicy</span> RemoteSigned <span class="literal">-scope</span> CurrentUser <span class="literal">-Force</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行安装命令（默认安装在用户目录下，如需更改请执行“自定义安装目录”命令）</span></span><br><span class="line"><span class="built_in">iwr</span> <span class="literal">-useb</span> scoop.<span class="number">201704</span>.xyz | <span class="built_in">iex</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## 自定义安装目录（注意将目录修改为合适位置)</span></span><br><span class="line"><span class="built_in">irm</span> scoop.<span class="number">201704</span>.xyz <span class="literal">-outfile</span> <span class="string">&#x27;install.ps1&#x27;</span></span><br><span class="line"></span><br><span class="line">.\install.ps1 <span class="literal">-ScoopDir</span> <span class="string">&#x27;E:\Scoop&#x27;</span> <span class="literal">-ScoopGlobalDir</span> <span class="string">&#x27;E:\GlobalScoopApps&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换分支到develop</span></span><br><span class="line">scoop config scoop_branch develop</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重新拉取git</span></span><br><span class="line">scoop update</span><br><span class="line"></span><br><span class="line"><span class="comment"># 基本语法</span></span><br><span class="line">scoop bucket add &lt;别名&gt; &lt;git地址&gt;</span><br><span class="line">scoop bucket <span class="built_in">rm</span> &lt;别名&gt;</span><br><span class="line"></span><br><span class="line">scoop bucket add dorado https://gitee.com/scoop<span class="literal">-installer</span>/dorado</span><br><span class="line">scoop bucket add scoopet https://gitee.com/scoop<span class="literal">-installer</span>/scoopet</span><br><span class="line">scoop bucket add scoopcn https://gitee.com/scoop<span class="literal">-installer</span>/scoopcn</span><br><span class="line">scoop bucket add scoop<span class="literal">-zapps</span> https://gitee.com/scoop<span class="literal">-installer</span>/scoop<span class="literal">-zapps</span></span><br><span class="line">scoop bucket add <span class="built_in">echo</span> https://gitee.com/scoop<span class="literal">-installer</span>/<span class="built_in">echo</span><span class="literal">-scoop</span></span><br><span class="line">scoop bucket add aki https://gitee.com/scoop<span class="literal">-installer</span>/aki<span class="literal">-apps</span></span><br><span class="line">scoop bucket add siku https://gitee.com/scoop<span class="literal">-installer</span>/siku</span><br><span class="line">scoop bucket add lemon https://gitee.com/scoop<span class="literal">-installer</span>/scoop<span class="literal">-lemon</span></span><br><span class="line">scoop bucket add cluttered https://gitee.com/scoop<span class="literal">-installer</span>/Cluttered<span class="literal">-bucket</span></span><br><span class="line">scoop bucket add iszy https://gitee.com/scoop<span class="literal">-installer</span>/scoop<span class="literal">-iszy</span></span><br><span class="line">scoop bucket add tomato https://gitee.com/scoop<span class="literal">-installer</span>/tomato</span><br><span class="line">scoop bucket add muggle https://gitee.com/scoop<span class="literal">-installer</span>/scoop<span class="literal">-muggle</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看已知bucket</span></span><br><span class="line">scoop bucket known</span><br></pre></td></tr></table></figure>
-<h2 id="安装-neovim"><a class="markdownIt-Anchor" href="#安装-neovim"></a> 安装 NeoVim</h2>
-<figure class="highlight powershell"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># 安装必备软件</span></span><br><span class="line">scoop install neovim neovide git lazygit gcc ripgrep fd unzip tree<span class="literal">-sitter</span> luarocks</span><br><span class="line"></span><br><span class="line"><span class="comment"># 下载安装LazyVim配置</span></span><br><span class="line">git clone git@github.com:LazyVim/starter <span class="variable">$env:LOCALAPPDATA</span>\nvim <span class="literal">--depth</span>=<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 为&#x27;nvim&#x27;设置别名为&#x27;vim&#x27;</span></span><br><span class="line"><span class="built_in">Set-Alias</span> <span class="literal">-Name</span> vim <span class="literal">-Value</span> <span class="string">&#x27;nvim&#x27;</span></span><br></pre></td></tr></table></figure>
-<h3 id="nodejs-安装"><a class="markdownIt-Anchor" href="#nodejs-安装"></a> NodeJS 安装</h3>
-<p><a href="https://nodejs.org/zh-cn/download/package-manager">NodeJS 安装方法</a>:</p>
-<figure class="highlight powershell"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># installs fnm (Fast Node Manager)</span></span><br><span class="line">winget install Schniz.fnm</span><br><span class="line"><span class="comment"># configure fnm environment</span></span><br><span class="line">fnm env <span class="literal">--use-on-cd</span> | <span class="built_in">Out-String</span> | <span class="built_in">Invoke-Expression</span></span><br><span class="line"><span class="comment"># download and install Node.js</span></span><br><span class="line">fnm use <span class="literal">--install-if-missing</span> <span class="number">20</span></span><br><span class="line"><span class="comment"># verifies the right Node.js version is in the environment</span></span><br><span class="line">node <span class="literal">-v</span> <span class="comment"># should print `v20.17.0`</span></span><br><span class="line"><span class="comment"># verifies the right npm version is in the environment</span></span><br><span class="line">npm <span class="literal">-v</span> <span class="comment"># should print `10.8.2`</span></span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>笔记</category>
-      </categories>
-      <tags>
-        <tag>Powershell7</tag>
       </tags>
   </entry>
   <entry>
@@ -476,30 +476,18 @@
 <p>在程序编写中，引入头文件<code>#include &lt;iocc2530.h&gt;</code></p>
 <p>与通用I/O端口相关的常用寄存器有下面4个：</p>
 <ol>
-<li>
-<p><img src="/img/P1%E7%AB%AF%E5%8F%A3SEL&amp;DIR&amp;INP.jpg" alt="P1端口" /></p>
-</li>
-<li>
-<p>PxSEL: <strong><u>端口功能选择</u></strong>，设置端口是通用I/O还是外设功能端口。置为0，端口设置为通用I/O模式；置为1，端口设置为外设功能</p>
-</li>
-<li>
-<p>PxDIR: <u><strong>端口方向选择</strong></u>，作为通用I/O时，用来<em><strong>设置数据的传输方向</strong></em>。置为0，输入；置为1，输出</p>
-</li>
-<li>
-<p>PxINP: 作为通用输入端口时，<u><strong>选择输入模式</strong></u>是<u><em>上拉</em></u>、<u><em>下拉</em></u>还是<u><em>三态</em></u>(高电平、低电平、高阻态)。置为0，上拉/下拉；置为1，三态</p>
+<li><img src="/img/P1%E7%AB%AF%E5%8F%A3SEL&amp;DIR&amp;INP.jpg" alt="P1端口" /></li>
+<li>PxSEL: <strong><u>端口功能选择</u></strong>，设置端口是通用I/O还是外设功能端口。置为0，端口设置为通用I/O模式；置为1，端口设置为外设功能</li>
+<li>PxDIR: <u><strong>端口方向选择</strong></u>，作为通用I/O时，用来<em><strong>设置数据的传输方向</strong></em>。置为0，输入；置为1，输出</li>
+<li>PxINP: 作为通用输入端口时，<u><strong>选择输入模式</strong></u>是<u><em>上拉</em></u>、<u><em>下拉</em></u>还是<u><em>三态</em></u>(高电平、低电平、高阻态)。置为0，上拉/下拉；置为1，三态
 <ol>
 <li>P0INP，对上拉/下拉控制，需要结合P2INP实现</li>
 <li><img src="/img/P2INP.jpg" alt="" /></li>
 </ol>
 </li>
-<li>
-<p>Px: 数据端口，用来<strong>控制端口的输入</strong>或<strong>获取端口的输入</strong></p>
-</li>
+<li>Px: 数据端口，用来<strong>控制端口的输入</strong>或<strong>获取端口的输入</strong></li>
 </ol>
-<p>P0SEL&amp;=~0x06;</p>
-<p>P0DIR|=0x06;</p>
-<p>P0INP&amp;=~0x06;</p>
-<p>P2INP&amp;=~0x20;</p>
+<figure class="highlight c"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">P0SEL&amp;=~<span class="number">0x06</span>;</span><br><span class="line">P0DIR|=<span class="number">0x06</span>;</span><br><span class="line">P0INP&amp;=~<span class="number">0x06</span>;</span><br><span class="line">P2INP&amp;=~<span class="number">0x20</span>;</span><br></pre></td></tr></table></figure>
 <h2 id="按键扫描"><a class="markdownIt-Anchor" href="#按键扫描"></a> 按键扫描</h2>
 <dl>
 <dt>基本原理：</dt>
@@ -573,38 +561,6 @@
       </tags>
   </entry>
   <entry>
-    <title>SSH使用</title>
-    <url>/2025/01/06/ssh%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<h2 id="ssh-远程登录"><a class="markdownIt-Anchor" href="#ssh-远程登录"></a> SSH 远程登录</h2>
-<h3 id="登录"><a class="markdownIt-Anchor" href="#登录"></a> 登录</h3>
-<p><code>ssh root@172.16.124.24 #用户名@主机名</code></p>
-<h3 id="免密登录"><a class="markdownIt-Anchor" href="#免密登录"></a> 免密登录</h3>
-<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa <span class="comment"># 生成密钥</span></span><br><span class="line">scp C:\Users\Admin\.ssh\id_rsa.pub root@172.16.124.24:/root/.ssh/id_rsa.pub.windows <span class="comment"># 把密钥文件拷贝到linux服务器上的.ssh文件下并改名</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>接下来进入 linux 服务器把密钥文件的内容复制到 anthorized_keys 文件里</p>
-</blockquote>
-<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">ssh root@172.16.124.24 </span><br><span class="line"><span class="built_in">cd</span> ~/.ssh</span><br><span class="line"><span class="built_in">cat</span> id_rsa.pub.windows &gt;&gt; authorized_keys</span><br><span class="line">接下来登录linux服务器就不需要输入密码了</span><br><span class="line"></span><br><span class="line">ssh root@172.16.124.24</span><br></pre></td></tr></table></figure>
-<h2 id="github-ssh-下载-密钥生成"><a class="markdownIt-Anchor" href="#github-ssh-下载-密钥生成"></a> GitHub SSH 下载 密钥生成</h2>
-<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment">#linux没有的话下载openssh</span></span><br><span class="line">ssh-keygen -t ed25519 -C <span class="string">&quot;your_name@email.com&quot;</span></span><br><span class="line"><span class="built_in">cat</span> ~/.ssh/id_ed25519.pub</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>请在 Git bash 或 PowerShell 中操作</p>
-<p>登录 GitHub，点击头像，点击设置，找到 SSH and GPG Keys 选项，点击 SSH Keys 右边的 New SSH Key 按钮，标题给个恰当的密钥名字，把 <code>cat ~/.ssh/id_ed25519.pub</code> 的输出全部复制进 Key 里面，单击 Add SSH Key，接着输入你的 GitHub 登录密码</p>
-<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">ssh -T git@github.com <span class="comment">#在终端中输入</span></span><br></pre></td></tr></table></figure>
-<p>末尾出现下面的代表成功</p>
-<p>Hi your_name! You’ve successfully authenticated, but GitHub does not provide shell access.</p>
-<p>可以使用 SSH 下载方式了</p>
-<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --depth=1 git@github.com:ryanoasis/nerd-fonts.git</span><br></pre></td></tr></table></figure>
-<p><code>--depth=1</code>: 只下载最近一次的提交版本，可以避免把所有的历史提交记录下载下来</p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>笔记</category>
-      </categories>
-      <tags>
-        <tag>ssh</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Markdown语法</title>
     <url>/2025/01/06/markdown%E8%AF%AD%E6%B3%95/</url>
     <content><![CDATA[<blockquote>
@@ -615,7 +571,6 @@
 <blockquote>
 <p>井号越多、标题越小，井号越少、标题越大</p>
 </blockquote>
-<p>xxxxxxxxxx9 1    sudo vim /usr/share/applications/code.desktop2    # 添加内容3    [Desktop Entry]4    Name=Visual Studio Code5    Type=Application6    Exec=/opt/code/code7    Icon=/opt/code/resources/app/resources/linux/code.png8    Terminal=false9    Comment=Visual Studio Codebash</p>
 <h2 id="换行"><a class="markdownIt-Anchor" href="#换行"></a> 换行</h2>
 <p>用法：在换行处添加<code>&lt;br&gt;</code>即可</p>
 <h2 id="强调"><a class="markdownIt-Anchor" href="#强调"></a> 强调</h2>
@@ -665,7 +620,7 @@
 <p>语法：<code>![图片alt](图片链接 &quot;图片title&quot;)</code></p>
 <p>用法：要添加图像，请使用感叹号 (!), 然后在方括号增加替代文本，图片链接放在圆括号里，括号里的链接后可以增加一个可选的图片标题文本。</p>
 <p>实例：</p>
-<p><img src="https://raw.githubusercontent.com/wcis314/MyPicture/refs/heads/img/p4.png" alt="" title="动漫图片" /></p>
+<p><img src="https://raw.githubusercontent.com/wcis314/note_img/refs/heads/img/p4.jpg" alt="" title="动漫图片" /></p>
 <h2 id="转义字符"><a class="markdownIt-Anchor" href="#转义字符"></a> 转义字符</h2>
 <p>用法：要显示原本用于格式化 Markdown 文档的字符，请在字符前面添加反斜杠字符 \ 。</p>
 <h2 id="表格"><a class="markdownIt-Anchor" href="#表格"></a> 表格</h2>
@@ -679,7 +634,6 @@
 <p>语法：</p>
 <figure class="highlight markdown"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">[^1]文本</span><br><span class="line">[<span class="symbol">^1</span>]: <span class="link">脚注释义</span></span><br></pre></td></tr></table></figure>
 <p>实例：</p>
-<p><sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>文本</p>
 <p>用法：要创建脚注参考，请在方括号（[^1]）内添加插入符号和标识符。标识符可以是数字或单词，但不能包含空格或制表符。标识符仅将脚注参考与脚注本身相关联 - 在输出中，脚注按顺序编号。</p>
 <h2 id="删除线"><a class="markdownIt-Anchor" href="#删除线"></a> 删除线</h2>
 <p>语法： <code>~~文本~~</code></p>
@@ -717,13 +671,6 @@
 <dd>This is one definition of the second term.</dd>
 <dd>This is another definition of the second term.</dd>
 </dl>
-<hr class="footnotes-sep" />
-<section class="footnotes">
-<ol class="footnotes-list">
-<li id="fn1" class="footnote-item"><p>脚注释义 <a href="#fnref1" class="footnote-backref">↩︎</a></p>
-</li>
-</ol>
-</section>
 ]]></content>
       <categories>
         <category>笔记</category>
@@ -790,6 +737,38 @@
       </categories>
       <tags>
         <tag>NuShell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SSH使用</title>
+    <url>/2025/01/06/ssh%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<h2 id="ssh-远程登录"><a class="markdownIt-Anchor" href="#ssh-远程登录"></a> SSH 远程登录</h2>
+<h3 id="登录"><a class="markdownIt-Anchor" href="#登录"></a> 登录</h3>
+<p><code>ssh root@172.16.124.24 #用户名@主机名</code></p>
+<h3 id="免密登录"><a class="markdownIt-Anchor" href="#免密登录"></a> 免密登录</h3>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa <span class="comment"># 生成密钥</span></span><br><span class="line">scp C:\Users\Admin\.ssh\id_rsa.pub root@172.16.124.24:/root/.ssh/id_rsa.pub.windows <span class="comment"># 把密钥文件拷贝到linux服务器上的.ssh文件下并改名</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>接下来进入 linux 服务器把密钥文件的内容复制到 anthorized_keys 文件里</p>
+</blockquote>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">ssh root@172.16.124.24 </span><br><span class="line"><span class="built_in">cd</span> ~/.ssh</span><br><span class="line"><span class="built_in">cat</span> id_rsa.pub.windows &gt;&gt; authorized_keys</span><br><span class="line">接下来登录linux服务器就不需要输入密码了</span><br><span class="line"></span><br><span class="line">ssh root@172.16.124.24</span><br></pre></td></tr></table></figure>
+<h2 id="github-ssh-下载-密钥生成"><a class="markdownIt-Anchor" href="#github-ssh-下载-密钥生成"></a> GitHub SSH 下载 密钥生成</h2>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment">#linux没有的话下载openssh</span></span><br><span class="line">ssh-keygen -t ed25519 -C <span class="string">&quot;your_name@email.com&quot;</span></span><br><span class="line"><span class="built_in">cat</span> ~/.ssh/id_ed25519.pub</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>请在 Git bash 或 PowerShell 中操作</p>
+<p>登录 GitHub，点击头像，点击设置，找到 SSH and GPG Keys 选项，点击 SSH Keys 右边的 New SSH Key 按钮，标题给个恰当的密钥名字，把 <code>cat ~/.ssh/id_ed25519.pub</code> 的输出全部复制进 Key 里面，单击 Add SSH Key，接着输入你的 GitHub 登录密码</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">ssh -T git@github.com <span class="comment">#在终端中输入</span></span><br></pre></td></tr></table></figure>
+<p>末尾出现下面的代表成功</p>
+<p>Hi your_name! You’ve successfully authenticated, but GitHub does not provide shell access.</p>
+<p>可以使用 SSH 下载方式了</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --depth=1 git@github.com:ryanoasis/nerd-fonts.git</span><br></pre></td></tr></table></figure>
+<p><code>--depth=1</code>: 只下载最近一次的提交版本，可以避免把所有的历史提交记录下载下来</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>ssh</tag>
       </tags>
   </entry>
   <entry>
