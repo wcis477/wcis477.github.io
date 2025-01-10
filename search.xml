@@ -118,6 +118,31 @@
       </tags>
   </entry>
   <entry>
+    <title>Docker安装Windows</title>
+    <url>/2025/01/05/Docker%E5%AE%89%E8%A3%85Windows/</url>
+    <content><![CDATA[<p>系统为Arch Linux，桌面为Hyprland</p>
+<h2 id="检查是否支持kvm"><a class="markdownIt-Anchor" href="#检查是否支持kvm"></a> 检查是否支持KVM</h2>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">egrep <span class="string">&quot;(svm|vmx)&quot;</span> /proc/cpuinfo</span><br></pre></td></tr></table></figure>
+<h2 id="安装docker-docker-compose"><a class="markdownIt-Anchor" href="#安装docker-docker-compose"></a> 安装Docker、Docker-compose</h2>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> pacman -S docker <span class="comment"># 安装docker</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> docker.service &amp;&amp; \</span><br><span class="line"><span class="built_in">sudo</span> systemctl start docker.service <span class="comment"># 开机自启和启动docker</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> usermod -aG docker <span class="variable">$USER</span> <span class="comment"># 创建docker用户</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> pacman -S docker-compose <span class="comment"># 安装docker-compose</span></span><br><span class="line"><span class="built_in">sudo</span> pacman -S bash-comletion</span><br></pre></td></tr></table></figure>
+<h2 id="docker操作"><a class="markdownIt-Anchor" href="#docker操作"></a> Docker操作</h2>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">docker ps -a</span><br><span class="line">docker images</span><br><span class="line">docker-compose up <span class="comment"># 启动docker</span></span><br><span class="line"><span class="comment">#创建docker-compose.yml文件</span></span><br><span class="line">vim ~/docker-compose.yml</span><br></pre></td></tr></table></figure>
+<h2 id="安装windows"><a class="markdownIt-Anchor" href="#安装windows"></a> 安装Windows</h2>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/dockur/windows.git</span><br><span class="line"><span class="built_in">cd</span> windows</span><br><span class="line">docker build -t dockurr/windows . <span class="comment"># 安装windows docker</span></span><br><span class="line">docker pull ghcr.io/qemus/qemu-docker:6.11 <span class="comment"># 挂梯子pull</span></span><br><span class="line">paru -S wsdd virtio-win tini nginx</span><br></pre></td></tr></table></figure>
+<p>下载Windows ISO镜像文件创建docker-compose文件，添加以下内容</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">version: <span class="string">&quot;3&quot;</span></span><br><span class="line">services:</span><br><span class="line">  windows:</span><br><span class="line">    image: dockurr/windows</span><br><span class="line">    container_name: windows</span><br><span class="line">    devices:</span><br><span class="line">      - /dev/kvm</span><br><span class="line">    cap_add:</span><br><span class="line">      - NET_ADMIN</span><br><span class="line">    ports:</span><br><span class="line">      - 8006:8006</span><br><span class="line">      - 3389:3389/tcp</span><br><span class="line">      - 3389:3389/udp</span><br><span class="line">    stop_grace_period: 2m</span><br><span class="line">    restart: on-failure</span><br><span class="line">    environment:</span><br><span class="line">      VERSION: <span class="string">&quot;http://winiso/Win10_22H2_Chinese_Simplified_x64v1.iso&quot;</span></span><br><span class="line">      MANUAL: <span class="string">&quot;N&quot;</span></span><br><span class="line">    volumes:</span><br><span class="line">      - ./win:/storage</span><br><span class="line">    depends_on:</span><br><span class="line">      - winiso</span><br><span class="line"></span><br><span class="line">  winiso:</span><br><span class="line">    image: nginx:alpine</span><br><span class="line">    container_name: winiso</span><br><span class="line">    restart: on-failure</span><br><span class="line">    volumes:</span><br><span class="line">      - /home/kingofthunder/ISO:/usr/share/nginx/html</span><br></pre></td></tr></table></figure>
+<p>使用<code>docker compose up</code>启动Windows镜像</p>
+<p>在浏览器输入<code>docker ip:8006</code>即可使用</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
+        <tag>Windows</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Github部署Hexo添加README文件</title>
     <url>/2025/01/10/Github%E9%83%A8%E7%BD%B2Hexo%E6%B7%BB%E5%8A%A0README%E6%96%87%E4%BB%B6/</url>
     <content><![CDATA[<p>在博客的根目录的<code>source</code>目录添加<code>README.md</code>文件</p>
@@ -159,31 +184,6 @@
       </categories>
       <tags>
         <tag>Hexo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Docker安装Windows</title>
-    <url>/2025/01/05/Docker%E5%AE%89%E8%A3%85Windows/</url>
-    <content><![CDATA[<p>系统为Arch Linux，桌面为Hyprland</p>
-<h2 id="检查是否支持kvm"><a class="markdownIt-Anchor" href="#检查是否支持kvm"></a> 检查是否支持KVM</h2>
-<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">egrep <span class="string">&quot;(svm|vmx)&quot;</span> /proc/cpuinfo</span><br></pre></td></tr></table></figure>
-<h2 id="安装docker-docker-compose"><a class="markdownIt-Anchor" href="#安装docker-docker-compose"></a> 安装Docker、Docker-compose</h2>
-<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> pacman -S docker <span class="comment"># 安装docker</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> docker.service &amp;&amp; \</span><br><span class="line"><span class="built_in">sudo</span> systemctl start docker.service <span class="comment"># 开机自启和启动docker</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> usermod -aG docker <span class="variable">$USER</span> <span class="comment"># 创建docker用户</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> pacman -S docker-compose <span class="comment"># 安装docker-compose</span></span><br><span class="line"><span class="built_in">sudo</span> pacman -S bash-comletion</span><br></pre></td></tr></table></figure>
-<h2 id="docker操作"><a class="markdownIt-Anchor" href="#docker操作"></a> Docker操作</h2>
-<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">docker ps -a</span><br><span class="line">docker images</span><br><span class="line">docker-compose up <span class="comment"># 启动docker</span></span><br><span class="line"><span class="comment">#创建docker-compose.yml文件</span></span><br><span class="line">vim ~/docker-compose.yml</span><br></pre></td></tr></table></figure>
-<h2 id="安装windows"><a class="markdownIt-Anchor" href="#安装windows"></a> 安装Windows</h2>
-<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/dockur/windows.git</span><br><span class="line"><span class="built_in">cd</span> windows</span><br><span class="line">docker build -t dockurr/windows . <span class="comment"># 安装windows docker</span></span><br><span class="line">docker pull ghcr.io/qemus/qemu-docker:6.11 <span class="comment"># 挂梯子pull</span></span><br><span class="line">paru -S wsdd virtio-win tini nginx</span><br></pre></td></tr></table></figure>
-<p>下载Windows ISO镜像文件创建docker-compose文件，添加以下内容</p>
-<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">version: <span class="string">&quot;3&quot;</span></span><br><span class="line">services:</span><br><span class="line">  windows:</span><br><span class="line">    image: dockurr/windows</span><br><span class="line">    container_name: windows</span><br><span class="line">    devices:</span><br><span class="line">      - /dev/kvm</span><br><span class="line">    cap_add:</span><br><span class="line">      - NET_ADMIN</span><br><span class="line">    ports:</span><br><span class="line">      - 8006:8006</span><br><span class="line">      - 3389:3389/tcp</span><br><span class="line">      - 3389:3389/udp</span><br><span class="line">    stop_grace_period: 2m</span><br><span class="line">    restart: on-failure</span><br><span class="line">    environment:</span><br><span class="line">      VERSION: <span class="string">&quot;http://winiso/Win10_22H2_Chinese_Simplified_x64v1.iso&quot;</span></span><br><span class="line">      MANUAL: <span class="string">&quot;N&quot;</span></span><br><span class="line">    volumes:</span><br><span class="line">      - ./win:/storage</span><br><span class="line">    depends_on:</span><br><span class="line">      - winiso</span><br><span class="line"></span><br><span class="line">  winiso:</span><br><span class="line">    image: nginx:alpine</span><br><span class="line">    container_name: winiso</span><br><span class="line">    restart: on-failure</span><br><span class="line">    volumes:</span><br><span class="line">      - /home/kingofthunder/ISO:/usr/share/nginx/html</span><br></pre></td></tr></table></figure>
-<p>使用<code>docker compose up</code>启动Windows镜像</p>
-<p>在浏览器输入<code>docker ip:8006</code>即可使用</p>
-]]></content>
-      <categories>
-        <category>笔记</category>
-      </categories>
-      <tags>
-        <tag>Docker</tag>
-        <tag>Windows</tag>
       </tags>
   </entry>
   <entry>
@@ -249,47 +249,6 @@
       </categories>
       <tags>
         <tag>Git</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>PowerShell7</title>
-    <url>/2025/01/06/Powershell7/</url>
-    <content><![CDATA[<h2 id="pwsh-的安装"><a class="markdownIt-Anchor" href="#pwsh-的安装"></a> Pwsh 的安装</h2>
-<p>Pwsh 的安装：</p>
-<figure class="highlight powershell"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># 显示当前powershell版本号</span></span><br><span class="line"><span class="variable">$PSVersionTable</span>.PSVersion</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示当前最新的可用的版本 正常版和预览版</span></span><br><span class="line">winget search Microsoft.PowerShell</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 Winget 安装 PowerShell</span></span><br><span class="line">winget install <span class="literal">--id</span> Microsoft.Powershell <span class="literal">--source</span> winget</span><br></pre></td></tr></table></figure>
-<h2 id="使用-pwshpowershell7"><a class="markdownIt-Anchor" href="#使用-pwshpowershell7"></a> 使用 Pwsh(PowerShell7)</h2>
-<p>win+R 键，打开运行，输入 pwsh，即可</p>
-<h2 id="pwsh-配置"><a class="markdownIt-Anchor" href="#pwsh-配置"></a> Pwsh 配置</h2>
-<p>添加自动补全 (无需 Tab 键):</p>
-<figure class="highlight powershell"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># 已输入过的命令：</span></span><br><span class="line"><span class="built_in">Set-PSReadLineOption</span> <span class="literal">-PredictionSource</span> <span class="built_in">History</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 没有输入过的命令：</span></span><br><span class="line"><span class="built_in">Set-PSReadLineOption</span> <span class="literal">-ShowToolTips</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在pwsh的属性、快捷方式、目标，用下行代码替代，可永久使用智能提示</span></span><br><span class="line"><span class="string">&quot;C:\Program Files\PowerShell\7\pwsh.exe&quot;</span> <span class="literal">-noe</span> <span class="literal">-c</span> <span class="string">&quot;&amp;&#123;  Set-PSReadLineOption -PredictionSource History -ShowToolTips&#125;&quot;</span> <span class="literal">-WorkingDirectory</span> ~</span><br></pre></td></tr></table></figure>
-<dl>
-<dt>设置快捷键：</dt>
-<dd>点击终端标题栏的下三角键</dd>
-<dd>点击<strong>设置</strong>，找到<strong>操作</strong></dd>
-<dd>找到<strong>新建标签页</strong>，修改快捷键为<em>Ctrl+Alt+T</em>，<strong>保存</strong>即可</dd>
-</dl>
-<blockquote>
-<p><code>Get-PSReadlineOption</code>可以查看历史命令的保存路径</p>
-</blockquote>
-<h3 id="安装-使用-oh-my-posh"><a class="markdownIt-Anchor" href="#安装-使用-oh-my-posh"></a> 安装、使用 oh-my-posh</h3>
-<figure class="highlight powershell"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># 安装oh-my-posh</span></span><br><span class="line">winget install <span class="built_in">oh</span><span class="literal">-my-posh</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加ohmyposh到启动文件中</span></span><br><span class="line">notepad <span class="variable">$PROFILE</span> <span class="comment"># 使用记事本打开启动文件</span></span><br><span class="line"><span class="built_in">oh</span><span class="literal">-my-posh</span> init pwsh | <span class="built_in">Invoke-Expression</span> <span class="comment"># 把这行代码添加其中保存</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Get-PoshThemes</span> <span class="comment"># 查看已有的主题</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">oh</span><span class="literal">-my-posh</span> init pwsh <span class="literal">--config</span> <span class="string">&quot;<span class="variable">$env:POSH_THEMES_PATH</span>/neko.omp.json&quot;</span> | <span class="built_in">Invoke-Expression</span> <span class="comment"># 把没加--config参数的替换为这行, 添加一个叫neko的主题</span></span><br></pre></td></tr></table></figure>
-<p>把<code>C:\Users\chpw2\AppData\Local\Programs\oh-my-posh\themes</code>这个路径添加为名叫<code>POSH_THEMES_PATH</code>的新建环境变量</p>
-<h2 id="安装字体"><a class="markdownIt-Anchor" href="#安装字体"></a> 安装字体</h2>
-<p><a href="https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/FiraCode.zip">Firacode 字体文件下载地址</a></p>
-<p>安装好<strong>Firacode</strong>字体后在终端设置里修改字体，保存退出</p>
-<h2 id="安装-scoop"><a class="markdownIt-Anchor" href="#安装-scoop"></a> 安装 Scoop</h2>
-<p>具体查看<a href="https://gitee.com/scoop-installer">Scoop</a></p>
-<figure class="highlight powershell"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># 脚本执行策略更改，默认自动同意</span></span><br><span class="line"><span class="built_in">Set-ExecutionPolicy</span> RemoteSigned <span class="literal">-scope</span> CurrentUser <span class="literal">-Force</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行安装命令（默认安装在用户目录下，如需更改请执行“自定义安装目录”命令）</span></span><br><span class="line"><span class="built_in">iwr</span> <span class="literal">-useb</span> scoop.<span class="number">201704</span>.xyz | <span class="built_in">iex</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## 自定义安装目录（注意将目录修改为合适位置)</span></span><br><span class="line"><span class="built_in">irm</span> scoop.<span class="number">201704</span>.xyz <span class="literal">-outfile</span> <span class="string">&#x27;install.ps1&#x27;</span></span><br><span class="line"></span><br><span class="line">.\install.ps1 <span class="literal">-ScoopDir</span> <span class="string">&#x27;E:\Scoop&#x27;</span> <span class="literal">-ScoopGlobalDir</span> <span class="string">&#x27;E:\GlobalScoopApps&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换分支到develop</span></span><br><span class="line">scoop config scoop_branch develop</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重新拉取git</span></span><br><span class="line">scoop update</span><br><span class="line"></span><br><span class="line"><span class="comment"># 基本语法</span></span><br><span class="line">scoop bucket add &lt;别名&gt; &lt;git地址&gt;</span><br><span class="line">scoop bucket <span class="built_in">rm</span> &lt;别名&gt;</span><br><span class="line"></span><br><span class="line">scoop bucket add dorado https://gitee.com/scoop<span class="literal">-installer</span>/dorado</span><br><span class="line">scoop bucket add scoopet https://gitee.com/scoop<span class="literal">-installer</span>/scoopet</span><br><span class="line">scoop bucket add scoopcn https://gitee.com/scoop<span class="literal">-installer</span>/scoopcn</span><br><span class="line">scoop bucket add scoop<span class="literal">-zapps</span> https://gitee.com/scoop<span class="literal">-installer</span>/scoop<span class="literal">-zapps</span></span><br><span class="line">scoop bucket add <span class="built_in">echo</span> https://gitee.com/scoop<span class="literal">-installer</span>/<span class="built_in">echo</span><span class="literal">-scoop</span></span><br><span class="line">scoop bucket add aki https://gitee.com/scoop<span class="literal">-installer</span>/aki<span class="literal">-apps</span></span><br><span class="line">scoop bucket add siku https://gitee.com/scoop<span class="literal">-installer</span>/siku</span><br><span class="line">scoop bucket add lemon https://gitee.com/scoop<span class="literal">-installer</span>/scoop<span class="literal">-lemon</span></span><br><span class="line">scoop bucket add cluttered https://gitee.com/scoop<span class="literal">-installer</span>/Cluttered<span class="literal">-bucket</span></span><br><span class="line">scoop bucket add iszy https://gitee.com/scoop<span class="literal">-installer</span>/scoop<span class="literal">-iszy</span></span><br><span class="line">scoop bucket add tomato https://gitee.com/scoop<span class="literal">-installer</span>/tomato</span><br><span class="line">scoop bucket add muggle https://gitee.com/scoop<span class="literal">-installer</span>/scoop<span class="literal">-muggle</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看已知bucket</span></span><br><span class="line">scoop bucket known</span><br></pre></td></tr></table></figure>
-<h2 id="安装-neovim"><a class="markdownIt-Anchor" href="#安装-neovim"></a> 安装 NeoVim</h2>
-<figure class="highlight powershell"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># 安装必备软件</span></span><br><span class="line">scoop install neovim neovide git lazygit gcc ripgrep fd unzip tree<span class="literal">-sitter</span> luarocks</span><br><span class="line"></span><br><span class="line"><span class="comment"># 下载安装LazyVim配置</span></span><br><span class="line">git clone git@github.com:LazyVim/starter <span class="variable">$env:LOCALAPPDATA</span>\nvim <span class="literal">--depth</span>=<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 为&#x27;nvim&#x27;设置别名为&#x27;vim&#x27;</span></span><br><span class="line"><span class="built_in">Set-Alias</span> <span class="literal">-Name</span> vim <span class="literal">-Value</span> <span class="string">&#x27;nvim&#x27;</span></span><br></pre></td></tr></table></figure>
-<h3 id="nodejs-安装"><a class="markdownIt-Anchor" href="#nodejs-安装"></a> NodeJS 安装</h3>
-<p><a href="https://nodejs.org/zh-cn/download/package-manager">NodeJS 安装方法</a>:</p>
-<figure class="highlight powershell"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># installs fnm (Fast Node Manager)</span></span><br><span class="line">winget install Schniz.fnm</span><br><span class="line"><span class="comment"># configure fnm environment</span></span><br><span class="line">fnm env <span class="literal">--use-on-cd</span> | <span class="built_in">Out-String</span> | <span class="built_in">Invoke-Expression</span></span><br><span class="line"><span class="comment"># download and install Node.js</span></span><br><span class="line">fnm use <span class="literal">--install-if-missing</span> <span class="number">20</span></span><br><span class="line"><span class="comment"># verifies the right Node.js version is in the environment</span></span><br><span class="line">node <span class="literal">-v</span> <span class="comment"># should print `v20.17.0`</span></span><br><span class="line"><span class="comment"># verifies the right npm version is in the environment</span></span><br><span class="line">npm <span class="literal">-v</span> <span class="comment"># should print `10.8.2`</span></span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>笔记</category>
-      </categories>
-      <tags>
-        <tag>Powershell7</tag>
       </tags>
   </entry>
   <entry>
@@ -369,6 +328,47 @@
         <tag>Linux</tag>
         <tag>Windows</tag>
         <tag>WSL2</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PowerShell7</title>
+    <url>/2025/01/06/Powershell7/</url>
+    <content><![CDATA[<h2 id="pwsh-的安装"><a class="markdownIt-Anchor" href="#pwsh-的安装"></a> Pwsh 的安装</h2>
+<p>Pwsh 的安装：</p>
+<figure class="highlight powershell"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># 显示当前powershell版本号</span></span><br><span class="line"><span class="variable">$PSVersionTable</span>.PSVersion</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示当前最新的可用的版本 正常版和预览版</span></span><br><span class="line">winget search Microsoft.PowerShell</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 Winget 安装 PowerShell</span></span><br><span class="line">winget install <span class="literal">--id</span> Microsoft.Powershell <span class="literal">--source</span> winget</span><br></pre></td></tr></table></figure>
+<h2 id="使用-pwshpowershell7"><a class="markdownIt-Anchor" href="#使用-pwshpowershell7"></a> 使用 Pwsh(PowerShell7)</h2>
+<p>win+R 键，打开运行，输入 pwsh，即可</p>
+<h2 id="pwsh-配置"><a class="markdownIt-Anchor" href="#pwsh-配置"></a> Pwsh 配置</h2>
+<p>添加自动补全 (无需 Tab 键):</p>
+<figure class="highlight powershell"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># 已输入过的命令：</span></span><br><span class="line"><span class="built_in">Set-PSReadLineOption</span> <span class="literal">-PredictionSource</span> <span class="built_in">History</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 没有输入过的命令：</span></span><br><span class="line"><span class="built_in">Set-PSReadLineOption</span> <span class="literal">-ShowToolTips</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在pwsh的属性、快捷方式、目标，用下行代码替代，可永久使用智能提示</span></span><br><span class="line"><span class="string">&quot;C:\Program Files\PowerShell\7\pwsh.exe&quot;</span> <span class="literal">-noe</span> <span class="literal">-c</span> <span class="string">&quot;&amp;&#123;  Set-PSReadLineOption -PredictionSource History -ShowToolTips&#125;&quot;</span> <span class="literal">-WorkingDirectory</span> ~</span><br></pre></td></tr></table></figure>
+<dl>
+<dt>设置快捷键：</dt>
+<dd>点击终端标题栏的下三角键</dd>
+<dd>点击<strong>设置</strong>，找到<strong>操作</strong></dd>
+<dd>找到<strong>新建标签页</strong>，修改快捷键为<em>Ctrl+Alt+T</em>，<strong>保存</strong>即可</dd>
+</dl>
+<blockquote>
+<p><code>Get-PSReadlineOption</code>可以查看历史命令的保存路径</p>
+</blockquote>
+<h3 id="安装-使用-oh-my-posh"><a class="markdownIt-Anchor" href="#安装-使用-oh-my-posh"></a> 安装、使用 oh-my-posh</h3>
+<figure class="highlight powershell"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># 安装oh-my-posh</span></span><br><span class="line">winget install <span class="built_in">oh</span><span class="literal">-my-posh</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加ohmyposh到启动文件中</span></span><br><span class="line">notepad <span class="variable">$PROFILE</span> <span class="comment"># 使用记事本打开启动文件</span></span><br><span class="line"><span class="built_in">oh</span><span class="literal">-my-posh</span> init pwsh | <span class="built_in">Invoke-Expression</span> <span class="comment"># 把这行代码添加其中保存</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Get-PoshThemes</span> <span class="comment"># 查看已有的主题</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">oh</span><span class="literal">-my-posh</span> init pwsh <span class="literal">--config</span> <span class="string">&quot;<span class="variable">$env:POSH_THEMES_PATH</span>/neko.omp.json&quot;</span> | <span class="built_in">Invoke-Expression</span> <span class="comment"># 把没加--config参数的替换为这行, 添加一个叫neko的主题</span></span><br></pre></td></tr></table></figure>
+<p>把<code>C:\Users\chpw2\AppData\Local\Programs\oh-my-posh\themes</code>这个路径添加为名叫<code>POSH_THEMES_PATH</code>的新建环境变量</p>
+<h2 id="安装字体"><a class="markdownIt-Anchor" href="#安装字体"></a> 安装字体</h2>
+<p><a href="https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/FiraCode.zip">Firacode 字体文件下载地址</a></p>
+<p>安装好<strong>Firacode</strong>字体后在终端设置里修改字体，保存退出</p>
+<h2 id="安装-scoop"><a class="markdownIt-Anchor" href="#安装-scoop"></a> 安装 Scoop</h2>
+<p>具体查看<a href="https://gitee.com/scoop-installer">Scoop</a></p>
+<figure class="highlight powershell"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># 脚本执行策略更改，默认自动同意</span></span><br><span class="line"><span class="built_in">Set-ExecutionPolicy</span> RemoteSigned <span class="literal">-scope</span> CurrentUser <span class="literal">-Force</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行安装命令（默认安装在用户目录下，如需更改请执行“自定义安装目录”命令）</span></span><br><span class="line"><span class="built_in">iwr</span> <span class="literal">-useb</span> scoop.<span class="number">201704</span>.xyz | <span class="built_in">iex</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## 自定义安装目录（注意将目录修改为合适位置)</span></span><br><span class="line"><span class="built_in">irm</span> scoop.<span class="number">201704</span>.xyz <span class="literal">-outfile</span> <span class="string">&#x27;install.ps1&#x27;</span></span><br><span class="line"></span><br><span class="line">.\install.ps1 <span class="literal">-ScoopDir</span> <span class="string">&#x27;E:\Scoop&#x27;</span> <span class="literal">-ScoopGlobalDir</span> <span class="string">&#x27;E:\GlobalScoopApps&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换分支到develop</span></span><br><span class="line">scoop config scoop_branch develop</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重新拉取git</span></span><br><span class="line">scoop update</span><br><span class="line"></span><br><span class="line"><span class="comment"># 基本语法</span></span><br><span class="line">scoop bucket add &lt;别名&gt; &lt;git地址&gt;</span><br><span class="line">scoop bucket <span class="built_in">rm</span> &lt;别名&gt;</span><br><span class="line"></span><br><span class="line">scoop bucket add dorado https://gitee.com/scoop<span class="literal">-installer</span>/dorado</span><br><span class="line">scoop bucket add scoopet https://gitee.com/scoop<span class="literal">-installer</span>/scoopet</span><br><span class="line">scoop bucket add scoopcn https://gitee.com/scoop<span class="literal">-installer</span>/scoopcn</span><br><span class="line">scoop bucket add scoop<span class="literal">-zapps</span> https://gitee.com/scoop<span class="literal">-installer</span>/scoop<span class="literal">-zapps</span></span><br><span class="line">scoop bucket add <span class="built_in">echo</span> https://gitee.com/scoop<span class="literal">-installer</span>/<span class="built_in">echo</span><span class="literal">-scoop</span></span><br><span class="line">scoop bucket add aki https://gitee.com/scoop<span class="literal">-installer</span>/aki<span class="literal">-apps</span></span><br><span class="line">scoop bucket add siku https://gitee.com/scoop<span class="literal">-installer</span>/siku</span><br><span class="line">scoop bucket add lemon https://gitee.com/scoop<span class="literal">-installer</span>/scoop<span class="literal">-lemon</span></span><br><span class="line">scoop bucket add cluttered https://gitee.com/scoop<span class="literal">-installer</span>/Cluttered<span class="literal">-bucket</span></span><br><span class="line">scoop bucket add iszy https://gitee.com/scoop<span class="literal">-installer</span>/scoop<span class="literal">-iszy</span></span><br><span class="line">scoop bucket add tomato https://gitee.com/scoop<span class="literal">-installer</span>/tomato</span><br><span class="line">scoop bucket add muggle https://gitee.com/scoop<span class="literal">-installer</span>/scoop<span class="literal">-muggle</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看已知bucket</span></span><br><span class="line">scoop bucket known</span><br></pre></td></tr></table></figure>
+<h2 id="安装-neovim"><a class="markdownIt-Anchor" href="#安装-neovim"></a> 安装 NeoVim</h2>
+<figure class="highlight powershell"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># 安装必备软件</span></span><br><span class="line">scoop install neovim neovide git lazygit gcc ripgrep fd unzip tree<span class="literal">-sitter</span> luarocks</span><br><span class="line"></span><br><span class="line"><span class="comment"># 下载安装LazyVim配置</span></span><br><span class="line">git clone git@github.com:LazyVim/starter <span class="variable">$env:LOCALAPPDATA</span>\nvim <span class="literal">--depth</span>=<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 为&#x27;nvim&#x27;设置别名为&#x27;vim&#x27;</span></span><br><span class="line"><span class="built_in">Set-Alias</span> <span class="literal">-Name</span> vim <span class="literal">-Value</span> <span class="string">&#x27;nvim&#x27;</span></span><br></pre></td></tr></table></figure>
+<h3 id="nodejs-安装"><a class="markdownIt-Anchor" href="#nodejs-安装"></a> NodeJS 安装</h3>
+<p><a href="https://nodejs.org/zh-cn/download/package-manager">NodeJS 安装方法</a>:</p>
+<figure class="highlight powershell"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># installs fnm (Fast Node Manager)</span></span><br><span class="line">winget install Schniz.fnm</span><br><span class="line"><span class="comment"># configure fnm environment</span></span><br><span class="line">fnm env <span class="literal">--use-on-cd</span> | <span class="built_in">Out-String</span> | <span class="built_in">Invoke-Expression</span></span><br><span class="line"><span class="comment"># download and install Node.js</span></span><br><span class="line">fnm use <span class="literal">--install-if-missing</span> <span class="number">20</span></span><br><span class="line"><span class="comment"># verifies the right Node.js version is in the environment</span></span><br><span class="line">node <span class="literal">-v</span> <span class="comment"># should print `v20.17.0`</span></span><br><span class="line"><span class="comment"># verifies the right npm version is in the environment</span></span><br><span class="line">npm <span class="literal">-v</span> <span class="comment"># should print `10.8.2`</span></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>Powershell7</tag>
       </tags>
   </entry>
   <entry>
@@ -573,66 +573,6 @@
       </tags>
   </entry>
   <entry>
-    <title>NuShell</title>
-    <url>/2025/01/06/nushell/</url>
-    <content><![CDATA[<blockquote>
-<p>Windows11使用Wezterm+NuShell+Starship</p>
-<p>安装字体<a href="https://download.jetbrains.com/fonts/JetBrainsMono-2.304.zip">JetBrains Mono</a></p>
-</blockquote>
-<h2 id="wezterm"><a class="markdownIt-Anchor" href="#wezterm"></a> Wezterm</h2>
-<p><a href="https://github.com/wez/wezterm/releases/download/20240203-110809-5046fc22/WezTerm-20240203-110809-5046fc22-setup.exe">Wezterm Windows下载地址</a></p>
-<p><a href="https://github.com/KevinSilvester/wezterm-config.git">Wezterm配置</a></p>
-<h2 id="nushell"><a class="markdownIt-Anchor" href="#nushell"></a> NuShell</h2>
-<p><a href="https://github.com/nushell/nushell/releases/download/0.98.0/nu-0.98.0-x86_64-pc-windows-msvc.msi">NuShell Windows下载地址</a></p>
-<p>使用nu切换盘符: <code>cd 盘符:/</code></p>
-<h2 id="starship"><a class="markdownIt-Anchor" href="#starship"></a> Starship</h2>
-<p><a href="https://github.com/starship/starship/releases/download/v1.20.1/starship-i686-pc-windows-msvc.msi">Starship Windows下载地址</a></p>
-<p>在NuShell里使用starship：</p>
-<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ~/.cache/starship</span><br><span class="line">starship init nu | save -f ~/.cache/starship/init.nu</span><br></pre></td></tr></table></figure>
-<p>在<a href="https://starship.rs/zh-CN/presets/">Wtarship themes</a>查看主题</p>
-<p>这里使用<a href="https://starship.rs/zh-CN/presets/pastel-powerline">pastel-powerline</a>主题输入下行代码即可:</p>
-<p><code>starship preset pastel-powerline -o ~/.config/starship.toml</code></p>
-<p>添加以下语句后重开一个终端就能出现效果了(使用<code>echo $nu.env-path</code>查看文件路径)</p>
-<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># 启动starship</span></span><br><span class="line">use ~/.cache/starship/init.nu</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义别名和目录常量</span></span><br><span class="line"><span class="built_in">alias</span> vim = nvim</span><br></pre></td></tr></table></figure>
-<h2 id="wezterm快捷键"><a class="markdownIt-Anchor" href="#wezterm快捷键"></a> Wezterm快捷键</h2>
-<p><a href="https://github.com/KevinSilvester/wezterm-config.git">Wezterm使用配置</a></p>
-<blockquote>
-<p>super -&gt; Alt</p>
-<p>super_rev -&gt; Ctrl+Alt</p>
-</blockquote>
-<h3 id="标签页"><a class="markdownIt-Anchor" href="#标签页"></a> 标签页</h3>
-<p><code>super+[</code>: 向左查看标签页<br />
-<code>super_rev+[</code>: 向左移动标签页<br />
-<code>super+]</code>: 向右查看标签页<br />
-<code>super_rev+]</code>: 向右移动标签页</p>
-<p><code>super+T</code>: 新建一个标签页<br />
-<code>super_rev+T</code>: 新建一个<code>wsl:ubuntu</code>标签页</p>
-<p><code>super+W</code>: 关闭一个标签页<br />
-<code>super_rev+W</code>: 关闭一个标签页</p>
-<h3 id="光标在命令行中移动"><a class="markdownIt-Anchor" href="#光标在命令行中移动"></a> 光标在命令行中移动</h3>
-<p><code>super+-&gt;</code>: 移动至行尾<br />
-<code>super+&lt;-</code>: 移动至行首<br />
-<code>super+backspace</code>: 清除整行</p>
-<h3 id="窗口"><a class="markdownIt-Anchor" href="#窗口"></a> 窗口</h3>
-<p><code>super+n</code>: 新建一个窗口</p>
-<h3 id="重命名"><a class="markdownIt-Anchor" href="#重命名"></a> 重命名</h3>
-<p><code>super+0</code>: 重命名当前标签页<br />
-<code>super_rev+0</code>: 撤销重命名</p>
-<h3 id="背景图片"><a class="markdownIt-Anchor" href="#背景图片"></a> 背景图片</h3>
-<p><code>super+/</code>: 随机选择背景图片<br />
-<code>super+,</code>: 下一张图片<br />
-<code>super+.</code>: 上一张图片<br />
-<code>super_rev+/</code>: 列表选择图片<br />
-<code>super+b</code>: 切换有/无背景图片模式</p>
-]]></content>
-      <categories>
-        <category>笔记</category>
-      </categories>
-      <tags>
-        <tag>NuShell</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>SSH使用</title>
     <url>/2025/01/06/ssh%E4%BD%BF%E7%94%A8/</url>
     <content><![CDATA[<h2 id="ssh-远程登录"><a class="markdownIt-Anchor" href="#ssh-远程登录"></a> SSH 远程登录</h2>
@@ -675,7 +615,7 @@
 <blockquote>
 <p>井号越多、标题越小，井号越少、标题越大</p>
 </blockquote>
-<p>用法：空白行分隔</p>
+<p>xxxxxxxxxx9 1    sudo vim /usr/share/applications/code.desktop2    # 添加内容3    [Desktop Entry]4    Name=Visual Studio Code5    Type=Application6    Exec=/opt/code/code7    Icon=/opt/code/resources/app/resources/linux/code.png8    Terminal=false9    Comment=Visual Studio Codebash</p>
 <h2 id="换行"><a class="markdownIt-Anchor" href="#换行"></a> 换行</h2>
 <p>用法：在换行处添加<code>&lt;br&gt;</code>即可</p>
 <h2 id="强调"><a class="markdownIt-Anchor" href="#强调"></a> 强调</h2>
@@ -793,6 +733,66 @@
       </tags>
   </entry>
   <entry>
+    <title>NuShell</title>
+    <url>/2025/01/06/nushell/</url>
+    <content><![CDATA[<blockquote>
+<p>Windows11使用Wezterm+NuShell+Starship</p>
+<p>安装字体<a href="https://download.jetbrains.com/fonts/JetBrainsMono-2.304.zip">JetBrains Mono</a></p>
+</blockquote>
+<h2 id="wezterm"><a class="markdownIt-Anchor" href="#wezterm"></a> Wezterm</h2>
+<p><a href="https://github.com/wez/wezterm/releases/download/20240203-110809-5046fc22/WezTerm-20240203-110809-5046fc22-setup.exe">Wezterm Windows下载地址</a></p>
+<p><a href="https://github.com/KevinSilvester/wezterm-config.git">Wezterm配置</a></p>
+<h2 id="nushell"><a class="markdownIt-Anchor" href="#nushell"></a> NuShell</h2>
+<p><a href="https://github.com/nushell/nushell/releases/download/0.98.0/nu-0.98.0-x86_64-pc-windows-msvc.msi">NuShell Windows下载地址</a></p>
+<p>使用nu切换盘符: <code>cd 盘符:/</code></p>
+<h2 id="starship"><a class="markdownIt-Anchor" href="#starship"></a> Starship</h2>
+<p><a href="https://github.com/starship/starship/releases/download/v1.20.1/starship-i686-pc-windows-msvc.msi">Starship Windows下载地址</a></p>
+<p>在NuShell里使用starship：</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ~/.cache/starship</span><br><span class="line">starship init nu | save -f ~/.cache/starship/init.nu</span><br></pre></td></tr></table></figure>
+<p>在<a href="https://starship.rs/zh-CN/presets/">Wtarship themes</a>查看主题</p>
+<p>这里使用<a href="https://starship.rs/zh-CN/presets/pastel-powerline">pastel-powerline</a>主题输入下行代码即可:</p>
+<p><code>starship preset pastel-powerline -o ~/.config/starship.toml</code></p>
+<p>添加以下语句后重开一个终端就能出现效果了(使用<code>echo $nu.env-path</code>查看文件路径)</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># 启动starship</span></span><br><span class="line">use ~/.cache/starship/init.nu</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义别名和目录常量</span></span><br><span class="line"><span class="built_in">alias</span> vim = nvim</span><br></pre></td></tr></table></figure>
+<h2 id="wezterm快捷键"><a class="markdownIt-Anchor" href="#wezterm快捷键"></a> Wezterm快捷键</h2>
+<p><a href="https://github.com/KevinSilvester/wezterm-config.git">Wezterm使用配置</a></p>
+<blockquote>
+<p>super -&gt; Alt</p>
+<p>super_rev -&gt; Ctrl+Alt</p>
+</blockquote>
+<h3 id="标签页"><a class="markdownIt-Anchor" href="#标签页"></a> 标签页</h3>
+<p><code>super+[</code>: 向左查看标签页<br />
+<code>super_rev+[</code>: 向左移动标签页<br />
+<code>super+]</code>: 向右查看标签页<br />
+<code>super_rev+]</code>: 向右移动标签页</p>
+<p><code>super+T</code>: 新建一个标签页<br />
+<code>super_rev+T</code>: 新建一个<code>wsl:ubuntu</code>标签页</p>
+<p><code>super+W</code>: 关闭一个标签页<br />
+<code>super_rev+W</code>: 关闭一个标签页</p>
+<h3 id="光标在命令行中移动"><a class="markdownIt-Anchor" href="#光标在命令行中移动"></a> 光标在命令行中移动</h3>
+<p><code>super+-&gt;</code>: 移动至行尾<br />
+<code>super+&lt;-</code>: 移动至行首<br />
+<code>super+backspace</code>: 清除整行</p>
+<h3 id="窗口"><a class="markdownIt-Anchor" href="#窗口"></a> 窗口</h3>
+<p><code>super+n</code>: 新建一个窗口</p>
+<h3 id="重命名"><a class="markdownIt-Anchor" href="#重命名"></a> 重命名</h3>
+<p><code>super+0</code>: 重命名当前标签页<br />
+<code>super_rev+0</code>: 撤销重命名</p>
+<h3 id="背景图片"><a class="markdownIt-Anchor" href="#背景图片"></a> 背景图片</h3>
+<p><code>super+/</code>: 随机选择背景图片<br />
+<code>super+,</code>: 下一张图片<br />
+<code>super+.</code>: 上一张图片<br />
+<code>super_rev+/</code>: 列表选择图片<br />
+<code>super+b</code>: 切换有/无背景图片模式</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>NuShell</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>U盘EFI分区删除</title>
     <url>/2025/01/06/u%E7%9B%98EFI%E5%88%86%E5%8C%BA%E5%88%A0%E9%99%A4/</url>
     <content><![CDATA[<p>在运行窗口输入<code>powershell</code>进入终端，输入<code>diskpart</code>并按下Enter键</p>
@@ -862,18 +862,6 @@
       </categories>
       <tags>
         <tag>Vim</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>计算机基础</title>
-    <url>/2025/01/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/</url>
-    <content><![CDATA[<p>…</p>
-]]></content>
-      <categories>
-        <category>笔记</category>
-      </categories>
-      <tags>
-        <tag>计算机基础</tag>
       </tags>
   </entry>
   <entry>
@@ -1001,6 +989,18 @@ Mysql 操作基于 Ubuntu 20.04, 其他操作基于 CentOS 7</p>
       </categories>
       <tags>
         <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>计算机基础</title>
+    <url>/2025/01/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<p>…</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>计算机基础</tag>
       </tags>
   </entry>
 </search>
