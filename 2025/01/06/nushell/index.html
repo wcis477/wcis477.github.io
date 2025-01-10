@@ -1,0 +1,338 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NuShell - 小陈の博客</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Blog,"> 
+    <meta name="description" content="
+Windows11使用Wezterm+NuShell+Starship
+安装字体JetBrains Mono
+
+ Wezterm
+Wezterm Windows下载地址
+Wezterm配置
+ Nu,"> 
+    <meta name="author" content="小陈"> 
+    <link rel="alternative" href="atom.xml" title="小陈の博客" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.ico"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="NuShell - 小陈の博客"/>
+    <meta name="twitter:description" content="
+Windows11使用Wezterm+NuShell+Starship
+安装字体JetBrains Mono
+
+ Wezterm
+Wezterm Windows下载地址
+Wezterm配置
+ Nu,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="小陈の博客"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="NuShell - 小陈の博客"/>
+    <meta property="og:description" content="
+Windows11使用Wezterm+NuShell+Starship
+安装字体JetBrains Mono
+
+ Wezterm
+Wezterm Windows下载地址
+Wezterm配置
+ Nu,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+<link rel="stylesheet" href="/css/add.css">
+
+    <script>window.searchDbPath = "/search.xml";</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap" rel="stylesheet">
+
+    <!-- 代码块复制 -->
+    <script type="text/javascript" src="/js/clipboard.js"></script>
+
+    <!-- 点击效果 -->
+    
+    <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 999; pointer-events: none;" ></canvas>
+    <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script>
+    <script type="text/javascript" src="/js/fireworks.js"></script>
+    
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">小陈の博客</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="https://wcis314.github.io"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">NuShell</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <!-- 帖子视图 -->
+
+    <div class="post_cover" >
+        
+            <img src="https://raw.githubusercontent.com/wcis314/blog_img/refs/heads/img/p5.png" />
+        
+        <div class="post_cover_mask"></div>
+        <div class="post_text">
+            <h1>NuShell</h1>
+            <div>
+                <span>一月 06, 2025</span>
+
+                
+  <ul class="post-tags-list" itemprop="keywords"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/NuShell/" rel="tag">NuShell</a></li></ul>
+
+
+            </div>
+        </div>
+    </div>
+
+
+<div class="article">
+    <div class='main'>
+
+        <!-- 帖子视图 -->
+        
+        
+        <!-- 更新时间 -->
+        
+
+        
+            <div class="content markdown" style="margin-top: 0px">
+        
+        
+            <blockquote>
+<p>Windows11使用Wezterm+NuShell+Starship</p>
+<p>安装字体<a target="_blank" rel="noopener" href="https://download.jetbrains.com/fonts/JetBrainsMono-2.304.zip">JetBrains Mono</a></p>
+</blockquote>
+<h2 id="wezterm"><a class="markdownIt-Anchor" href="#wezterm"></a> Wezterm</h2>
+<p><a target="_blank" rel="noopener" href="https://github.com/wez/wezterm/releases/download/20240203-110809-5046fc22/WezTerm-20240203-110809-5046fc22-setup.exe">Wezterm Windows下载地址</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/KevinSilvester/wezterm-config.git">Wezterm配置</a></p>
+<h2 id="nushell"><a class="markdownIt-Anchor" href="#nushell"></a> NuShell</h2>
+<p><a target="_blank" rel="noopener" href="https://github.com/nushell/nushell/releases/download/0.98.0/nu-0.98.0-x86_64-pc-windows-msvc.msi">NuShell Windows下载地址</a></p>
+<p>使用nu切换盘符: <code>cd 盘符:/</code></p>
+<h2 id="starship"><a class="markdownIt-Anchor" href="#starship"></a> Starship</h2>
+<p><a target="_blank" rel="noopener" href="https://github.com/starship/starship/releases/download/v1.20.1/starship-i686-pc-windows-msvc.msi">Starship Windows下载地址</a></p>
+<p>在NuShell里使用starship：</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ~/.cache/starship</span><br><span class="line">starship init nu | save -f ~/.cache/starship/init.nu</span><br></pre></td></tr></table></figure>
+<p>在<a target="_blank" rel="noopener" href="https://starship.rs/zh-CN/presets/">Wtarship themes</a>查看主题</p>
+<p>这里使用<a target="_blank" rel="noopener" href="https://starship.rs/zh-CN/presets/pastel-powerline">pastel-powerline</a>主题输入下行代码即可:</p>
+<p><code>starship preset pastel-powerline -o ~/.config/starship.toml</code></p>
+<p>添加以下语句后重开一个终端就能出现效果了(使用<code>echo $nu.env-path</code>查看文件路径)</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 启动starship</span></span><br><span class="line">use ~/.cache/starship/init.nu</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义别名和目录常量</span></span><br><span class="line"><span class="built_in">alias</span> vim = nvim</span><br></pre></td></tr></table></figure>
+<h2 id="wezterm快捷键"><a class="markdownIt-Anchor" href="#wezterm快捷键"></a> Wezterm快捷键</h2>
+<p><a target="_blank" rel="noopener" href="https://github.com/KevinSilvester/wezterm-config.git">Wezterm使用配置</a></p>
+<blockquote>
+<p>super -&gt; Alt</p>
+<p>super_rev -&gt; Ctrl+Alt</p>
+</blockquote>
+<h3 id="标签页"><a class="markdownIt-Anchor" href="#标签页"></a> 标签页</h3>
+<p><code>super+[</code>: 向左查看标签页<br />
+<code>super_rev+[</code>: 向左移动标签页<br />
+<code>super+]</code>: 向右查看标签页<br />
+<code>super_rev+]</code>: 向右移动标签页</p>
+<p><code>super+T</code>: 新建一个标签页<br />
+<code>super_rev+T</code>: 新建一个<code>wsl:ubuntu</code>标签页</p>
+<p><code>super+W</code>: 关闭一个标签页<br />
+<code>super_rev+W</code>: 关闭一个标签页</p>
+<h3 id="光标在命令行中移动"><a class="markdownIt-Anchor" href="#光标在命令行中移动"></a> 光标在命令行中移动</h3>
+<p><code>super+-&gt;</code>: 移动至行尾<br />
+<code>super+&lt;-</code>: 移动至行首<br />
+<code>super+backspace</code>: 清除整行</p>
+<h3 id="窗口"><a class="markdownIt-Anchor" href="#窗口"></a> 窗口</h3>
+<p><code>super+n</code>: 新建一个窗口</p>
+<h3 id="重命名"><a class="markdownIt-Anchor" href="#重命名"></a> 重命名</h3>
+<p><code>super+0</code>: 重命名当前标签页<br />
+<code>super_rev+0</code>: 撤销重命名</p>
+<h3 id="背景图片"><a class="markdownIt-Anchor" href="#背景图片"></a> 背景图片</h3>
+<p><code>super+/</code>: 随机选择背景图片<br />
+<code>super+,</code>: 下一张图片<br />
+<code>super+.</code>: 上一张图片<br />
+<code>super_rev+/</code>: 列表选择图片<br />
+<code>super+b</code>: 切换有/无背景图片模式</p>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="//mp3/荒-郑鱼.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="//mp3/夏音-優里.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+         <!-- 版权声明 -->
+        
+            <div class="statement">
+  <div><span>作者: </span>小陈</div>
+  <div><span>标题: </span>NuShell</div>
+  <div><span>链接: </span>
+    <a href="/2025/01/06/nushell/">https://wcis314.github.io/2025/01/06/nushell/</a>
+  </div>
+  <div><span>版权声明: </span>本文采用
+    
+    <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh">CC BY 4.0</a>
+    
+    进行声明
+  </div>
+</div>
+        
+
+        <!-- 结束 -->
+        <p class="end" >-&nbsp;&nbsp;&nbsp;END&nbsp;&nbsp;&nbsp;-</p>
+
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci="Ov23ligduczFjVg1qyrT"
+        data-cs="6235f3ef022b2ceed2274fddfe2f53e9cc3d2e43"
+        data-r="comments"
+        data-o="xiaochen477"
+        data-a="xiaochen477"
+        data-d="true"
+    >查看评论</div>
+
+
+    </div>
+
+    <!-- 悬浮 -->
+    
+    <div class="float">
+        <!-- 目录 -->
+        <div class="directory">
+            <div class="directory_btn float_btn"></div>
+            <div class="directory_list">
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#wezterm"><span class="toc-number">1.</span> <span class="toc-text"> Wezterm</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#nushell"><span class="toc-number">2.</span> <span class="toc-text"> NuShell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#starship"><span class="toc-number">3.</span> <span class="toc-text"> Starship</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#wezterm%E5%BF%AB%E6%8D%B7%E9%94%AE"><span class="toc-number">4.</span> <span class="toc-text"> Wezterm快捷键</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%87%E7%AD%BE%E9%A1%B5"><span class="toc-number">4.1.</span> <span class="toc-text"> 标签页</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%89%E6%A0%87%E5%9C%A8%E5%91%BD%E4%BB%A4%E8%A1%8C%E4%B8%AD%E7%A7%BB%E5%8A%A8"><span class="toc-number">4.2.</span> <span class="toc-text"> 光标在命令行中移动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AA%97%E5%8F%A3"><span class="toc-number">4.3.</span> <span class="toc-text"> 窗口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E5%91%BD%E5%90%8D"><span class="toc-number">4.4.</span> <span class="toc-text"> 重命名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%83%8C%E6%99%AF%E5%9B%BE%E7%89%87"><span class="toc-number">4.5.</span> <span class="toc-text"> 背景图片</span></a></li></ol></li></ol>
+            </div>
+        </div>
+    </div>
+    
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/codeCopy.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+
+</html>

@@ -1,0 +1,402 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>服务器实训 - 小陈の博客</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Blog,"> 
+    <meta name="description" content="
+Linux 服务与配置用到的操作步骤
+Mysql 操作基于 Ubuntu 20.04, 其他操作基于 CentOS 7
+
+ 实验配置
+ 启用 Firewalld 服务
+systemctl star,"> 
+    <meta name="author" content="小陈"> 
+    <link rel="alternative" href="atom.xml" title="小陈の博客" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.ico"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="服务器实训 - 小陈の博客"/>
+    <meta name="twitter:description" content="
+Linux 服务与配置用到的操作步骤
+Mysql 操作基于 Ubuntu 20.04, 其他操作基于 CentOS 7
+
+ 实验配置
+ 启用 Firewalld 服务
+systemctl star,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="小陈の博客"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="服务器实训 - 小陈の博客"/>
+    <meta property="og:description" content="
+Linux 服务与配置用到的操作步骤
+Mysql 操作基于 Ubuntu 20.04, 其他操作基于 CentOS 7
+
+ 实验配置
+ 启用 Firewalld 服务
+systemctl star,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+<link rel="stylesheet" href="/css/add.css">
+
+    <script>window.searchDbPath = "/search.xml";</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap" rel="stylesheet">
+
+    <!-- 代码块复制 -->
+    <script type="text/javascript" src="/js/clipboard.js"></script>
+
+    <!-- 点击效果 -->
+    
+    <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 999; pointer-events: none;" ></canvas>
+    <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script>
+    <script type="text/javascript" src="/js/fireworks.js"></script>
+    
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">小陈の博客</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="https://wcis314.github.io"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">服务器实训</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <!-- 帖子视图 -->
+
+    <div class="post_cover" >
+        
+            <img src="https://raw.githubusercontent.com/wcis314/blog_img/refs/heads/img/p15.png" />
+        
+        <div class="post_cover_mask"></div>
+        <div class="post_text">
+            <h1>服务器实训</h1>
+            <div>
+                <span>一月 06, 2025</span>
+
+                
+  <ul class="post-tags-list" itemprop="keywords"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
+
+
+            </div>
+        </div>
+    </div>
+
+
+<div class="article">
+    <div class='main'>
+
+        <!-- 帖子视图 -->
+        
+        
+        <!-- 更新时间 -->
+        
+
+        
+            <div class="content markdown" style="margin-top: 0px">
+        
+        
+            <blockquote>
+<p>Linux 服务与配置用到的操作步骤<br />
+Mysql 操作基于 Ubuntu 20.04, 其他操作基于 CentOS 7</p>
+</blockquote>
+<h2 id="实验配置"><a class="markdownIt-Anchor" href="#实验配置"></a> 实验配置</h2>
+<h3 id="启用-firewalld-服务"><a class="markdownIt-Anchor" href="#启用-firewalld-服务"></a> 启用 Firewalld 服务</h3>
+<p><code>systemctl start firewalld</code></p>
+<h3 id="关闭-selinux"><a class="markdownIt-Anchor" href="#关闭-selinux"></a> 关闭 SElinux</h3>
+<p><code>getenforce</code>查看是否为 Disable</p>
+<h3 id="配置软件源"><a class="markdownIt-Anchor" href="#配置软件源"></a> 配置软件源</h3>
+<p>配置 Centos 7 本地源：</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#! /bin/bash</span></span><br><span class="line"></span><br><span class="line">path=<span class="string">&quot;/etc/yum.repos.d&quot;</span></span><br><span class="line"><span class="keyword">if</span> [ ! -e <span class="string">&quot;<span class="variable">$path</span>&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line"> <span class="built_in">mkdir</span> <span class="string">&quot;<span class="variable">$path</span>&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line"> <span class="built_in">rm</span> -rf <span class="string">&quot;<span class="variable">$path</span>&quot;</span></span><br><span class="line"> <span class="built_in">mkdir</span> <span class="string">&quot;<span class="variable">$path</span>&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo</span><br><span class="line">yum remove epel-release -y &amp;&amp; yum install epel-release -y; </span><br><span class="line">yum clean all &amp;&amp; yum makecache;</span><br><span class="line"></span><br><span class="line">iso=<span class="string">&quot;/mnt/iso&quot;</span></span><br><span class="line"><span class="keyword">if</span> [ ! -e <span class="string">&quot;<span class="variable">$iso</span>&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line"> <span class="built_in">mkdir</span> <span class="variable">$iso</span></span><br><span class="line"><span class="keyword">fi</span> </span><br><span class="line">mount /dev/cdrom /mnt/iso;</span><br><span class="line">dvd=<span class="string">&quot;/etc/yum.repos.d/dvd.repo&quot;</span></span><br><span class="line"><span class="keyword">if</span> [ -e <span class="string">&quot;<span class="variable">$dvd</span>&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line"> <span class="built_in">rm</span> <span class="variable">$dvd</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line"> <span class="built_in">touch</span> <span class="variable">$dvd</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"><span class="built_in">cat</span> &lt;&lt;<span class="string">EOF &gt;&gt; &quot;$dvd&quot;;</span></span><br><span class="line"><span class="string">[dvd]</span></span><br><span class="line"><span class="string">name=dvd</span></span><br><span class="line"><span class="string">baseurl=file:///mnt/cd0</span></span><br><span class="line"><span class="string">gpgcheck=0</span></span><br><span class="line"><span class="string">enabled=1</span></span><br><span class="line"><span class="string">priority=1</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line">yum -y install yum-priorities; </span><br><span class="line">path=<span class="string">&quot;/etc/yum.repos.d/CentOS-Base.repo&quot;</span></span><br><span class="line"><span class="keyword">if</span> grep -q <span class="string">&quot;priority=2&quot;</span> <span class="string">&quot;<span class="variable">$path</span>&quot;</span>; <span class="keyword">then</span></span><br><span class="line"> <span class="built_in">echo</span> <span class="string">&quot;已包含&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line"> sed -i <span class="string">&#x27;/7/a\priority=2&#x27;</span> <span class="string">&quot;<span class="variable">$path</span>&quot;</span>;</span><br><span class="line"><span class="keyword">fi</span>  </span><br><span class="line">path=<span class="string">&quot;/etc/yum.repos.d/epel.repo&quot;</span></span><br><span class="line"><span class="keyword">if</span> grep -q <span class="string">&quot;priority=11&quot;</span> <span class="string">&quot;<span class="variable">$path</span>&quot;</span>; <span class="keyword">then</span></span><br><span class="line"> <span class="built_in">echo</span> <span class="string">&quot;已包含&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line"> sed -i <span class="string">&#x27;11i\priority=11&#x27;</span> <span class="string">&quot;<span class="variable">$path</span>&quot;</span>;</span><br><span class="line"><span class="keyword">fi</span>  </span><br><span class="line">yum clean all &amp;&amp; yum makecache;</span><br><span class="line">yum install httpd -y;</span><br><span class="line">yum repolist;</span><br></pre></td></tr></table></figure>
+<p>软件源地址：</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">清华大学软件源: https://mirrors.tuna.tsinghua.edu.cn/help</span><br><span class="line">中科大软件源: https://mirrors.ustc.edu.cn/help</span><br><span class="line">华为云软件源: https://mirrors.huaweicloud.com/home</span><br><span class="line">阿里云软件源: https://developer.aliyun.com/mirror/</span><br><span class="line">上海交大软件源: https://mirrors.sjtug.sjtu.edu.cn/docs/ubuntu</span><br></pre></td></tr></table></figure>
+<p>我使用的是中科大软件源:</p>
+<p>CentOS 7:</p>
+<ul>
+<li>使用 Vim(没有就用 Vi) 打开<code>/etc/yum.repos.d/CentOS-Base.repo</code></li>
+<li>把下面的软件源输入进去</li>
+</ul>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">[base]</span><br><span class="line">name=CentOS-<span class="variable">$releasever</span> - Base</span><br><span class="line"><span class="comment">#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=os&amp;infra=$infra</span></span><br><span class="line">baseurl=https://mirrors.ustc.edu.cn/centos/<span class="variable">$releasever</span>/os/<span class="variable">$basearch</span>/</span><br><span class="line">gpgcheck=1</span><br><span class="line">gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7</span><br><span class="line"><span class="comment">#released updates</span></span><br><span class="line">[updates]</span><br><span class="line">name=CentOS-<span class="variable">$releasever</span> - Updates</span><br><span class="line"><span class="comment">#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=updates&amp;infra=$infra</span></span><br><span class="line">baseurl=https://mirrors.ustc.edu.cn/centos/<span class="variable">$releasever</span>/updates/<span class="variable">$basearch</span>/</span><br><span class="line">gpgcheck=1</span><br><span class="line">gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7</span><br><span class="line"><span class="comment">#additional packages that may be useful</span></span><br><span class="line">[extras]</span><br><span class="line">name=CentOS-<span class="variable">$releasever</span> - Extras</span><br><span class="line"><span class="comment">#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=extras&amp;infra=$infra</span></span><br><span class="line">baseurl=https://mirrors.ustc.edu.cn/centos/<span class="variable">$releasever</span>/extras/<span class="variable">$basearch</span>/</span><br><span class="line">gpgcheck=1</span><br><span class="line">gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7</span><br><span class="line"><span class="comment">#additional packages that extend functionality of existing packages</span></span><br><span class="line">[centosplus]</span><br><span class="line">name=CentOS-<span class="variable">$releasever</span> - Plus</span><br><span class="line"><span class="comment">#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=centosplus&amp;infra=$infra</span></span><br><span class="line">baseurl=https://mirrors.ustc.edu.cn/centos/<span class="variable">$releasever</span>/centosplus/<span class="variable">$basearch</span>/</span><br><span class="line">gpgcheck=1</span><br><span class="line">enabled=0</span><br><span class="line">gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7</span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用<code>sudo yum update</code>更新</li>
+</ul>
+<p>Ubuntu 20.04:</p>
+<ul>
+<li>使用 vi 打开<code>/etc/apt/sources.list</code></li>
+<li>输入软件源：</li>
+</ul>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 默认注释了源码仓库，如有需要可自行取消注释</span></span><br><span class="line">deb https://mirrors.ustc.edu.cn/ubuntu/ focal main restricted universe multiverse</span><br><span class="line">deb https://mirrors.ustc.edu.cn/ubuntu/ focal-security main restricted universe multiverse</span><br><span class="line">deb https://mirrors.ustc.edu.cn/ubuntu/ focal-updates main restricted universe multiverse</span><br><span class="line">deb https://mirrors.ustc.edu.cn/ubuntu/ focal-backports main restricted universe multiverse</span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用<code>sudo apt update</code>更新</li>
+</ul>
+<h2 id="使用-rdp-方式连接-linux-服务器"><a class="markdownIt-Anchor" href="#使用-rdp-方式连接-linux-服务器"></a> 使用 RDP 方式连接 Linux 服务器</h2>
+<blockquote>
+<p>开通防火墙的 3389 端口，即可</p>
+</blockquote>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --permanent --add-port=3389/tcp</span><br><span class="line">firewall-cmd --reload <span class="comment"># 使上面的配置生效</span></span><br></pre></td></tr></table></figure>
+<h2 id="制作-dhcp-服务器"><a class="markdownIt-Anchor" href="#制作-dhcp-服务器"></a> 制作 DHCP 服务器</h2>
+<blockquote>
+<p>本实验需要用到云计算机 A、B 和 C, 其中 A、B 装有 centos 7, C 装有 windows xp<br />
+使用 A、B 的 ens33 网卡，C 使用本地连接 2</p>
+</blockquote>
+<h3 id="dhcp-服务安装和配置"><a class="markdownIt-Anchor" href="#dhcp-服务安装和配置"></a> DHCP 服务安装和配置</h3>
+<blockquote>
+<p>在云计算机 A 中操作</p>
+</blockquote>
+<h4 id="安装"><a class="markdownIt-Anchor" href="#安装"></a> 安装</h4>
+<p>使用<code>sudo yum install dhcp -y</code>安装，使用<code>dhcpd</code>检查是否成功安装 dhcp</p>
+<h4 id="配置"><a class="markdownIt-Anchor" href="#配置"></a> 配置</h4>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span>&lt;&lt;<span class="string">EOF &gt; /etc/dhcp/dhcpd.conf</span></span><br><span class="line"><span class="string">ddns-update-style none;   #配置DHCP-DNS为不自动更新模式</span></span><br><span class="line"><span class="string">log-facility local7;         #local7以上级别的日志发送到dhcp日志</span></span><br><span class="line"><span class="string">default-lease-time 600;             #默认租约时间长度</span></span><br><span class="line"><span class="string">max-lease-time 3600;              #最大租约时间长度</span></span><br><span class="line"><span class="string">subnet 192.168.24.0 netmask 255.255.255.0 &#123;     #子网号和掩码</span></span><br><span class="line"><span class="string">range 192.168.24.50 192.168.24.100;           #IP地址分配范围</span></span><br><span class="line"><span class="string">option domain-name-servers 192.168.24.1;      #域名服务器地址</span></span><br><span class="line"><span class="string">option domain-name &quot;JQE.com&quot;;              #域名</span></span><br><span class="line"><span class="string">option routers 192.168.24.1;                   #网关地址</span></span><br><span class="line"><span class="string">option broadcast-address 192.168.24.254;       #广播地址</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">EOF</span></span><br></pre></td></tr></table></figure>
+<h4 id="修改-ip"><a class="markdownIt-Anchor" href="#修改-ip"></a> 修改 IP</h4>
+<ul>
+<li>在 A 中使用<strong>nmtui</strong>命令工具修改 ens33 网卡 IP 为<strong>192.168.24.1</strong>, 然后重新激活网卡</li>
+<li>在 B 中使用<strong>nmtui</strong>命令修改 ens33 网卡 IP 为自动分配</li>
+<li>在 C 中找到网络连接把本地连接 2 改成自动分配 IP</li>
+</ul>
+<h2 id="制作-ssh-服务器"><a class="markdownIt-Anchor" href="#制作-ssh-服务器"></a> 制作 SSH 服务器</h2>
+<ul>
+<li>创建 Docker 虚拟机：<code>docker run -itd  --name nczy --hostname chpw --privileged=true  centos:7  /usr/sbin/init</code></li>
+<li>进入：<code>docker exec -it nczy bash</code></li>
+<li>进入虚拟机可能会没网，所以在进入之前先：<code>systemctl restart docker</code></li>
+<li>如果还是没网，就照下面的输：</li>
+</ul>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在宿主机</span></span><br><span class="line"><span class="built_in">cat</span>&lt;&lt;<span class="string">EOF &gt; /etc/sysctl.conf</span></span><br><span class="line"><span class="string"> net.ipv4.ip_forward = 1</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line">sysctl -p</span><br><span class="line">systemctl restart docker</span><br><span class="line">docker <span class="built_in">exec</span> -it nczy bash <span class="comment"># 启动nczy</span></span><br></pre></td></tr></table></figure>
+<p>虚拟机里输入：</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum install openssh-server</span><br><span class="line">systemctl restart sshd --now</span><br><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+<p>在宿主机里输入：<br />
+<code>firewall-cmd --zone=public --add-forward-port=port=2222:proto=tcp:toaddr=172.17.0.2:toport=22</code><br />
+在终端输入：<br />
+<code>ssh root@宿主机IP地址 -p 2222</code></p>
+<h2 id="在-nczy-安装-rdp-服务从校园网访问"><a class="markdownIt-Anchor" href="#在-nczy-安装-rdp-服务从校园网访问"></a> 在 nczy 安装 RDP 服务，从校园网访问</h2>
+<ul>
+<li>在虚拟机中输入：</li>
+</ul>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">yum install -y epel-release   <span class="comment">#添加第三方安装源epel-release</span></span><br><span class="line">yum install -y xrdp</span><br><span class="line">yum groupinstall -y Xfce    <span class="comment"># 基于上面epel-release，得先安装它</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;xfce4-session&quot;</span> &gt; ~/.Xclients</span><br><span class="line"><span class="built_in">chmod</span> +x ~/.Xclients</span><br><span class="line">sed -i <span class="string">&#x27;s/ssl_protocols=.*/ssl_protocols=TLSv1/&#x27;</span> /etc/xrdp/xrdp.ini </span><br><span class="line">systemctl start xrdp --now </span><br><span class="line">systemctl <span class="built_in">enable</span> xrdp --now </span><br></pre></td></tr></table></figure>
+<ul>
+<li>在宿主机中输入：</li>
+</ul>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">firewall-cmd --permanent --add-port=3390/tcp</span><br><span class="line">firewall-cmd --reload</span><br><span class="line">firewall-cmd --zone=public --add-forward-port=port=3390:proto=tcp:toaddr=172.17.0.2:toport=3389</span><br></pre></td></tr></table></figure>
+<h2 id="dns"><a class="markdownIt-Anchor" href="#dns"></a> DNS</h2>
+<h3 id="添加-docker-国内镜像"><a class="markdownIt-Anchor" href="#添加-docker-国内镜像"></a> 添加 Docker 国内镜像</h3>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span>&lt;&lt;<span class="string">EOF &gt; /etc/docker/daemon.json</span></span><br><span class="line"><span class="string">&#123;</span></span><br><span class="line"><span class="string"> &quot;registry-mirrors&quot;: [</span></span><br><span class="line"><span class="string">    &quot;https://9cpn8tt6.mirror.aliyuncs.com&quot;,</span></span><br><span class="line"><span class="string">    &quot;https://dockerproxy.com&quot;,</span></span><br><span class="line"><span class="string">    &quot;https://hub-mirror.c.163.com&quot;,</span></span><br><span class="line"><span class="string">    &quot;https://mirror.baidubce.com&quot;,</span></span><br><span class="line"><span class="string">    &quot;https://ccr.ccs.tencentyun.com&quot;</span></span><br><span class="line"><span class="string">  ]</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">EOF</span></span><br></pre></td></tr></table></figure>
+<h3 id="拉取-bind-服务器"><a class="markdownIt-Anchor" href="#拉取-bind-服务器"></a> 拉取 Bind 服务器</h3>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">systemctl start docker</span><br><span class="line"></span><br><span class="line">docker pull sameersbn/bind</span><br><span class="line"></span><br><span class="line"><span class="built_in">mkdir</span> -p /opt/docker/bind</span><br><span class="line"></span><br><span class="line">lsof -i :53 <span class="comment"># 查看哪些服务监听着53端口</span></span><br><span class="line">systemctl stop dnsmasq <span class="comment"># 暂停dnsmasq服务</span></span><br><span class="line"><span class="built_in">kill</span> -9 PID <span class="comment"># PID在上一条命令显示出了</span></span><br><span class="line"></span><br><span class="line">docker run --name <span class="built_in">bind</span> -d \</span><br><span class="line">--restart=always \</span><br><span class="line">-p 53:53/tcp \</span><br><span class="line">-p 53:53/udp \</span><br><span class="line">-p 10000:10000/tcp \</span><br><span class="line">--volume /opt/docker/bind:/data \</span><br><span class="line">sameersbn/bind</span><br><span class="line"></span><br><span class="line">docker restart <span class="built_in">bind</span></span><br></pre></td></tr></table></figure>
+<h2 id="安装-mysql"><a class="markdownIt-Anchor" href="#安装-mysql"></a> 安装 Mysql</h2>
+<blockquote>
+<p>基于 Ubuntu 20.04</p>
+</blockquote>
+<ul>
+<li>
+<p>安装 Mysql 服务<br />
+<code>sudo apt install mysql-server</code></p>
+</li>
+<li>
+<p>启动服务<br />
+<code>sudo service mysql start</code></p>
+</li>
+<li>
+<p>启动服务<br />
+<code>mysql -u root -p</code></p>
+</li>
+<li>
+<p>修改密码和授予远程访问权限</p>
+</li>
+</ul>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CREATE USER <span class="string">&#x27;root&#x27;</span>@<span class="string">&#x27;%&#x27;</span> IDENTIFIED BY <span class="string">&#x27;123456&#x27;</span>; <span class="comment"># 创建一个用户为root并且密码设置为123456</span></span><br><span class="line">GRANT ALL PRIVILEGES ON *.* TO <span class="string">&#x27;root&#x27;</span>@<span class="string">&#x27;%&#x27;</span> WITH GRANT OPTION; <span class="comment"># 授予root用户远程访问权限</span></span><br><span class="line">FLUSH PRIVILEGES; <span class="comment"># 刷新配置</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>修改配置文件<br />
+在<code>/etc/mysql/mysql.cnf</code>文件中输入下面两行</li>
+</ul>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[mysqld]</span><br><span class="line">bind-address = 0.0.0.0</span><br></pre></td></tr></table></figure>
+<p>把<code>/etc/mysql/mysql.conf.d/mysqld.conf</code>中下面两行注释掉</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bind-address = 127.0.0.1</span><br><span class="line">mysqlx-bind-address = 127.0.0.1</span><br></pre></td></tr></table></figure>
+<p><code>service mysql restart</code></p>
+<h2 id="使用-python-程序向-linux-系统发送命令"><a class="markdownIt-Anchor" href="#使用-python-程序向-linux-系统发送命令"></a> 使用 Python 程序向 Linux 系统发送命令</h2>
+<figure class="highlight python"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"></span><br><span class="line">result = subprocess.run(</span><br><span class="line">    [<span class="string">&#x27;ssh&#x27;</span>, <span class="string">&#x27;root@172.16.124.24&#x27;</span>, <span class="string">&#x27;ls -l /&#x27;</span>],</span><br><span class="line">    capture_output=<span class="literal">True</span>,</span><br><span class="line">    text=<span class="literal">True</span>,</span><br><span class="line">    encoding=<span class="string">&#x27;utf-8&#x27;</span>  <span class="comment"># 使用 UTF-8 编码</span></span><br><span class="line">)</span><br><span class="line"><span class="built_in">print</span>(result.stdout)</span><br></pre></td></tr></table></figure>
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="//mp3/荒-郑鱼.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="//mp3/夏音-優里.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+         <!-- 版权声明 -->
+        
+            <div class="statement">
+  <div><span>作者: </span>小陈</div>
+  <div><span>标题: </span>服务器实训</div>
+  <div><span>链接: </span>
+    <a href="/2025/01/06/%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%9E%E8%AE%AD/">https://wcis314.github.io/2025/01/06/%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%9E%E8%AE%AD/</a>
+  </div>
+  <div><span>版权声明: </span>本文采用
+    
+    <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh">CC BY 4.0</a>
+    
+    进行声明
+  </div>
+</div>
+        
+
+        <!-- 结束 -->
+        <p class="end" >-&nbsp;&nbsp;&nbsp;END&nbsp;&nbsp;&nbsp;-</p>
+
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci="Ov23ligduczFjVg1qyrT"
+        data-cs="6235f3ef022b2ceed2274fddfe2f53e9cc3d2e43"
+        data-r="comments"
+        data-o="xiaochen477"
+        data-a="xiaochen477"
+        data-d="true"
+    >查看评论</div>
+
+
+    </div>
+
+    <!-- 悬浮 -->
+    
+    <div class="float">
+        <!-- 目录 -->
+        <div class="directory">
+            <div class="directory_btn float_btn"></div>
+            <div class="directory_list">
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E9%85%8D%E7%BD%AE"><span class="toc-number">1.</span> <span class="toc-text"> 实验配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E7%94%A8-firewalld-%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.1.</span> <span class="toc-text"> 启用 Firewalld 服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%97%AD-selinux"><span class="toc-number">1.2.</span> <span class="toc-text"> 关闭 SElinux</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E8%BD%AF%E4%BB%B6%E6%BA%90"><span class="toc-number">1.3.</span> <span class="toc-text"> 配置软件源</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-rdp-%E6%96%B9%E5%BC%8F%E8%BF%9E%E6%8E%A5-linux-%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">2.</span> <span class="toc-text"> 使用 RDP 方式连接 Linux 服务器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%B6%E4%BD%9C-dhcp-%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">3.</span> <span class="toc-text"> 制作 DHCP 服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#dhcp-%E6%9C%8D%E5%8A%A1%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE"><span class="toc-number">3.1.</span> <span class="toc-text"> DHCP 服务安装和配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">3.1.1.</span> <span class="toc-text"> 安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE"><span class="toc-number">3.1.2.</span> <span class="toc-text"> 配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9-ip"><span class="toc-number">3.1.3.</span> <span class="toc-text"> 修改 IP</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%B6%E4%BD%9C-ssh-%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">4.</span> <span class="toc-text"> 制作 SSH 服务器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9C%A8-nczy-%E5%AE%89%E8%A3%85-rdp-%E6%9C%8D%E5%8A%A1%E4%BB%8E%E6%A0%A1%E5%9B%AD%E7%BD%91%E8%AE%BF%E9%97%AE"><span class="toc-number">5.</span> <span class="toc-text"> 在 nczy 安装 RDP 服务，从校园网访问</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#dns"><span class="toc-number">6.</span> <span class="toc-text"> DNS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0-docker-%E5%9B%BD%E5%86%85%E9%95%9C%E5%83%8F"><span class="toc-number">6.1.</span> <span class="toc-text"> 添加 Docker 国内镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8B%89%E5%8F%96-bind-%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">6.2.</span> <span class="toc-text"> 拉取 Bind 服务器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-mysql"><span class="toc-number">7.</span> <span class="toc-text"> 安装 Mysql</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-python-%E7%A8%8B%E5%BA%8F%E5%90%91-linux-%E7%B3%BB%E7%BB%9F%E5%8F%91%E9%80%81%E5%91%BD%E4%BB%A4"><span class="toc-number">8.</span> <span class="toc-text"> 使用 Python 程序向 Linux 系统发送命令</span></a></li></ol>
+            </div>
+        </div>
+    </div>
+    
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/codeCopy.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+
+</html>

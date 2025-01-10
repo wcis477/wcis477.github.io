@@ -1,0 +1,1006 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Arch、Hyprland实体机全安装教程</title>
+    <url>/2025/01/05/Arch%E3%80%81Hyprland%E5%AE%9E%E4%BD%93%E6%9C%BA%E5%85%A8%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B/</url>
+    <content><![CDATA[<h2 id="安装"><a class="markdownIt-Anchor" href="#安装"></a> 安装</h2>
+<p>内容参考<a href="https://wiki.archlinuxcn.org/wiki/%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97#">Arch WiKi</a>Arch提供了自动化安装脚本可以输入<code>archinstall</code>进行配置</p>
+<h3 id="下载arch镜像"><a class="markdownIt-Anchor" href="#下载arch镜像"></a> 下载Arch镜像</h3>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">[Arch 2024.12.01镜像](https://mirrors.tuna.tsinghua.edu.cn/archlinux/iso/2024.12.01/)</span><br></pre></td></tr></table></figure>
+<h3 id="验证iso文件密钥sha256"><a class="markdownIt-Anchor" href="#验证iso文件密钥sha256"></a> 验证ISO文件密钥SHA256</h3>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">certutil -hashfile 镜像文件.iso SHA256 <span class="comment"># 和官网密钥对比</span></span><br></pre></td></tr></table></figure>
+<p><a href="https://archlinux.org/download/">Arch 官网下载界面</a>密钥在这查看<img src="https://raw.githubusercontent.com/wcis314/note_img/refs/heads/img/P1.jpg" alt="启动盘" /></p>
+<h3 id="制作启动盘"><a class="markdownIt-Anchor" href="#制作启动盘"></a> 制作启动盘</h3>
+<p>进入<a href="https://rufus.ie/en/">Rufus 官网</a>下载rufus启动盘制作软件分区类型GPT，目标系统类型UEFI</p>
+<p>如果是固态U盘就打开显示高级设备选项</p>
+<p>勾选上显示USB外置硬盘</p>
+<h3 id="验证引导模式"><a class="markdownIt-Anchor" href="#验证引导模式"></a> 验证引导模式</h3>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /sys/firmware/efi/fw_platform_size <span class="comment"># 验证UEFI位数是64位或32位</span></span><br></pre></td></tr></table></figure>
+<h3 id="连接wifi"><a class="markdownIt-Anchor" href="#连接wifi"></a> 连接WIFI</h3>
+<p><code>rfkill unblock wifi</code>解除网络接口软件屏蔽</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">iwctl <span class="comment"># 进入[iwd]#界面 </span></span><br><span class="line">device list <span class="comment"># 列出所有可用的适配器设备</span></span><br><span class="line">device name set-property Powered on <span class="comment"># 把网络适配器打开</span></span><br><span class="line">station name scan <span class="comment"># 扫描网络</span></span><br><span class="line">station name get-networks <span class="comment"># 列出所有网络 </span></span><br><span class="line">station name connect SSID <span class="comment"># 连接网络</span></span><br><span class="line"><span class="built_in">exit</span> <span class="comment"># 退出[iwd]#界面</span></span><br></pre></td></tr></table></figure>
+<p>Name是适配器名称，SSID是无线网络名称</p>
+<p>连接上了可使用 <code>ping archlinux.org</code>测试网络是否通畅</p>
+<h3 id="更新系统时间"><a class="markdownIt-Anchor" href="#更新系统时间"></a> 更新系统时间</h3>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">timedatectl set-ntp <span class="literal">true</span> <span class="comment"># 启用NTP同步</span></span><br></pre></td></tr></table></figure>
+<h3 id="创建硬盘分区"><a class="markdownIt-Anchor" href="#创建硬盘分区"></a> 创建硬盘分区</h3>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">fdisk -l <span class="comment"># 查看硬盘信息</span></span><br><span class="line">fdisk 硬盘名称 <span class="comment"># 分区工具修改硬盘分区表，把路径写全</span></span><br></pre></td></tr></table></figure>
+<h4 id="fdisk创建分区"><a class="markdownIt-Anchor" href="#fdisk创建分区"></a> fdisk创建分区</h4>
+<p>我的分区方案是一个EFI分区、一个SWAP分区、一个/(根)分区</p>
+<p>输入 <code>g</code> 创建一个GPT分区表输入 <code>n</code> 创建分区</p>
+<p>接下来依次是分区编号、起始扇区、结束扇区分区编号如果是默认直接回车即可、起始扇区也是结束扇区根据想要分区多大输入，1G就输入 <code>+1G</code></p>
+<p>512MB就输入 <code>+512M</code>输入 <code>p</code>显示分区表输入 <code>w</code>保存分区表写入磁盘输入 <code>q</code>放弃更改后的分区表</p>
+<h3 id="格式化分区"><a class="markdownIt-Anchor" href="#格式化分区"></a> 格式化分区</h3>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">mkfs.ext4 根分区 <span class="comment"># 格式化/分区</span></span><br><span class="line">mkswap swap分区 <span class="comment"># 格式化swap分区</span></span><br><span class="line">mkfs.fat -F 32 EFI分区 <span class="comment"># 格式化EFI分区</span></span><br></pre></td></tr></table></figure>
+<h3 id="挂载分区"><a class="markdownIt-Anchor" href="#挂载分区"></a> 挂载分区</h3>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">mount 根分区 /mnt <span class="comment"># 把根分区挂载到/mnt目录</span></span><br><span class="line">mount --<span class="built_in">mkdir</span> EFI分区 /mnt/boot <span class="comment"># 把EFI分区挂载到/mnt/boot目录</span></span><br><span class="line">swapon swap分区 <span class="comment"># 启用Swap分区</span></span><br></pre></td></tr></table></figure>
+<p>遵循先挂载到根分区，再挂载EFI分区，最后挂载其他分区</p>
+<h3 id="配置软件源"><a class="markdownIt-Anchor" href="#配置软件源"></a> 配置软件源</h3>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">curl -L <span class="string">&quot;https://archlinux.org/mirrorlist/?country=CN&amp;protocol=https&quot;</span> \</span><br><span class="line">-o /etc/pacman.d/mirrorlist  <span class="comment"># 获取中国大陆的https镜像站</span></span><br></pre></td></tr></table></figure>
+<p>进入 <code>/etc/pacma.d/mirrorlist</code>文件找到想要的软件源把前面的#去掉保存即可</p>
+<h3 id="安装必需软件包"><a class="markdownIt-Anchor" href="#安装必需软件包"></a> 安装必需软件包</h3>
+<p><code>pacstrap -K /mnt base linux linux-firmware</code>安装linux内核文件显示分区表如果计算机是intel的CPU追加<code>intel-ucode</code>，AMD CPU追加<code>amd-ucode</code>文件管理系统的用户工具：</p>
+<p>ext4 <code>e2fsprogs</code>exfat <code>exfatprogs</code>Btrfs <code>btrfs-progs</code>XFS <code>xfsprogs</code></p>
+<p>访问RAID分区的工具 <code>mdadm</code>访问LVM分区的工具 <code>lvm2</code>内建音频的 <code>sof-firmware</code>,用于Marvell无线的 <code>linux-firmware-marvell</code>Broadcom wireless的固件包 <code>broadcom-wl</code>联网所需的程序 <code>modemmanager</code>文件编辑器如 <code>nano</code>,<code>vim</code>访问man和info页面中文档的工具:<code>man-db</code>,<code>man-pages</code>,<code>texinfo</code>ssh工具 <code>openssh</code>、网络管理器 <code>networkmanager</code>sudo <code>sudo</code>、zsh <code>zsh</code>、git <code>git</code>、base-level <code>base-level</code>、nodejs <code>nodejs</code>、<code>npm</code></p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">pacstrap -K /mnt base linux linux-firmware interl-ucode amd-ucode \</span><br><span class="line">e2fsprogs exfatprogs btrfs-progs xfsprogs mdadm lvm2 sof-firmware \</span><br><span class="line">linux-firmware-marvell broadcom-wl modemmanager nano vim man-db \</span><br><span class="line">man-pages texinfo openssh networkmanager <span class="built_in">sudo</span> zsh git base-level \</span><br><span class="line">nodejs npm</span><br></pre></td></tr></table></figure>
+<h3 id="生成fstab文件"><a class="markdownIt-Anchor" href="#生成fstab文件"></a> 生成fstab文件</h3>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">genfstab -U /mnt &gt;&gt; /mnt/etc/fstab <span class="comment"># 分区挂载或启用后自动检测并生成系统文件</span></span><br></pre></td></tr></table></figure>
+<h3 id="chroot到新安装的系统"><a class="markdownIt-Anchor" href="#chroot到新安装的系统"></a> chroot到新安装的系统</h3>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">arch-chroot /mnt <span class="comment"># chroot到新安装系统</span></span><br></pre></td></tr></table></figure>
+<h3 id="设置时区"><a class="markdownIt-Anchor" href="#设置时区"></a> 设置时区</h3>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="built_in">ln</span> -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime <span class="comment"># 设置时区为上海</span></span><br><span class="line">hwclock --sysohc <span class="comment"># 生成/etc/adjtime文件</span></span><br></pre></td></tr></table></figure>
+<h3 id="区域化本地设置"><a class="markdownIt-Anchor" href="#区域化本地设置"></a> 区域化本地设置</h3>
+<p>打开<code>/etc/locale.gen</code>文件取消<code>en_US.UTF-8 UFT-8</code>和<code>zh_CN.UTF-8 UTF-8</code>的注释，保存退出执行<code>locale-gen</code>命令打开<code>/etc/locale.conf</code>文件添加<code>LANG=en_US.UTF-8</code>和<code>LC_TIME=zh_CN.UTF-8</code>两行</p>
+<h3 id="网络配置"><a class="markdownIt-Anchor" href="#网络配置"></a> 网络配置</h3>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">vim /etc/hostname <span class="comment"># 在文件中输入主机名</span></span><br><span class="line">ip <span class="built_in">link</span> show <span class="comment"># 查看网络接口</span></span><br><span class="line">ip <span class="built_in">link</span> <span class="built_in">set</span> interface up <span class="comment"># 开启网络接口，interface替换为网络接口</span></span><br><span class="line">systemctl <span class="built_in">enable</span> NetworkManager.service <span class="comment"># 开机自启网络服务</span></span><br><span class="line">systemctl <span class="built_in">enable</span> sshd.service <span class="comment"># 开机自启sshd服务</span></span><br></pre></td></tr></table></figure>
+<h3 id="设置root密码"><a class="markdownIt-Anchor" href="#设置root密码"></a> 设置root密码</h3>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">passwd root <span class="comment"># 设置root密码</span></span><br></pre></td></tr></table></figure>
+<h3 id="安装grub引导程序"><a class="markdownIt-Anchor" href="#安装grub引导程序"></a> 安装Grub引导程序</h3>
+<p>安装软件包<code>efibootmgr</code>、<code>grub</code></p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># 把grub安装到磁盘</span></span><br><span class="line">grub-install --target=x86_64-efi \</span><br><span class="line">--efi-directory=/boot --bootloader-id=GRUB</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成cfg文件</span></span><br><span class="line">grub-mkconfig -o /boot/grub/grub.cfg</span><br></pre></td></tr></table></figure>
+<p>进入cfg文件 找到 <code>set timeout=10</code>把10改为0保存退出</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="built_in">exit</span> <span class="comment"># 退出chroot环境</span></span><br><span class="line">umount -R /mnt <span class="comment"># 手动卸载全部被挂载分区</span></span><br><span class="line">reboot <span class="comment"># 重启系统</span></span><br></pre></td></tr></table></figure>
+<p>撤出启动盘进入系统后使用 <code>nmtui</code>工具连接网络</p>
+<h3 id="创建普通用户"><a class="markdownIt-Anchor" href="#创建普通用户"></a> 创建普通用户</h3>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /etc/shells` 查看zsh路径</span><br><span class="line">`useradd -m -s <span class="string">&quot;/bin/zsh&quot;</span> <span class="string">&quot;username&quot;</span>` 创建普通用户，并为其指定默认shell为zsh</span><br><span class="line">`passwd <span class="string">&quot;用户名&quot;</span></span><br></pre></td></tr></table></figure>
+<p>使用root用户在 <code>/etc/sudoers</code>文件里找到 <code>root ALL=(ALL:ALL) ALL</code>复制在下一行粘贴，把root换成我们要添加的普通用户名，保存退出（这样就能普通用户就能使用sudo命令执行root权限了）建议用户名不要用中文、大写，否则Hyprland登陆会登不进去</p>
+<p><img src="https://raw.githubusercontent.com/wcis314/note_img/refs/heads/img/p2.jpg" alt="" /></p>
+<h2 id="配置"><a class="markdownIt-Anchor" href="#配置"></a> 配置</h2>
+<h3 id="配置archlinuxcn"><a class="markdownIt-Anchor" href="#配置archlinuxcn"></a> 配置ArchLinuxCN</h3>
+<p>使用<a href="https://mirrors.tuna.tsinghua.edu.cn/help/archlinuxcn/">清华的软件源</a>在<code>/etc/pacman.conf</code> 末尾添加以下语句</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">[archlinuxcn]</span><br><span class="line">Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/<span class="variable">$arch</span></span><br></pre></td></tr></table></figure>
+<p>添加本地信任GPG key<code>sudo pacman-key --lsign-key &quot;farseerc@archlinux.org&quot;</code>安装archlinuxcn密钥<code>sudo pacman -Sy archlinuxcn-keyring</code>配置git的全局设置</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">git config --global user.name <span class="string">&quot;your_github_username&quot;</span></span><br><span class="line">git config --global user.email <span class="string">&quot;your_github_email@email.com&quot;</span></span><br><span class="line">git config --global init.defaultBranch main</span><br></pre></td></tr></table></figure>
+<h3 id="npm换源"><a class="markdownIt-Anchor" href="#npm换源"></a> npm换源</h3>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">node -v &amp;&amp; npm -v <span class="comment"># 查看npm、node版本</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 更换华为源</span></span><br><span class="line"></span><br><span class="line">npm config <span class="built_in">set</span> registry </span><br><span class="line">https://mirrors.huaweicloud.com/repository/npm/</span><br><span class="line"></span><br><span class="line">npm cache clean -f <span class="comment"># 清理缓存</span></span><br><span class="line"></span><br><span class="line">npm config list <span class="comment"># 查看源</span></span><br><span class="line"></span><br><span class="line">npm update <span class="comment"># 更新</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> npm install -g npm@latest <span class="comment"># 更新npm</span></span><br></pre></td></tr></table></figure>
+<p>使用npm下载工具需要root权限</p>
+<h3 id="github-ssh下载"><a class="markdownIt-Anchor" href="#github-ssh下载"></a> Github SSH下载</h3>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">ssh-keygen -t ed25519 -C <span class="string">&quot;your_name@email.com&quot;</span></span><br><span class="line"><span class="built_in">cat</span> ~/.ssh/id_ed25519.pub</span><br></pre></td></tr></table></figure>
+<p>登录<strong>github</strong>，点击<strong>头像</strong>，点击<strong>设置</strong>，找到 <strong>SSH and GPG keys</strong> 选项，点击 <strong>SSH keys</strong> 右边的 <strong>New SSH key</strong> 按钮，标题给个恰当的密钥名字，把 cat ~/.ssh/id_ed25519.pub的输出全部复制进 Key 里面，单击 <strong>Add SSH key</strong>，接着输入你的 github 登录密码<code>ssh -T git@github.com</code>弹出以下内容，代表成功<code>Hi your_name! You’ve successfully authenticated, but GitHub does not provide shell access.</code></p>
+<h3 id="paru安装"><a class="markdownIt-Anchor" href="#paru安装"></a> paru安装</h3>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://aur.archlinux.org/paru.git</span><br><span class="line"><span class="built_in">cd</span> paru</span><br><span class="line">makepkg -si</span><br></pre></td></tr></table></figure>
+<p><code>sudo vim /etc/pacman.conf</code>把 Color的注释去掉<code>sudo nano /etc/paru.conf</code> 把BottomUp注释去掉<code>paru -Syu</code> 更新</p>
+<h3 id="hyprland安装"><a class="markdownIt-Anchor" href="#hyprland安装"></a> Hyprland安装</h3>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/JaKooLit/Arch-Hyprland.git</span><br><span class="line"><span class="built_in">cd</span> Arch-Hyprland</span><br><span class="line"><span class="built_in">chmod</span> +x install.sh</span><br><span class="line">./install.sh</span><br></pre></td></tr></table></figure>
+<p>安装过程需要全程联网并且建议挑网络好的时候安装如果安装过程中经常有软件下载失败可以先把最后的标记失败的软件安装上，再配置好npm和github ssh下载方式，再进行下载</p>
+<p>安装一些娱乐软件</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">paru -S google-chrome <span class="comment"># 安装chrome浏览器</span></span><br><span class="line">paru -S baidunetdisk-bin <span class="comment"># 安装百度网盘</span></span><br><span class="line">paru -S nerd-fonts <span class="comment"># 安装nerd-fonts字体</span></span><br><span class="line">paru -S linuxqq wechat <span class="comment"># qq和微信</span></span><br><span class="line">paru bilibili <span class="comment"># 选择1</span></span><br></pre></td></tr></table></figure>
+<p>安装中文字体</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> pacman -Sy adobe-source-han-sans-cn-fonts \</span><br><span class="line">adobe-source-han-serif-cn-fonts noto-fonts-cjk \</span><br><span class="line">wqy-microhei wqy-microhei wqy-microhei-lite \</span><br><span class="line">wqy-bitmapfont ttf-arphic-ukai ttf-arphic-uming</span><br></pre></td></tr></table></figure>
+<h3 id="oh-my-zsh"><a class="markdownIt-Anchor" href="#oh-my-zsh"></a> oh-my-zsh</h3>
+<p>如果安装完毕，终端没有ohmyzsh美化，可以自己尝试安装</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh</span><br><span class="line"></span><br><span class="line"><span class="built_in">cp</span> ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc</span><br><span class="line"></span><br><span class="line"><span class="comment"># 主题 powerlevel10k</span></span><br><span class="line">git <span class="built_in">clone</span> --depth=1 https://gitee.com/romkatv/powerlevel10k.git \</span><br><span class="line"><span class="variable">$&#123;ZSH_CUSTOM:-<span class="variable">$HOME</span>/.oh-my-zsh/custom&#125;</span>/themes/powerlevel10k</span><br><span class="line"><span class="comment"># 高亮</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-syntax-highlighting.git \</span><br><span class="line"><span class="variable">$&#123;ZSH_CUSTOM:-~/.oh-my-zsh/custom&#125;</span>/plugins/zsh-syntax-highlighting</span><br><span class="line"><span class="comment"># 自动补全</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-autosuggestions \</span><br><span class="line"><span class="variable">$&#123;ZSH_CUSTOM:-~/.oh-my-zsh/custom&#125;</span>/plugins/zsh-autosuggestions</span><br><span class="line"></span><br><span class="line"><span class="comment"># 进入.zshrc文件</span></span><br><span class="line"><span class="comment"># 找到 ZSH_THEME，把值改为&quot;powerlevel10k/powerlevel10k&quot;</span></span><br><span class="line"><span class="comment"># 找到 plugins=(git)，在 git 后面添加 zsh-autosuggestions zsh-syntax-highlighting</span></span><br></pre></td></tr></table></figure>
+<h3 id="lazyvim"><a class="markdownIt-Anchor" href="#lazyvim"></a> LazyVim</h3>
+<p>保证装有neovim和git</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> pacman -Sy neovim</span><br><span class="line">git <span class="built_in">clone</span> https://github.com/LazyVim/starter ~/.config/nvim</span><br><span class="line"><span class="built_in">rm</span> -rf ~/.config/nvim/.git</span><br><span class="line">nvim <span class="comment"># 启动nvim，安装插件</span></span><br><span class="line"><span class="comment"># 在~/.zshrc文件中添加</span></span><br><span class="line"><span class="built_in">alias</span> vim=<span class="string">&#x27;nvim&#x27;</span> <span class="comment"># 需要先将vim删掉，如果出现有vim但是pacman找不到，可以先安装，再删除</span></span><br></pre></td></tr></table></figure>
+<h3 id="电池管理"><a class="markdownIt-Anchor" href="#电池管理"></a> 电池管理</h3>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> pacman -S tlp</span><br><span class="line">paru -S tlpui-git <span class="comment"># 如果出现git仓库克隆失败可以先执行下行注释git命令克隆下来,再安装</span></span><br><span class="line"><span class="comment"># git clone https://github.com/linrunner/TLP.git</span></span><br><span class="line">paru -S tlp-rdw</span><br><span class="line">paru -S tp_smapi-lts tp_smapi</span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> tlp.service</span><br><span class="line"><span class="built_in">sudo</span> systemctl start tlp.service</span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> NetworkManager-dispatcher.service</span><br><span class="line"><span class="built_in">sudo</span> systemctl start NetworkManager-dispatcher.service</span><br><span class="line"><span class="built_in">sudo</span> systemctl mask systemd-rfkill.socket systemd-rfkill.service</span><br></pre></td></tr></table></figure>
+<h3 id="风扇控制"><a class="markdownIt-Anchor" href="#风扇控制"></a> 风扇控制</h3>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">paru -S nbfc-linux-git</span><br></pre></td></tr></table></figure>
+<h3 id="ufw防火墙"><a class="markdownIt-Anchor" href="#ufw防火墙"></a> ufw防火墙</h3>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> pacman -S ufw</span><br><span class="line">systemctl <span class="built_in">enable</span> ufw</span><br><span class="line">systemctl start ufw</span><br><span class="line"></span><br><span class="line"><span class="comment"># 操作</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> ufw allow 3389/tcp</span><br><span class="line"><span class="built_in">sudo</span> ufw allow 3389/udp</span><br><span class="line"><span class="built_in">sudo</span> ufw reset</span><br><span class="line"><span class="built_in">sudo</span> ufw status</span><br><span class="line"><span class="built_in">sudo</span> ufw default deny</span><br></pre></td></tr></table></figure>
+<h3 id="安装vscode"><a class="markdownIt-Anchor" href="#安装vscode"></a> 安装VSCode</h3>
+<p>在<a href="https://code.visualstudio.com/Download">VSCode下载链接</a>下载.tar.gz包</p>
+<p>把安装包<code>tar -zxvf 安装包.tar.gz</code>解压，放在/opt/目录下</p>
+<p>使用ln命令创建软件链接<code>ln -s /opt/code-stable-x64-1731511985 /opt/vscode</code></p>
+<p>创建<code>vscode.desktop</code>文件(快捷方式)<a href="about:blank">链接</a></p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">[Desktop Entry]</span><br><span class="line">Type=Application</span><br><span class="line">Name=Visual Studio Code</span><br><span class="line">Exec=/opt/vscode/code</span><br><span class="line">Icon=/opt/vscode/resources/app/resources/linux/code.png</span><br><span class="line">Comment=Visual Studio Code</span><br><span class="line">Terminal=<span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<p>把文件放在 <code>/usr/share/applications/</code>目录下，结束<br />
+<img src="https://raw.githubusercontent.com/wcis314/note_img/refs/heads/img/p3.jpg" alt="" /></p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>Arch</tag>
+        <tag>Linux</tag>
+        <tag>Hyprland</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Github部署Hexo添加README文件</title>
+    <url>/2025/01/10/Github%E9%83%A8%E7%BD%B2Hexo%E6%B7%BB%E5%8A%A0README%E6%96%87%E4%BB%B6/</url>
+    <content><![CDATA[<p>在博客的根目录的<code>source</code>目录添加<code>README.md</code>文件</p>
+<p>在根目录的<code>_config.yml</code>文件中找到<code>skip_render</code></p>
+<p>写入<code>README.md</code>，如下图：</p>
+<p><img src="https://raw.githubusercontent.com/wcis314/note_img/img/p5.jpg" alt="cover" /></p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>Github</tag>
+        <tag>Hexo</tag>
+        <tag>README</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hexo基本操作</title>
+    <url>/2025/01/09/Hexo%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/</url>
+    <content><![CDATA[<h2 id="下载hexo"><a class="markdownIt-Anchor" href="#下载hexo"></a> 下载Hexo</h2>
+<p><code>npm install -g hexo-cli</code></p>
+<h2 id="创建博客"><a class="markdownIt-Anchor" href="#创建博客"></a> 创建博客</h2>
+<p><code>hexo init blog</code></p>
+<h2 id="创建文章"><a class="markdownIt-Anchor" href="#创建文章"></a> 创建文章</h2>
+<p><code>hexo new text</code></p>
+<h2 id="xxxxxxxxxx9-1-sudo-vim-usrshareapplicationscodedesktop2-添加内容3-desktop-entry4-namevisual-studio-code5-typeapplication6-execoptcodecode7-iconoptcoderesourcesappresourceslinuxcodepng8-terminalfalse9-commentvisual-studio-codebash"><a class="markdownIt-Anchor" href="#xxxxxxxxxx9-1-sudo-vim-usrshareapplicationscodedesktop2-添加内容3-desktop-entry4-namevisual-studio-code5-typeapplication6-execoptcodecode7-iconoptcoderesourcesappresourceslinuxcodepng8-terminalfalse9-commentvisual-studio-codebash"></a> xxxxxxxxxx9 1    sudo vim /usr/share/applications/code.desktop2    # 添加内容3    [Desktop Entry]4    Name=Visual Studio Code5    Type=Application6    Exec=/opt/code/code7    Icon=/opt/code/resources/app/resources/linux/code.png8    Terminal=false9    Comment=Visual Studio Codebash</h2>
+<p><code>hexo new page test</code></p>
+<h2 id="预览和部署网站"><a class="markdownIt-Anchor" href="#预览和部署网站"></a> 预览和部署网站</h2>
+<h3 id="预览网站"><a class="markdownIt-Anchor" href="#预览网站"></a> 预览网站</h3>
+<p><code>hexo clean &amp;&amp; hexo g &amp;&amp; hexo s</code></p>
+<h3 id="部署网站"><a class="markdownIt-Anchor" href="#部署网站"></a> 部署网站</h3>
+<p><code>npm install hexo-deployer-git</code></p>
+<p>在根目录下_config.yml配置:</p>
+<figure class="highlight yaml"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">	<span class="attr">type:</span> <span class="string">&#x27;git&#x27;</span></span><br><span class="line">	<span class="attr">repo:</span> <span class="string">&#x27;git@github.com:your name/your repositories&#x27;</span> <span class="comment"># 仓库地址，可选择ssh和https两种</span></span><br><span class="line">	<span class="attr">branch:</span> <span class="string">&#x27;main&#x27;</span> <span class="comment"># 分支</span></span><br></pre></td></tr></table></figure>
+<p><code>hexo clean &amp;&amp; hexo g &amp;&amp; hexo d</code></p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Docker安装Windows</title>
+    <url>/2025/01/05/Docker%E5%AE%89%E8%A3%85Windows/</url>
+    <content><![CDATA[<p>系统为Arch Linux，桌面为Hyprland</p>
+<h2 id="检查是否支持kvm"><a class="markdownIt-Anchor" href="#检查是否支持kvm"></a> 检查是否支持KVM</h2>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">egrep <span class="string">&quot;(svm|vmx)&quot;</span> /proc/cpuinfo</span><br></pre></td></tr></table></figure>
+<h2 id="安装docker-docker-compose"><a class="markdownIt-Anchor" href="#安装docker-docker-compose"></a> 安装Docker、Docker-compose</h2>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> pacman -S docker <span class="comment"># 安装docker</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> docker.service &amp;&amp; \</span><br><span class="line"><span class="built_in">sudo</span> systemctl start docker.service <span class="comment"># 开机自启和启动docker</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> usermod -aG docker <span class="variable">$USER</span> <span class="comment"># 创建docker用户</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">sudo</span> pacman -S docker-compose <span class="comment"># 安装docker-compose</span></span><br><span class="line"><span class="built_in">sudo</span> pacman -S bash-comletion</span><br></pre></td></tr></table></figure>
+<h2 id="docker操作"><a class="markdownIt-Anchor" href="#docker操作"></a> Docker操作</h2>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">docker ps -a</span><br><span class="line">docker images</span><br><span class="line">docker-compose up <span class="comment"># 启动docker</span></span><br><span class="line"><span class="comment">#创建docker-compose.yml文件</span></span><br><span class="line">vim ~/docker-compose.yml</span><br></pre></td></tr></table></figure>
+<h2 id="安装windows"><a class="markdownIt-Anchor" href="#安装windows"></a> 安装Windows</h2>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/dockur/windows.git</span><br><span class="line"><span class="built_in">cd</span> windows</span><br><span class="line">docker build -t dockurr/windows . <span class="comment"># 安装windows docker</span></span><br><span class="line">docker pull ghcr.io/qemus/qemu-docker:6.11 <span class="comment"># 挂梯子pull</span></span><br><span class="line">paru -S wsdd virtio-win tini nginx</span><br></pre></td></tr></table></figure>
+<p>下载Windows ISO镜像文件创建docker-compose文件，添加以下内容</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">version: <span class="string">&quot;3&quot;</span></span><br><span class="line">services:</span><br><span class="line">  windows:</span><br><span class="line">    image: dockurr/windows</span><br><span class="line">    container_name: windows</span><br><span class="line">    devices:</span><br><span class="line">      - /dev/kvm</span><br><span class="line">    cap_add:</span><br><span class="line">      - NET_ADMIN</span><br><span class="line">    ports:</span><br><span class="line">      - 8006:8006</span><br><span class="line">      - 3389:3389/tcp</span><br><span class="line">      - 3389:3389/udp</span><br><span class="line">    stop_grace_period: 2m</span><br><span class="line">    restart: on-failure</span><br><span class="line">    environment:</span><br><span class="line">      VERSION: <span class="string">&quot;http://winiso/Win10_22H2_Chinese_Simplified_x64v1.iso&quot;</span></span><br><span class="line">      MANUAL: <span class="string">&quot;N&quot;</span></span><br><span class="line">    volumes:</span><br><span class="line">      - ./win:/storage</span><br><span class="line">    depends_on:</span><br><span class="line">      - winiso</span><br><span class="line"></span><br><span class="line">  winiso:</span><br><span class="line">    image: nginx:alpine</span><br><span class="line">    container_name: winiso</span><br><span class="line">    restart: on-failure</span><br><span class="line">    volumes:</span><br><span class="line">      - /home/kingofthunder/ISO:/usr/share/nginx/html</span><br></pre></td></tr></table></figure>
+<p>使用<code>docker compose up</code>启动Windows镜像</p>
+<p>在浏览器输入<code>docker ip:8006</code>即可使用</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
+        <tag>Windows</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux上VSCode.tar.gz安装VSCode</title>
+    <url>/2025/01/05/Linux%E4%B8%8AVSCode-tar-gz%E5%AE%89%E8%A3%85VSCode/</url>
+    <content><![CDATA[<blockquote>
+<p>下载&amp;解压.tar.gz安装包</p>
+</blockquote>
+<blockquote>
+<p>把安装包放在/opt/目录中</p>
+</blockquote>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">tar -zxvf VSCode.tar.gz</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">mv</span> VSCode /opt</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">ln</span> -s /opt/VSCode /opt/code</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>创建快捷方式</p>
+</blockquote>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> vim /usr/share/applications/code.desktop</span><br><span class="line"><span class="comment"># 添加内容</span></span><br><span class="line">[Desktop Entry]</span><br><span class="line">Name=Visual Studio Code</span><br><span class="line">Type=Application</span><br><span class="line">Exec=/opt/code/code</span><br><span class="line">Icon=/opt/code/resources/app/resources/linux/code.png</span><br><span class="line">Terminal=<span class="literal">false</span></span><br><span class="line">Comment=Visual Studio Code</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>tar.gz</tag>
+        <tag>vscode</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Git本地远程推送</title>
+    <url>/2025/01/05/Git%E6%9C%AC%E5%9C%B0%E8%BF%9C%E7%A8%8B%E6%8E%A8%E9%80%81/</url>
+    <content><![CDATA[<h2 id="github-本地配置"><a class="markdownIt-Anchor" href="#github-本地配置"></a> GitHub 本地配置</h2>
+<h3 id="配置本地-git-全局设置"><a class="markdownIt-Anchor" href="#配置本地-git-全局设置"></a> 配置本地 Git 全局设置</h3>
+<p><code>git config --global user.name &quot;your_github_username&quot;``git config --global user.email &quot;your_github_email@outlook.com&quot;</code></p>
+<h3 id="创建一个-github-本地仓库"><a class="markdownIt-Anchor" href="#创建一个-github-本地仓库"></a> 创建一个 GitHub 本地仓库</h3>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> e:\NoteBook                  <span class="comment"># 新建一个文件夹, 使用cd进入</span></span><br><span class="line">git init                        <span class="comment"># 仓库初始化</span></span><br><span class="line">git add *                       <span class="comment"># 把本地仓库中的内容全添加</span></span><br><span class="line">git commit -m <span class="string">&quot;first commit&quot;</span>    <span class="comment"># 提交内容, &quot;first commit&quot;是描述, 不会写就随便填</span></span><br><span class="line">git branch -M main              <span class="comment"># </span></span><br><span class="line">git remote add origin git@github.com:RestorerOfTheWorld/NoteBook.git</span><br><span class="line">git push -u origin main         <span class="comment"># 把本地仓库推送到GitHub仓库上</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>新建后，以后可以用下面的命令把日常更新的内容推送到 GitHub 仓库中去</p>
+</blockquote>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">git add . </span><br><span class="line">git commit -m <span class="string">&quot;commit&quot;</span></span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
+<h3 id="更新同步本地远程-url"><a class="markdownIt-Anchor" href="#更新同步本地远程-url"></a> 更新同步本地/远程 URL</h3>
+<blockquote>
+<p>如果更新了 GitHub 用户名可以使用下面的命令把本地 Git 的用户名同步成 GitHub 上的</p>
+</blockquote>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">git remote -v</span><br><span class="line">git remote set-url origin new_url</span><br><span class="line">git pull origin main</span><br></pre></td></tr></table></figure>
+<h2 id="git-下载"><a class="markdownIt-Anchor" href="#git-下载"></a> Git 下载</h2>
+<p>Windows 下载：<code>winget install Git.Git</code></p>
+<h2 id="linux-下载"><a class="markdownIt-Anchor" href="#linux-下载"></a> Linux 下载</h2>
+<ul>
+<li>
+<p>Debian/Ubuntu：<code>sudo apt install git</code></p>
+</li>
+<li>
+<p>CentOS/Fedora：<code>sudo yum install git 或 sudo dnf install git</code></p>
+</li>
+<li>
+<p>Arch/Manjaro：<code>sudo pacman -S git</code></p>
+</li>
+<li>
+<p>MacOS 下载：<code>brew install git</code></p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PowerShell7</title>
+    <url>/2025/01/06/Powershell7/</url>
+    <content><![CDATA[<h2 id="pwsh-的安装"><a class="markdownIt-Anchor" href="#pwsh-的安装"></a> Pwsh 的安装</h2>
+<p>Pwsh 的安装：</p>
+<figure class="highlight powershell"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># 显示当前powershell版本号</span></span><br><span class="line"><span class="variable">$PSVersionTable</span>.PSVersion</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示当前最新的可用的版本 正常版和预览版</span></span><br><span class="line">winget search Microsoft.PowerShell</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 Winget 安装 PowerShell</span></span><br><span class="line">winget install <span class="literal">--id</span> Microsoft.Powershell <span class="literal">--source</span> winget</span><br></pre></td></tr></table></figure>
+<h2 id="使用-pwshpowershell7"><a class="markdownIt-Anchor" href="#使用-pwshpowershell7"></a> 使用 Pwsh(PowerShell7)</h2>
+<p>win+R 键，打开运行，输入 pwsh，即可</p>
+<h2 id="pwsh-配置"><a class="markdownIt-Anchor" href="#pwsh-配置"></a> Pwsh 配置</h2>
+<p>添加自动补全 (无需 Tab 键):</p>
+<figure class="highlight powershell"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># 已输入过的命令：</span></span><br><span class="line"><span class="built_in">Set-PSReadLineOption</span> <span class="literal">-PredictionSource</span> <span class="built_in">History</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 没有输入过的命令：</span></span><br><span class="line"><span class="built_in">Set-PSReadLineOption</span> <span class="literal">-ShowToolTips</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在pwsh的属性、快捷方式、目标，用下行代码替代，可永久使用智能提示</span></span><br><span class="line"><span class="string">&quot;C:\Program Files\PowerShell\7\pwsh.exe&quot;</span> <span class="literal">-noe</span> <span class="literal">-c</span> <span class="string">&quot;&amp;&#123;  Set-PSReadLineOption -PredictionSource History -ShowToolTips&#125;&quot;</span> <span class="literal">-WorkingDirectory</span> ~</span><br></pre></td></tr></table></figure>
+<dl>
+<dt>设置快捷键：</dt>
+<dd>点击终端标题栏的下三角键</dd>
+<dd>点击<strong>设置</strong>，找到<strong>操作</strong></dd>
+<dd>找到<strong>新建标签页</strong>，修改快捷键为<em>Ctrl+Alt+T</em>，<strong>保存</strong>即可</dd>
+</dl>
+<blockquote>
+<p><code>Get-PSReadlineOption</code>可以查看历史命令的保存路径</p>
+</blockquote>
+<h3 id="安装-使用-oh-my-posh"><a class="markdownIt-Anchor" href="#安装-使用-oh-my-posh"></a> 安装、使用 oh-my-posh</h3>
+<figure class="highlight powershell"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># 安装oh-my-posh</span></span><br><span class="line">winget install <span class="built_in">oh</span><span class="literal">-my-posh</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加ohmyposh到启动文件中</span></span><br><span class="line">notepad <span class="variable">$PROFILE</span> <span class="comment"># 使用记事本打开启动文件</span></span><br><span class="line"><span class="built_in">oh</span><span class="literal">-my-posh</span> init pwsh | <span class="built_in">Invoke-Expression</span> <span class="comment"># 把这行代码添加其中保存</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">Get-PoshThemes</span> <span class="comment"># 查看已有的主题</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">oh</span><span class="literal">-my-posh</span> init pwsh <span class="literal">--config</span> <span class="string">&quot;<span class="variable">$env:POSH_THEMES_PATH</span>/neko.omp.json&quot;</span> | <span class="built_in">Invoke-Expression</span> <span class="comment"># 把没加--config参数的替换为这行, 添加一个叫neko的主题</span></span><br></pre></td></tr></table></figure>
+<p>把<code>C:\Users\chpw2\AppData\Local\Programs\oh-my-posh\themes</code>这个路径添加为名叫<code>POSH_THEMES_PATH</code>的新建环境变量</p>
+<h2 id="安装字体"><a class="markdownIt-Anchor" href="#安装字体"></a> 安装字体</h2>
+<p><a href="https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/FiraCode.zip">Firacode 字体文件下载地址</a></p>
+<p>安装好<strong>Firacode</strong>字体后在终端设置里修改字体，保存退出</p>
+<h2 id="安装-scoop"><a class="markdownIt-Anchor" href="#安装-scoop"></a> 安装 Scoop</h2>
+<p>具体查看<a href="https://gitee.com/scoop-installer">Scoop</a></p>
+<figure class="highlight powershell"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># 脚本执行策略更改，默认自动同意</span></span><br><span class="line"><span class="built_in">Set-ExecutionPolicy</span> RemoteSigned <span class="literal">-scope</span> CurrentUser <span class="literal">-Force</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行安装命令（默认安装在用户目录下，如需更改请执行“自定义安装目录”命令）</span></span><br><span class="line"><span class="built_in">iwr</span> <span class="literal">-useb</span> scoop.<span class="number">201704</span>.xyz | <span class="built_in">iex</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">## 自定义安装目录（注意将目录修改为合适位置)</span></span><br><span class="line"><span class="built_in">irm</span> scoop.<span class="number">201704</span>.xyz <span class="literal">-outfile</span> <span class="string">&#x27;install.ps1&#x27;</span></span><br><span class="line"></span><br><span class="line">.\install.ps1 <span class="literal">-ScoopDir</span> <span class="string">&#x27;E:\Scoop&#x27;</span> <span class="literal">-ScoopGlobalDir</span> <span class="string">&#x27;E:\GlobalScoopApps&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换分支到develop</span></span><br><span class="line">scoop config scoop_branch develop</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重新拉取git</span></span><br><span class="line">scoop update</span><br><span class="line"></span><br><span class="line"><span class="comment"># 基本语法</span></span><br><span class="line">scoop bucket add &lt;别名&gt; &lt;git地址&gt;</span><br><span class="line">scoop bucket <span class="built_in">rm</span> &lt;别名&gt;</span><br><span class="line"></span><br><span class="line">scoop bucket add dorado https://gitee.com/scoop<span class="literal">-installer</span>/dorado</span><br><span class="line">scoop bucket add scoopet https://gitee.com/scoop<span class="literal">-installer</span>/scoopet</span><br><span class="line">scoop bucket add scoopcn https://gitee.com/scoop<span class="literal">-installer</span>/scoopcn</span><br><span class="line">scoop bucket add scoop<span class="literal">-zapps</span> https://gitee.com/scoop<span class="literal">-installer</span>/scoop<span class="literal">-zapps</span></span><br><span class="line">scoop bucket add <span class="built_in">echo</span> https://gitee.com/scoop<span class="literal">-installer</span>/<span class="built_in">echo</span><span class="literal">-scoop</span></span><br><span class="line">scoop bucket add aki https://gitee.com/scoop<span class="literal">-installer</span>/aki<span class="literal">-apps</span></span><br><span class="line">scoop bucket add siku https://gitee.com/scoop<span class="literal">-installer</span>/siku</span><br><span class="line">scoop bucket add lemon https://gitee.com/scoop<span class="literal">-installer</span>/scoop<span class="literal">-lemon</span></span><br><span class="line">scoop bucket add cluttered https://gitee.com/scoop<span class="literal">-installer</span>/Cluttered<span class="literal">-bucket</span></span><br><span class="line">scoop bucket add iszy https://gitee.com/scoop<span class="literal">-installer</span>/scoop<span class="literal">-iszy</span></span><br><span class="line">scoop bucket add tomato https://gitee.com/scoop<span class="literal">-installer</span>/tomato</span><br><span class="line">scoop bucket add muggle https://gitee.com/scoop<span class="literal">-installer</span>/scoop<span class="literal">-muggle</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看已知bucket</span></span><br><span class="line">scoop bucket known</span><br></pre></td></tr></table></figure>
+<h2 id="安装-neovim"><a class="markdownIt-Anchor" href="#安装-neovim"></a> 安装 NeoVim</h2>
+<figure class="highlight powershell"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># 安装必备软件</span></span><br><span class="line">scoop install neovim neovide git lazygit gcc ripgrep fd unzip tree<span class="literal">-sitter</span> luarocks</span><br><span class="line"></span><br><span class="line"><span class="comment"># 下载安装LazyVim配置</span></span><br><span class="line">git clone git@github.com:LazyVim/starter <span class="variable">$env:LOCALAPPDATA</span>\nvim <span class="literal">--depth</span>=<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 为&#x27;nvim&#x27;设置别名为&#x27;vim&#x27;</span></span><br><span class="line"><span class="built_in">Set-Alias</span> <span class="literal">-Name</span> vim <span class="literal">-Value</span> <span class="string">&#x27;nvim&#x27;</span></span><br></pre></td></tr></table></figure>
+<h3 id="nodejs-安装"><a class="markdownIt-Anchor" href="#nodejs-安装"></a> NodeJS 安装</h3>
+<p><a href="https://nodejs.org/zh-cn/download/package-manager">NodeJS 安装方法</a>:</p>
+<figure class="highlight powershell"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># installs fnm (Fast Node Manager)</span></span><br><span class="line">winget install Schniz.fnm</span><br><span class="line"><span class="comment"># configure fnm environment</span></span><br><span class="line">fnm env <span class="literal">--use-on-cd</span> | <span class="built_in">Out-String</span> | <span class="built_in">Invoke-Expression</span></span><br><span class="line"><span class="comment"># download and install Node.js</span></span><br><span class="line">fnm use <span class="literal">--install-if-missing</span> <span class="number">20</span></span><br><span class="line"><span class="comment"># verifies the right Node.js version is in the environment</span></span><br><span class="line">node <span class="literal">-v</span> <span class="comment"># should print `v20.17.0`</span></span><br><span class="line"><span class="comment"># verifies the right npm version is in the environment</span></span><br><span class="line">npm <span class="literal">-v</span> <span class="comment"># should print `10.8.2`</span></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>Powershell7</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>WSL2安装配置</title>
+    <url>/2025/01/05/Wsl2%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<h2 id="安装-wsl2"><a class="markdownIt-Anchor" href="#安装-wsl2"></a> 安装 WSL2</h2>
+<ul>
+<li>启用适用于 Linux 的 Windows 子系统</li>
+</ul>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart</span><br></pre></td></tr></table></figure>
+<ul>
+<li>启用虚拟化</li>
+</ul>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart</span><br></pre></td></tr></table></figure>
+<ul>
+<li>启动 Hyper-V</li>
+</ul>
+<p>Windows+R 键，调出运行，键入 control，进入控制面板，进入程序，打开启动或关闭 Windows 功能，勾选 Hyper-V，重启</p>
+<p><a href="https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi" title="把链接拷贝到浏览器上">下载并安装 X64 的 WSL2 linux 内核升级包</a></p>
+<p>设置 WSL 默认版本</p>
+<p><code>wsl --set-default-version 2</code></p>
+<h2 id="安装-linux"><a class="markdownIt-Anchor" href="#安装-linux"></a> 安装 Linux</h2>
+<p>打开 Store 商店，输入 Arch，下载</p>
+<p>下载完了，打开，输入用户名，密码</p>
+<h2 id="配置-arch"><a class="markdownIt-Anchor" href="#配置-arch"></a> 配置 Arch</h2>
+<h3 id="换源"><a class="markdownIt-Anchor" href="#换源"></a> 换源</h3>
+<p>切换 Arch linux、Arch linux CN 源</p>
+<p><a href="https://mirrors.ustc.edu.cn/help/">中科大软件源</a></p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> pacman -Syyuu</span><br><span class="line"><span class="built_in">sudo</span> pacman-key --lsign-key <span class="string">&quot;farseerfc@archlinux.org&quot;</span></span><br><span class="line"><span class="built_in">sudo</span> pacman -S archlinuxcn-keyring</span><br><span class="line"><span class="built_in">sudo</span> pacman -S yay</span><br><span class="line"><span class="built_in">sudo</span> passwd root <span class="comment"># 修改root密码</span></span><br></pre></td></tr></table></figure>
+<p>下载 nvim、zsh &amp; ohmyzsh、yay</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> /etc/shells <span class="comment"># 查看zsh是否安装</span></span><br><span class="line"><span class="built_in">sudo</span> pacman -S zsh</span><br><span class="line">git <span class="built_in">clone</span> --depth=1 git@github.com:ryanoasis/nerd-fonts.git</span><br><span class="line"><span class="built_in">cd</span> nerd-fonts</span><br><span class="line">./install.sh</span><br></pre></td></tr></table></figure>
+<h3 id="zsh-ohmyzsh"><a class="markdownIt-Anchor" href="#zsh-ohmyzsh"></a> zsh &amp; ohmyzsh</h3>
+<p>ohmyzsh 安装：</p>
+<ul>
+<li>把 oh-my-zsh 项目 Clone 下来：</li>
+</ul>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh</span><br></pre></td></tr></table></figure>
+<ul>
+<li>复制 .zshrc</li>
+</ul>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc</span><br></pre></td></tr></table></figure>
+<ul>
+<li>更改你的默认 Shell</li>
+</ul>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">chsh -s /bin/zsh</span><br></pre></td></tr></table></figure>
+<p>zsh 插件：</p>
+<ul>
+<li>
+<p>powerlevel10k(主题)</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --depth=1 https://gitee.com/romkatv/powerlevel10k.git <span class="variable">$&#123;ZSH_CUSTOM:-<span class="variable">$HOME</span>/.oh-my-zsh/custom&#125;</span>/themes/powerlevel10k</span><br></pre></td></tr></table></figure>
+<p>把.zshrc 打开，找到 ZSH_THEME，把值改为&quot;powerlevel10k/powerlevel10k&quot;</p>
+</li>
+<li>
+<p>auto-suggestion(自动补全)</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-autosuggestions <span class="variable">$&#123;ZSH_CUSTOM:-~/.oh-my-zsh/custom&#125;</span>/plugins/zsh-autosuggestions</span><br></pre></td></tr></table></figure>
+<p>把.zshrc 打开，找到 plugins=(git)，在 git 后面添加 zsh-autosuggestions</p>
+</li>
+<li>
+<p>syntax highlighting(语法高亮)</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-syntax-highlighting.git <span class="variable">$&#123;ZSH_CUSTOM:-~/.oh-my-zsh/custom&#125;</span>/plugins/zsh-syntax-highlighting</span><br></pre></td></tr></table></figure>
+<p>把<code>.zshrc</code> 打开，找到 <code>plugins=(git)</code>，在 <code>git</code> 后面添加 <code>zsh-syntax-highlighting</code></p>
+</li>
+</ul>
+<p>最后<code>source ~/.zshrc</code></p>
+<h3 id="nvim"><a class="markdownIt-Anchor" href="#nvim"></a> nvim</h3>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> pacman -S neovim</span><br><span class="line">git <span class="built_in">clone</span> git@github.com:ayamir/nvimdots.git</span><br><span class="line"><span class="built_in">cd</span> nvimdots/scripts</span><br><span class="line">./install.sh</span><br><span class="line"><span class="comment"># 如果始终无法安装成功，则执行下条命令</span></span><br><span class="line"><span class="built_in">rm</span> -fr ~/.local/share/nvim/site/lazy</span><br></pre></td></tr></table></figure>
+<h3 id="nano-编辑器"><a class="markdownIt-Anchor" href="#nano-编辑器"></a> nano 编辑器</h3>
+<p><code>Ctrl+O</code>:保存，按<strong>回车</strong>保存当前文件</p>
+<p><code>Ctrl+X</code>:退出</p>
+<h2 id="迁移-wsl2"><a class="markdownIt-Anchor" href="#迁移-wsl2"></a> 迁移 WSL2</h2>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">wsl --shutdown <span class="comment">#关闭所有正在运行的实例</span></span><br><span class="line">wsl -l -v <span class="comment">#查看STATE是否为Stopped</span></span><br><span class="line">wsl --<span class="built_in">export</span> Ubuntu  D:\Ubuntu_WSL2\Ubuntu.tar <span class="comment">#导出Ubuntu到D盘的Ubuntu_WSL2目录并创建一个Ubuntu.tar的归档文件</span></span><br><span class="line">wsl --unregister Ubuntu <span class="comment">#注销Ubuntu</span></span><br><span class="line">wsl --import Ubuntu D:\Ubuntu_WSL2 D:\Ubuntu_WSL2\Ubuntu.tar <span class="comment">#把Ubuntu.tar重新注册为linux发行版</span></span><br><span class="line">Ubuntu config --default-user chpw <span class="comment">#新建一个叫chpw用户</span></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>Arch</tag>
+        <tag>Linux</tag>
+        <tag>Windows</tag>
+        <tag>WSL2</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CC2530学习笔记</title>
+    <url>/2025/01/06/cc2530%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<blockquote>
+<p>需要使用的软件有:</p>
+<ul>
+<li>
+<p>IAR Embedded Workbench IDE</p>
+</li>
+<li>
+<p>SmartRF Flash Programmer</p>
+</li>
+</ul>
+<p>硬件:</p>
+<ul>
+<li>
+<p>一个CC Debugger仿真器、USB充电器</p>
+</li>
+<li>
+<p>蓝色zigbee智能节点盒及其充电器</p>
+</li>
+<li>
+<p>一台装有职业院校技能大赛物联网专用win10系统的PC</p>
+</li>
+</ul>
+</blockquote>
+<h2 id="iar创建工程文件"><a class="markdownIt-Anchor" href="#iar创建工程文件"></a> IAR创建工程文件</h2>
+<ol>
+<li>
+<p>创建一个空目录</p>
+</li>
+<li>
+<p>打开IAR软件，创建一个空workspace(工作区) <code>File -&gt; New -&gt; Workspace</code></p>
+</li>
+<li>
+<p>创建工程<code>Project -&gt; Create New Project... -&gt; Tool chain 选8051, Empty project -&gt; OK -&gt; 弹出的窗口找到新建的空目录，把保存文件名字改下 -&gt; 保存</code></p>
+</li>
+<li>
+<p>基础设置<code>在软件的左边Workspace区的工程文件上右击 -&gt; 选Options... -&gt; 在Device框 点击右边的 ...  -&gt; 弹出窗口下拉找到Texas Instruments打开 -&gt; 选CC2530F2256.i51文件打开 -&gt; 在Debugger栏 -&gt; Driver下拉菜单找到Texas Instruments点击 -&gt; 在Linker栏 -&gt; Output -&gt; Output file -&gt; 勾选Override default -&gt; 文件名可以不改，把后缀名改成.hex就行 -&gt; Format -&gt; 勾选Other单选框，Output format默认inter-extended，如果不是，请改正 -&gt; OK</code></p>
+</li>
+<li>
+<p>新建文件，然后把文件保存到空目录下<code>File -&gt; New -&gt; File</code></p>
+</li>
+<li>
+<p><code>右击左边的工程文件 -&gt; Add -&gt; Add &quot;main.c&quot;</code>: main.c是新建的文件</p>
+</li>
+<li>
+<p>创建eww工作区文件<code>Project -&gt; Rebuild All -&gt; 在当前目录下保存</code></p>
+</li>
+</ol>
+<h2 id="将寄存器中的某些位清0或置1"><a class="markdownIt-Anchor" href="#将寄存器中的某些位清0或置1"></a> 将寄存器中的某些位清0或置1</h2>
+<blockquote>
+<p>基本思路: 将要操作的位置为1，如果是与运算，则要使用到取反(<code>~</code>)操作符</p>
+<p>需要用到16进制的8421法则</p>
+</blockquote>
+<h3 id="将某些位置1同时不影响其他位"><a class="markdownIt-Anchor" href="#将某些位置1同时不影响其他位"></a> 将某些位置1同时不影响其他位</h3>
+<dl>
+<dt><strong>或</strong>操作<code>|=</code>：</dt>
+<dd>
+<p>任何值与0相或，保持原值；</p>
+</dd>
+<dd>
+<p>任何值与1相或，结果为1；</p>
+</dd>
+</dl>
+<h3 id="将某些位置0同时不影响其他位"><a class="markdownIt-Anchor" href="#将某些位置0同时不影响其他位"></a> 将某些位置0同时不影响其他位</h3>
+<dl>
+<dt><strong>与</strong>操作<code>&amp;=</code>:</dt>
+<dd>
+<p>任何值与1相与，保持原值；</p>
+</dd>
+<dd>
+<p>任何值与0相与，结果为0;</p>
+</dd>
+</dl>
+<h2 id="cc2530端口引脚概述"><a class="markdownIt-Anchor" href="#cc2530端口引脚概述"></a> CC2530端口引脚概述</h2>
+<ul>
+<li>
+<p>采用QFN40封装，有40个引脚。</p>
+</li>
+<li>
+<p>有21个数字I/O端口，其中P0和P1是8个引脚，P2仅有5个可以使用。</p>
+</li>
+<li>
+<p>实际开发可用I/O端口只有17个</p>
+</li>
+<li>
+<p>可配置为通用I/O端口，或外部设备I/O</p>
+</li>
+<li>
+<p>输入端口具备上拉或下拉能力</p>
+</li>
+<li>
+<p>每个I/O端口都可以配置成外围中断源的输入引脚</p>
+</li>
+<li>
+<p>P1_0和P1_1都没有上拉/下拉能力</p>
+</li>
+<li>
+<p>P1_0和P1_1具备20mA搞驱动输出，其余I/O引脚是4mA的驱动能力</p>
+</li>
+</ul>
+<p>在程序编写中，引入头文件<code>#include &lt;iocc2530.h&gt;</code></p>
+<p>与通用I/O端口相关的常用寄存器有下面4个：</p>
+<ol>
+<li>
+<p><img src="/img/P1%E7%AB%AF%E5%8F%A3SEL&amp;DIR&amp;INP.jpg" alt="P1端口" /></p>
+</li>
+<li>
+<p>PxSEL: <strong><u>端口功能选择</u></strong>，设置端口是通用I/O还是外设功能端口。置为0，端口设置为通用I/O模式；置为1，端口设置为外设功能</p>
+</li>
+<li>
+<p>PxDIR: <u><strong>端口方向选择</strong></u>，作为通用I/O时，用来<em><strong>设置数据的传输方向</strong></em>。置为0，输入；置为1，输出</p>
+</li>
+<li>
+<p>PxINP: 作为通用输入端口时，<u><strong>选择输入模式</strong></u>是<u><em>上拉</em></u>、<u><em>下拉</em></u>还是<u><em>三态</em></u>(高电平、低电平、高阻态)。置为0，上拉/下拉；置为1，三态</p>
+<ol>
+<li>P0INP，对上拉/下拉控制，需要结合P2INP实现</li>
+<li><img src="/img/P2INP.jpg" alt="" /></li>
+</ol>
+</li>
+<li>
+<p>Px: 数据端口，用来<strong>控制端口的输入</strong>或<strong>获取端口的输入</strong></p>
+</li>
+</ol>
+<p>P0SEL&amp;=~0x06;</p>
+<p>P0DIR|=0x06;</p>
+<p>P0INP&amp;=~0x06;</p>
+<p>P2INP&amp;=~0x20;</p>
+<h2 id="按键扫描"><a class="markdownIt-Anchor" href="#按键扫描"></a> 按键扫描</h2>
+<dl>
+<dt>基本原理：</dt>
+<dd>
+<p>按键的两个引脚，一端<strong>通过电阻上拉到高电平</strong>，一端<strong>接地</strong></p>
+</dd>
+<dd>
+<p><strong>没有按键按下</strong>时，输入引脚为<u>高电平</u>；同理，<strong>按下时</strong>，则为<u>低电平</u></p>
+</dd>
+<dd>
+<p>扫描原理：通过<u>反复读取按键输入引脚的信号</u>，然后<strong>识别高低电平</strong>来判断<strong>是否有按键触发</strong></p>
+</dd>
+</dl>
+<h3 id="按键去抖动"><a class="markdownIt-Anchor" href="#按键去抖动"></a> 按键去抖动</h3>
+<blockquote>
+<p>通过这个操作可以规避一些干扰信号，从而获取真实的按键触发信号</p>
+</blockquote>
+<p>去抖动原理：</p>
+<blockquote>
+<p>由于抖动产生的低电平往往都很短，所以可以分两次检测，如果第一次是低电平，延迟一会，进一步判断，如果还是低电平，则为真实信号，否则为干扰</p>
+</blockquote>
+<p>代码实例：</p>
+<figure class="highlight c"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">uint <span class="title function_">Key_Check</span><span class="params">(<span class="type">void</span>)</span>&#123;</span><br><span class="line">    <span class="comment">//按下K1为低电平，置为0；未按下K1为高电平，置为1</span></span><br><span class="line">    <span class="keyword">if</span>(K1 == <span class="number">0</span>)&#123;</span><br><span class="line">        Delay(<span class="number">5000</span>);</span><br><span class="line">        <span class="keyword">if</span>(K1 == <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span>(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="keyword">return</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="cc2530的中断系统"><a class="markdownIt-Anchor" href="#cc2530的中断系统"></a> CC2530的中断系统</h2>
+<dl>
+<dt>CC2530的P0、P1、P2端口中的每个引脚都具有<strong>外部中断输入功能</strong>，要使某些引脚具有外部中断功能，需要对<strong>IENx寄存器、PxIEN寄存器和PICTL寄存器</strong>进行适当的设置</dt>
+<dd>
+<p>PxIEN寄存器<strong>外部中断功能</strong></p>
+</dd>
+<dd>
+<p>PICTL寄存器<strong>端口输入信号控制</strong></p>
+</dd>
+</dl>
+<p>P0、P1和P2端口分别使用<strong>P0IF、P1IF和P2IF</strong>作为<strong>中断标志位</strong>，端口组上的任何一个引脚产生<strong>外部中断</strong>时，都会将<strong>对应端口组的中断标志为自动置位</strong></p>
+<p><strong>端口状态标志</strong>寄存器<strong>P0IFG、P1IFG和P2IFG</strong>，分别对应3个端口中隔音教的中断触发状态，当某引脚产生了<strong>设定的外部中断触发信号</strong>时，该寄存器<strong>对应的标志位会自动置位</strong></p>
+<blockquote>
+<p>外部中断标志PxIF和PxIFG必须在中断服务函数中<strong>手工清除</strong>，否则CPU会反复进入中断</p>
+<p>先清除PxIFG，再清除PxIF</p>
+</blockquote>
+<dl>
+<dt>外部中断相关的寄存器：</dt>
+<dd>
+<blockquote>
+<p>寄存器置0中断禁止，置1中断使能</p>
+</blockquote>
+</dd>
+<dd>
+<p>IEN1的第5位：P0IE(端口0中断使能)</p>
+</dd>
+<dd>
+<p>IEN2的第4位：P1IE(端口1中断使能),IEN2的第1位：P2IE(端口2中断使能)</p>
+</dd>
+<dd>
+<p>Px(P0&amp;P1&amp;P2)IEN寄存器和PICTL寄存器(置0上升沿触发，置1下降沿触发)</p>
+</dd>
+</dl>
+<p>例：将P1_2和P1_4设置为外部中断引脚，P1_2下降沿触发，P1_4上升沿触发，使能相关中断控制位</p>
+<figure class="highlight c"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">Init_INTP1</span><span class="params">()</span>&#123;</span><br><span class="line">    P1SEL &amp;= ~<span class="number">0x14</span>;	<span class="comment">//P1_2和P1_4设置为通用I/O端口，</span></span><br><span class="line">    P1DIR &amp;= ~<span class="number">0x14</span>;	<span class="comment">//P1_2和P1_4设置为输入模式</span></span><br><span class="line">    <span class="comment">//CC2530芯片复位后，I/O引脚被配置成带上拉的输入模式，故上述两行代码可省略。</span></span><br><span class="line">    PICTL |= <span class="number">0x02</span>;	<span class="comment">//P1_2的外部中断信号设置为下降沿触发</span></span><br><span class="line">    PICTL &amp;= ~<span class="number">0x04</span>;	<span class="comment">//P1_4的外部中断信号设置为上升沿触发</span></span><br><span class="line">    P1IEN |= <span class="number">0x14</span>;	<span class="comment">//P1_2和P1_4使能位外部中断引脚</span></span><br><span class="line">    IEN2 |= <span class="number">0x10</span>;	<span class="comment">//使能P1端口外部中断</span></span><br><span class="line">    EA = <span class="number">1</span>;			<span class="comment">//打开总中断</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment">//SW2(P0_1)初始化</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">Init_INTP0</span><span class="params">()</span>&#123;</span><br><span class="line">    P0SEL &amp;= ~<span class="number">0x02</span>;	<span class="comment">//设置为I/O</span></span><br><span class="line"></span><br><span class="line">    P0DIR &amp;= ~<span class="number">0x02</span>;	<span class="comment">//设置为输入</span></span><br><span class="line"></span><br><span class="line">    P0INP &amp;= ~<span class="number">0x02</span>;	<span class="comment">//设置为上拉/下拉</span></span><br><span class="line"></span><br><span class="line">    P2INP &amp;= ~<span class="number">0x20</span>;	<span class="comment">//设置为上拉</span></span><br><span class="line"></span><br><span class="line">    IEN1 |= <span class="number">0x20</span>;	<span class="comment">//设置P0端口的中断使能</span></span><br><span class="line"></span><br><span class="line">    P0IEN |= <span class="number">0x02</span>;	<span class="comment">//设置P0_1这个引脚为中断使能</span></span><br><span class="line"></span><br><span class="line">    PICTL |= <span class="number">0x01</span>;	<span class="comment">//设置P0端口为下降沿触发</span></span><br><span class="line"></span><br><span class="line">    EA = <span class="number">1</span>; 		<span class="comment">//打开总中断</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//4个LED灯初始化</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">Init_Port</span><span class="params">()</span>&#123;</span><br><span class="line">    P1SEL &amp;= ~<span class="number">0x1B</span>; <span class="comment">//把P1_4、P1_3、P1_1、P1_0四个端口设置为I/O模式</span></span><br><span class="line"></span><br><span class="line">	P1DIR |= <span class="number">0x1B</span>;	<span class="comment">//把4个端口设置为输出</span></span><br><span class="line"></span><br><span class="line">	P1 &amp;= ~<span class="number">0x1B</span>;	<span class="comment">//4个LED灯设置为0(灭)</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//中断服务函数</span></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> vector = P0INT_VECTOR <span class="comment">//向量可以在ioCC2530.h头文件中&quot;Interrupt Vectors&quot;找</span></span></span><br><span class="line">__interrupt <span class="type">void</span> <span class="title function_">Service_INIP0</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="comment">//P0IFG</span></span><br><span class="line">    <span class="keyword">if</span>((P0IFG &amp; <span class="number">0x02</span>) == <span class="number">0x02</span>)</span><br><span class="line">        D5 = ~D5;</span><br><span class="line">    </span><br><span class="line">    P0IFG = <span class="number">0</span>; <span class="comment">//手动置0；先IFG，后IF</span></span><br><span class="line">    P0IF = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//延时函数</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">Delay</span><span class="params">(<span class="type">unsigned</span> <span class="type">int</span> t)</span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(t--);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    Init_Port();</span><br><span class="line">    Init_INTP0();</span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">        D4 = <span class="number">1</span>;</span><br><span class="line">        Delay(<span class="number">60000</span>);</span><br><span class="line">        Delay(<span class="number">60000</span>);</span><br><span class="line">        D4 = <span class="number">0</span>;</span><br><span class="line">        Delay(<span class="number">60000</span>);</span><br><span class="line">        Delay(<span class="number">60000</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>端口组中断使能 -&gt; 端口组具体引脚中断使能 -&gt; 上升(0)、下降(1)沿触发 -&gt; 总中断使能</p>
+</blockquote>
+<p>…</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>单片机</tag>
+        <tag>CC2530</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>NuShell</title>
+    <url>/2025/01/06/nushell/</url>
+    <content><![CDATA[<blockquote>
+<p>Windows11使用Wezterm+NuShell+Starship</p>
+<p>安装字体<a href="https://download.jetbrains.com/fonts/JetBrainsMono-2.304.zip">JetBrains Mono</a></p>
+</blockquote>
+<h2 id="wezterm"><a class="markdownIt-Anchor" href="#wezterm"></a> Wezterm</h2>
+<p><a href="https://github.com/wez/wezterm/releases/download/20240203-110809-5046fc22/WezTerm-20240203-110809-5046fc22-setup.exe">Wezterm Windows下载地址</a></p>
+<p><a href="https://github.com/KevinSilvester/wezterm-config.git">Wezterm配置</a></p>
+<h2 id="nushell"><a class="markdownIt-Anchor" href="#nushell"></a> NuShell</h2>
+<p><a href="https://github.com/nushell/nushell/releases/download/0.98.0/nu-0.98.0-x86_64-pc-windows-msvc.msi">NuShell Windows下载地址</a></p>
+<p>使用nu切换盘符: <code>cd 盘符:/</code></p>
+<h2 id="starship"><a class="markdownIt-Anchor" href="#starship"></a> Starship</h2>
+<p><a href="https://github.com/starship/starship/releases/download/v1.20.1/starship-i686-pc-windows-msvc.msi">Starship Windows下载地址</a></p>
+<p>在NuShell里使用starship：</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ~/.cache/starship</span><br><span class="line">starship init nu | save -f ~/.cache/starship/init.nu</span><br></pre></td></tr></table></figure>
+<p>在<a href="https://starship.rs/zh-CN/presets/">Wtarship themes</a>查看主题</p>
+<p>这里使用<a href="https://starship.rs/zh-CN/presets/pastel-powerline">pastel-powerline</a>主题输入下行代码即可:</p>
+<p><code>starship preset pastel-powerline -o ~/.config/starship.toml</code></p>
+<p>添加以下语句后重开一个终端就能出现效果了(使用<code>echo $nu.env-path</code>查看文件路径)</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># 启动starship</span></span><br><span class="line">use ~/.cache/starship/init.nu</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义别名和目录常量</span></span><br><span class="line"><span class="built_in">alias</span> vim = nvim</span><br></pre></td></tr></table></figure>
+<h2 id="wezterm快捷键"><a class="markdownIt-Anchor" href="#wezterm快捷键"></a> Wezterm快捷键</h2>
+<p><a href="https://github.com/KevinSilvester/wezterm-config.git">Wezterm使用配置</a></p>
+<blockquote>
+<p>super -&gt; Alt</p>
+<p>super_rev -&gt; Ctrl+Alt</p>
+</blockquote>
+<h3 id="标签页"><a class="markdownIt-Anchor" href="#标签页"></a> 标签页</h3>
+<p><code>super+[</code>: 向左查看标签页<br />
+<code>super_rev+[</code>: 向左移动标签页<br />
+<code>super+]</code>: 向右查看标签页<br />
+<code>super_rev+]</code>: 向右移动标签页</p>
+<p><code>super+T</code>: 新建一个标签页<br />
+<code>super_rev+T</code>: 新建一个<code>wsl:ubuntu</code>标签页</p>
+<p><code>super+W</code>: 关闭一个标签页<br />
+<code>super_rev+W</code>: 关闭一个标签页</p>
+<h3 id="光标在命令行中移动"><a class="markdownIt-Anchor" href="#光标在命令行中移动"></a> 光标在命令行中移动</h3>
+<p><code>super+-&gt;</code>: 移动至行尾<br />
+<code>super+&lt;-</code>: 移动至行首<br />
+<code>super+backspace</code>: 清除整行</p>
+<h3 id="窗口"><a class="markdownIt-Anchor" href="#窗口"></a> 窗口</h3>
+<p><code>super+n</code>: 新建一个窗口</p>
+<h3 id="重命名"><a class="markdownIt-Anchor" href="#重命名"></a> 重命名</h3>
+<p><code>super+0</code>: 重命名当前标签页<br />
+<code>super_rev+0</code>: 撤销重命名</p>
+<h3 id="背景图片"><a class="markdownIt-Anchor" href="#背景图片"></a> 背景图片</h3>
+<p><code>super+/</code>: 随机选择背景图片<br />
+<code>super+,</code>: 下一张图片<br />
+<code>super+.</code>: 上一张图片<br />
+<code>super_rev+/</code>: 列表选择图片<br />
+<code>super+b</code>: 切换有/无背景图片模式</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>NuShell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SSH使用</title>
+    <url>/2025/01/06/ssh%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<h2 id="ssh-远程登录"><a class="markdownIt-Anchor" href="#ssh-远程登录"></a> SSH 远程登录</h2>
+<h3 id="登录"><a class="markdownIt-Anchor" href="#登录"></a> 登录</h3>
+<p><code>ssh root@172.16.124.24 #用户名@主机名</code></p>
+<h3 id="免密登录"><a class="markdownIt-Anchor" href="#免密登录"></a> 免密登录</h3>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa <span class="comment"># 生成密钥</span></span><br><span class="line">scp C:\Users\Admin\.ssh\id_rsa.pub root@172.16.124.24:/root/.ssh/id_rsa.pub.windows <span class="comment"># 把密钥文件拷贝到linux服务器上的.ssh文件下并改名</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>接下来进入 linux 服务器把密钥文件的内容复制到 anthorized_keys 文件里</p>
+</blockquote>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">ssh root@172.16.124.24 </span><br><span class="line"><span class="built_in">cd</span> ~/.ssh</span><br><span class="line"><span class="built_in">cat</span> id_rsa.pub.windows &gt;&gt; authorized_keys</span><br><span class="line">接下来登录linux服务器就不需要输入密码了</span><br><span class="line"></span><br><span class="line">ssh root@172.16.124.24</span><br></pre></td></tr></table></figure>
+<h2 id="github-ssh-下载-密钥生成"><a class="markdownIt-Anchor" href="#github-ssh-下载-密钥生成"></a> GitHub SSH 下载 密钥生成</h2>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment">#linux没有的话下载openssh</span></span><br><span class="line">ssh-keygen -t ed25519 -C <span class="string">&quot;your_name@email.com&quot;</span></span><br><span class="line"><span class="built_in">cat</span> ~/.ssh/id_ed25519.pub</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>请在 Git bash 或 PowerShell 中操作</p>
+<p>登录 GitHub，点击头像，点击设置，找到 SSH and GPG Keys 选项，点击 SSH Keys 右边的 New SSH Key 按钮，标题给个恰当的密钥名字，把 <code>cat ~/.ssh/id_ed25519.pub</code> 的输出全部复制进 Key 里面，单击 Add SSH Key，接着输入你的 GitHub 登录密码</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">ssh -T git@github.com <span class="comment">#在终端中输入</span></span><br></pre></td></tr></table></figure>
+<p>末尾出现下面的代表成功</p>
+<p>Hi your_name! You’ve successfully authenticated, but GitHub does not provide shell access.</p>
+<p>可以使用 SSH 下载方式了</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --depth=1 git@github.com:ryanoasis/nerd-fonts.git</span><br></pre></td></tr></table></figure>
+<p><code>--depth=1</code>: 只下载最近一次的提交版本，可以避免把所有的历史提交记录下载下来</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>ssh</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Markdown语法</title>
+    <url>/2025/01/06/markdown%E8%AF%AD%E6%B3%95/</url>
+    <content><![CDATA[<blockquote>
+<p>Markdown 语法网站 <a href="https://markdown.com.cn/intro.html">Markdown</a></p>
+</blockquote>
+<h2 id="标题"><a class="markdownIt-Anchor" href="#标题"></a> 标题</h2>
+<p>语法：<code>### 标题</code></p>
+<blockquote>
+<p>井号越多、标题越小，井号越少、标题越大</p>
+</blockquote>
+<p>用法：空白行分隔</p>
+<h2 id="换行"><a class="markdownIt-Anchor" href="#换行"></a> 换行</h2>
+<p>用法：在换行处添加<code>&lt;br&gt;</code>即可</p>
+<h2 id="强调"><a class="markdownIt-Anchor" href="#强调"></a> 强调</h2>
+<h3 id="粗体"><a class="markdownIt-Anchor" href="#粗体"></a> 粗体</h3>
+<p>语法：<code>**文本**</code></p>
+<h3 id="斜体"><a class="markdownIt-Anchor" href="#斜体"></a> 斜体</h3>
+<p>语法： <code>*文本*或_文本_</code></p>
+<h3 id="高亮"><a class="markdownIt-Anchor" href="#高亮"></a> 高亮</h3>
+<p>语法：<code>==文本==</code></p>
+<h3 id="下划线"><a class="markdownIt-Anchor" href="#下划线"></a> 下划线</h3>
+<p>语法：<code>&lt;u&gt;文本&lt;/u&gt;</code></p>
+<h2 id="引用"><a class="markdownIt-Anchor" href="#引用"></a> 引用</h2>
+<p>语法：<code>&gt; 文本</code></p>
+<h2 id="列表"><a class="markdownIt-Anchor" href="#列表"></a> 列表</h2>
+<h3 id="有序列表"><a class="markdownIt-Anchor" href="#有序列表"></a> 有序列表</h3>
+<p>语法：<code>1. 文本</code></p>
+<h3 id="无序列表"><a class="markdownIt-Anchor" href="#无序列表"></a> 无序列表</h3>
+<p>语法：<code>- 文本、 * 文本或+ 文本</code></p>
+<h2 id="代码"><a class="markdownIt-Anchor" href="#代码"></a> 代码</h2>
+<p>语法：`<code>文本</code>`</p>
+<h2 id="分隔线"><a class="markdownIt-Anchor" href="#分隔线"></a> 分隔线</h2>
+<p>语法：<code>*** 、--- 或___</code></p>
+<h2 id="上标和下标"><a class="markdownIt-Anchor" href="#上标和下标"></a> 上标和下标</h2>
+<p>语法：</p>
+<ul>
+<li>
+<p>上标：<code>2^2^</code></p>
+</li>
+<li>
+<p>下标：<code>2~2~</code></p>
+</li>
+</ul>
+<p>实例：</p>
+<ul>
+<li>
+<p>下标：2<sub>2</sub></p>
+</li>
+<li>
+<p>上标：2<sup>2</sup></p>
+</li>
+</ul>
+<h2 id="链接"><a class="markdownIt-Anchor" href="#链接"></a> 链接</h2>
+<p>语法：<code>[超链接显示名](超链接地址 &quot;超链接title&quot;)</code><br />
+用法：链接文本放在中括号内，链接地址放在后面的括号中，链接 title(光标放上去的显示名) 可选。<br />
+实例： <a href="https://baidu.com" title="搜索">百度</a></p>
+<h2 id="图片"><a class="markdownIt-Anchor" href="#图片"></a> 图片</h2>
+<p>语法：<code>![图片alt](图片链接 &quot;图片title&quot;)</code></p>
+<p>用法：要添加图像，请使用感叹号 (!), 然后在方括号增加替代文本，图片链接放在圆括号里，括号里的链接后可以增加一个可选的图片标题文本。</p>
+<p>实例：</p>
+<p><img src="https://raw.githubusercontent.com/wcis314/MyPicture/refs/heads/img/p4.png" alt="" title="动漫图片" /></p>
+<h2 id="转义字符"><a class="markdownIt-Anchor" href="#转义字符"></a> 转义字符</h2>
+<p>用法：要显示原本用于格式化 Markdown 文档的字符，请在字符前面添加反斜杠字符 \ 。</p>
+<h2 id="表格"><a class="markdownIt-Anchor" href="#表格"></a> 表格</h2>
+<p>语法：</p>
+<figure class="highlight markdown"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">|Syntax|Description|</span><br><span class="line">|-|-|</span><br><span class="line">|Header|Title|</span><br><span class="line">|Paragraph|Text|</span><br></pre></td></tr></table></figure>
+<p>用法：要添加表，请使用三个或多个连字符（—）创建每列的标题，并使用管道（|）分隔每列。您可以选择在表的任一端添加管道。<a href="https://www.tablesgenerator.com/markdown_tables">表格</a></p>
+<h2 id="围栏代码块"><a class="markdownIt-Anchor" href="#围栏代码块"></a> 围栏代码块</h2>
+<p>语法：</p>
+<figure class="highlight css"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">&quot;firstName&quot;: <span class="string">&quot;John&quot;</span>,</span><br><span class="line"><span class="string">&quot;lastName&quot;</span>: <span class="string">&quot;Smith&quot;</span>,</span><br><span class="line"><span class="string">&quot;age&quot;</span>: <span class="number">25</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="脚注"><a class="markdownIt-Anchor" href="#脚注"></a> 脚注</h2>
+<p>语法：</p>
+<figure class="highlight markdown"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">[^1]文本</span><br><span class="line">[<span class="symbol">^1</span>]: <span class="link">脚注释义</span></span><br></pre></td></tr></table></figure>
+<p>实例：</p>
+<p><sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup>文本</p>
+<p>用法：要创建脚注参考，请在方括号（[^1]）内添加插入符号和标识符。标识符可以是数字或单词，但不能包含空格或制表符。标识符仅将脚注参考与脚注本身相关联 - 在输出中，脚注按顺序编号。</p>
+<h2 id="删除线"><a class="markdownIt-Anchor" href="#删除线"></a> 删除线</h2>
+<p>语法： <code>~~文本~~</code></p>
+<p>实例： <s>文本</s></p>
+<h2 id="任务列表-复选框"><a class="markdownIt-Anchor" href="#任务列表-复选框"></a> 任务列表 (复选框)</h2>
+<p>语法：</p>
+<figure class="highlight markdown"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="bullet">-</span> [x] Write the press release</span><br><span class="line"><span class="bullet">-</span> [x] Update the website</span><br><span class="line"><span class="bullet">-</span> [ ] Contact the media</span><br></pre></td></tr></table></figure>
+<p>实例：</p>
+<ul>
+<li>[x] 吃饭</li>
+<li>[ ] 睡觉</li>
+</ul>
+<h2 id="使用-emoji-表情"><a class="markdownIt-Anchor" href="#使用-emoji-表情"></a> 使用 Emoji 表情</h2>
+<p>用法：在 <a href="https://emojipedia.org/" title="emoji图片复制网站">emoji</a>网站复制</p>
+<h2 id="目录"><a class="markdownIt-Anchor" href="#目录"></a> 目录</h2>
+<p>用法：在文章顶部添加<code>[toc]</code>,即可</p>
+<h2 id="彩色提示块"><a class="markdownIt-Anchor" href="#彩色提示块"></a> 彩色提示块</h2>
+<div style="background-color: #ffcccc; color: #ff0000; padding: 10px; border-radius: 5px;">
+这是一个红色的提示块。
+</div>
+<div style="background-color: #ccddff; color: #0000ff; padding: 10px; border-radius: 5px;">
+这是一个蓝色的提示块。
+</div>
+<div style="background-color: #ccffcc; color: #00ff00; padding: 10px; border-radius: 5px;">
+这是一个绿色的提示块。
+</div>
+<div style="background-color: #ffffcc; color: #ffcc00; padding: 10px; border-radius: 5px;">
+这是一个黄色的提示块。
+</div>
+<h2 id="定义列表"><a class="markdownIt-Anchor" href="#定义列表"></a> 定义列表</h2>
+<dl>
+<dt>First Term</dt>
+<dd>This is the definition of the first term.</dd>
+<dt>Second Term</dt>
+<dd>This is one definition of the second term.</dd>
+<dd>This is another definition of the second term.</dd>
+</dl>
+<hr class="footnotes-sep" />
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>脚注释义 <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>Markdown</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>U盘EFI分区删除</title>
+    <url>/2025/01/06/u%E7%9B%98EFI%E5%88%86%E5%8C%BA%E5%88%A0%E9%99%A4/</url>
+    <content><![CDATA[<p>在运行窗口输入<code>powershell</code>进入终端，输入<code>diskpart</code>并按下Enter键</p>
+<p>在弹出的窗口输入<code>list disk</code> 找到和u盘内存相近的磁盘, 我的是<strong>磁盘1</strong></p>
+<p>输入<code>select disk 1</code>选择磁盘1</p>
+<p>输入<code>clean</code>清空磁盘</p>
+<blockquote>
+<p>这时进入<strong>计算机管理</strong>,找到<strong>磁盘管理</strong>，找到<strong>磁盘1</strong>(U盘)，这时<u>右击</u>，发现无法创建分区，需要<u>右击</u>左边显示<em>磁盘1基本信息的区域</em>选择<strong>初始化磁盘</strong>，在弹出来的窗口中选择<strong>GPT</strong>，确定，就能创建分区了</p>
+</blockquote>
+<blockquote>
+<p><code>Windows+X</code>再按<code>K</code>键就能调出<strong>磁盘管理</strong>了</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>U盘</tag>
+        <tag>EFI分区</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Vim</title>
+    <url>/2025/01/06/vim/</url>
+    <content><![CDATA[<h2 id="普通模式"><a class="markdownIt-Anchor" href="#普通模式"></a> 普通模式</h2>
+<blockquote>
+<p>使用 <code>Esc</code> 键进入<br />
+<code>h/j/k/l</code>: 分别是左/上/右/下</p>
+</blockquote>
+<p><code>o</code>: 向下插入一行</p>
+<p><code>O</code>: 向上插入一行</p>
+<p><code>w</code>: 词首向前移动</p>
+<p><code>e</code>: 词尾向前移动</p>
+<p><code>b</code>: 词首向后移动</p>
+<p><code>u</code>: 撤销</p>
+<p><code>ctrl+r</code>: 复原操作</p>
+<p><code>ctrl+q</code>: 矩形选择</p>
+<p><code>V</code>: 选择行</p>
+<p><code>v</code>: 选择</p>
+<p><code>p</code>: 粘贴</p>
+<p><code>y</code>: 复制</p>
+<p><code>yy</code>: 复制行</p>
+<p><code>dd</code>: 删除行</p>
+<p><code>x</code>: 删除字符</p>
+<p><code>dw</code>: 删除词</p>
+<p><code>^/$</code>: 行首/行尾</p>
+<p><code>gg</code>: 定位到文件第一行, 第一个字符</p>
+<p><code>G</code>: 定位到文件末尾行, 最后一个字符</p>
+<h2 id="插入模式"><a class="markdownIt-Anchor" href="#插入模式"></a> 插入模式</h2>
+<p><code>i</code>: 光标前插入</p>
+<p><code>I</code>: 行首插入</p>
+<p><code>a</code>: 光标后插入</p>
+<p><code>A</code>: 行尾插入</p>
+<h2 id="ex-模式"><a class="markdownIt-Anchor" href="#ex-模式"></a> EX 模式</h2>
+<blockquote>
+<p>使用<code>:</code>入</p>
+</blockquote>
+<p><code>:set nu</code> : 设置行号</p>
+<p><code>:数字</code> :切换到对应行去</p>
+<p><code>:wq</code> : 保存并退出</p>
+<p><code>:x</code> : 和上一个基本一样，不同的是如果未修改文件，修改时间也不变</p>
+<p><code>:%s/被替换字符/替换字符/g</code> : 全文替换</p>
+<p><code>:&lt;','&gt;s/被替换字符/替换字符/g</code> : 选定区域替换</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>Vim</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>计算机基础</title>
+    <url>/2025/01/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<p>…</p>
+]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>计算机基础</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>服务器实训</title>
+    <url>/2025/01/06/%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%9E%E8%AE%AD/</url>
+    <content><![CDATA[<blockquote>
+<p>Linux 服务与配置用到的操作步骤<br />
+Mysql 操作基于 Ubuntu 20.04, 其他操作基于 CentOS 7</p>
+</blockquote>
+<h2 id="实验配置"><a class="markdownIt-Anchor" href="#实验配置"></a> 实验配置</h2>
+<h3 id="启用-firewalld-服务"><a class="markdownIt-Anchor" href="#启用-firewalld-服务"></a> 启用 Firewalld 服务</h3>
+<p><code>systemctl start firewalld</code></p>
+<h3 id="关闭-selinux"><a class="markdownIt-Anchor" href="#关闭-selinux"></a> 关闭 SElinux</h3>
+<p><code>getenforce</code>查看是否为 Disable</p>
+<h3 id="配置软件源"><a class="markdownIt-Anchor" href="#配置软件源"></a> 配置软件源</h3>
+<p>配置 Centos 7 本地源：</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="meta">#! /bin/bash</span></span><br><span class="line"></span><br><span class="line">path=<span class="string">&quot;/etc/yum.repos.d&quot;</span></span><br><span class="line"><span class="keyword">if</span> [ ! -e <span class="string">&quot;<span class="variable">$path</span>&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line"> <span class="built_in">mkdir</span> <span class="string">&quot;<span class="variable">$path</span>&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line"> <span class="built_in">rm</span> -rf <span class="string">&quot;<span class="variable">$path</span>&quot;</span></span><br><span class="line"> <span class="built_in">mkdir</span> <span class="string">&quot;<span class="variable">$path</span>&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo</span><br><span class="line">yum remove epel-release -y &amp;&amp; yum install epel-release -y; </span><br><span class="line">yum clean all &amp;&amp; yum makecache;</span><br><span class="line"></span><br><span class="line">iso=<span class="string">&quot;/mnt/iso&quot;</span></span><br><span class="line"><span class="keyword">if</span> [ ! -e <span class="string">&quot;<span class="variable">$iso</span>&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line"> <span class="built_in">mkdir</span> <span class="variable">$iso</span></span><br><span class="line"><span class="keyword">fi</span> </span><br><span class="line">mount /dev/cdrom /mnt/iso;</span><br><span class="line">dvd=<span class="string">&quot;/etc/yum.repos.d/dvd.repo&quot;</span></span><br><span class="line"><span class="keyword">if</span> [ -e <span class="string">&quot;<span class="variable">$dvd</span>&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line"> <span class="built_in">rm</span> <span class="variable">$dvd</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line"> <span class="built_in">touch</span> <span class="variable">$dvd</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"><span class="built_in">cat</span> &lt;&lt;<span class="string">EOF &gt;&gt; &quot;$dvd&quot;;</span></span><br><span class="line"><span class="string">[dvd]</span></span><br><span class="line"><span class="string">name=dvd</span></span><br><span class="line"><span class="string">baseurl=file:///mnt/cd0</span></span><br><span class="line"><span class="string">gpgcheck=0</span></span><br><span class="line"><span class="string">enabled=1</span></span><br><span class="line"><span class="string">priority=1</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line">yum -y install yum-priorities; </span><br><span class="line">path=<span class="string">&quot;/etc/yum.repos.d/CentOS-Base.repo&quot;</span></span><br><span class="line"><span class="keyword">if</span> grep -q <span class="string">&quot;priority=2&quot;</span> <span class="string">&quot;<span class="variable">$path</span>&quot;</span>; <span class="keyword">then</span></span><br><span class="line"> <span class="built_in">echo</span> <span class="string">&quot;已包含&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line"> sed -i <span class="string">&#x27;/7/a\priority=2&#x27;</span> <span class="string">&quot;<span class="variable">$path</span>&quot;</span>;</span><br><span class="line"><span class="keyword">fi</span>  </span><br><span class="line">path=<span class="string">&quot;/etc/yum.repos.d/epel.repo&quot;</span></span><br><span class="line"><span class="keyword">if</span> grep -q <span class="string">&quot;priority=11&quot;</span> <span class="string">&quot;<span class="variable">$path</span>&quot;</span>; <span class="keyword">then</span></span><br><span class="line"> <span class="built_in">echo</span> <span class="string">&quot;已包含&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line"> sed -i <span class="string">&#x27;11i\priority=11&#x27;</span> <span class="string">&quot;<span class="variable">$path</span>&quot;</span>;</span><br><span class="line"><span class="keyword">fi</span>  </span><br><span class="line">yum clean all &amp;&amp; yum makecache;</span><br><span class="line">yum install httpd -y;</span><br><span class="line">yum repolist;</span><br></pre></td></tr></table></figure>
+<p>软件源地址：</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">清华大学软件源: https://mirrors.tuna.tsinghua.edu.cn/help</span><br><span class="line">中科大软件源: https://mirrors.ustc.edu.cn/help</span><br><span class="line">华为云软件源: https://mirrors.huaweicloud.com/home</span><br><span class="line">阿里云软件源: https://developer.aliyun.com/mirror/</span><br><span class="line">上海交大软件源: https://mirrors.sjtug.sjtu.edu.cn/docs/ubuntu</span><br></pre></td></tr></table></figure>
+<p>我使用的是中科大软件源:</p>
+<p>CentOS 7:</p>
+<ul>
+<li>使用 Vim(没有就用 Vi) 打开<code>/etc/yum.repos.d/CentOS-Base.repo</code></li>
+<li>把下面的软件源输入进去</li>
+</ul>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">[base]</span><br><span class="line">name=CentOS-<span class="variable">$releasever</span> - Base</span><br><span class="line"><span class="comment">#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=os&amp;infra=$infra</span></span><br><span class="line">baseurl=https://mirrors.ustc.edu.cn/centos/<span class="variable">$releasever</span>/os/<span class="variable">$basearch</span>/</span><br><span class="line">gpgcheck=1</span><br><span class="line">gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7</span><br><span class="line"><span class="comment">#released updates</span></span><br><span class="line">[updates]</span><br><span class="line">name=CentOS-<span class="variable">$releasever</span> - Updates</span><br><span class="line"><span class="comment">#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=updates&amp;infra=$infra</span></span><br><span class="line">baseurl=https://mirrors.ustc.edu.cn/centos/<span class="variable">$releasever</span>/updates/<span class="variable">$basearch</span>/</span><br><span class="line">gpgcheck=1</span><br><span class="line">gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7</span><br><span class="line"><span class="comment">#additional packages that may be useful</span></span><br><span class="line">[extras]</span><br><span class="line">name=CentOS-<span class="variable">$releasever</span> - Extras</span><br><span class="line"><span class="comment">#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=extras&amp;infra=$infra</span></span><br><span class="line">baseurl=https://mirrors.ustc.edu.cn/centos/<span class="variable">$releasever</span>/extras/<span class="variable">$basearch</span>/</span><br><span class="line">gpgcheck=1</span><br><span class="line">gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7</span><br><span class="line"><span class="comment">#additional packages that extend functionality of existing packages</span></span><br><span class="line">[centosplus]</span><br><span class="line">name=CentOS-<span class="variable">$releasever</span> - Plus</span><br><span class="line"><span class="comment">#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&amp;arch=$basearch&amp;repo=centosplus&amp;infra=$infra</span></span><br><span class="line">baseurl=https://mirrors.ustc.edu.cn/centos/<span class="variable">$releasever</span>/centosplus/<span class="variable">$basearch</span>/</span><br><span class="line">gpgcheck=1</span><br><span class="line">enabled=0</span><br><span class="line">gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7</span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用<code>sudo yum update</code>更新</li>
+</ul>
+<p>Ubuntu 20.04:</p>
+<ul>
+<li>使用 vi 打开<code>/etc/apt/sources.list</code></li>
+<li>输入软件源：</li>
+</ul>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># 默认注释了源码仓库，如有需要可自行取消注释</span></span><br><span class="line">deb https://mirrors.ustc.edu.cn/ubuntu/ focal main restricted universe multiverse</span><br><span class="line">deb https://mirrors.ustc.edu.cn/ubuntu/ focal-security main restricted universe multiverse</span><br><span class="line">deb https://mirrors.ustc.edu.cn/ubuntu/ focal-updates main restricted universe multiverse</span><br><span class="line">deb https://mirrors.ustc.edu.cn/ubuntu/ focal-backports main restricted universe multiverse</span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用<code>sudo apt update</code>更新</li>
+</ul>
+<h2 id="使用-rdp-方式连接-linux-服务器"><a class="markdownIt-Anchor" href="#使用-rdp-方式连接-linux-服务器"></a> 使用 RDP 方式连接 Linux 服务器</h2>
+<blockquote>
+<p>开通防火墙的 3389 端口，即可</p>
+</blockquote>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">firewall-cmd --permanent --add-port=3389/tcp</span><br><span class="line">firewall-cmd --reload <span class="comment"># 使上面的配置生效</span></span><br></pre></td></tr></table></figure>
+<h2 id="制作-dhcp-服务器"><a class="markdownIt-Anchor" href="#制作-dhcp-服务器"></a> 制作 DHCP 服务器</h2>
+<blockquote>
+<p>本实验需要用到云计算机 A、B 和 C, 其中 A、B 装有 centos 7, C 装有 windows xp<br />
+使用 A、B 的 ens33 网卡，C 使用本地连接 2</p>
+</blockquote>
+<h3 id="dhcp-服务安装和配置"><a class="markdownIt-Anchor" href="#dhcp-服务安装和配置"></a> DHCP 服务安装和配置</h3>
+<blockquote>
+<p>在云计算机 A 中操作</p>
+</blockquote>
+<h4 id="安装"><a class="markdownIt-Anchor" href="#安装"></a> 安装</h4>
+<p>使用<code>sudo yum install dhcp -y</code>安装，使用<code>dhcpd</code>检查是否成功安装 dhcp</p>
+<h4 id="配置"><a class="markdownIt-Anchor" href="#配置"></a> 配置</h4>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span>&lt;&lt;<span class="string">EOF &gt; /etc/dhcp/dhcpd.conf</span></span><br><span class="line"><span class="string">ddns-update-style none;   #配置DHCP-DNS为不自动更新模式</span></span><br><span class="line"><span class="string">log-facility local7;         #local7以上级别的日志发送到dhcp日志</span></span><br><span class="line"><span class="string">default-lease-time 600;             #默认租约时间长度</span></span><br><span class="line"><span class="string">max-lease-time 3600;              #最大租约时间长度</span></span><br><span class="line"><span class="string">subnet 192.168.24.0 netmask 255.255.255.0 &#123;     #子网号和掩码</span></span><br><span class="line"><span class="string">range 192.168.24.50 192.168.24.100;           #IP地址分配范围</span></span><br><span class="line"><span class="string">option domain-name-servers 192.168.24.1;      #域名服务器地址</span></span><br><span class="line"><span class="string">option domain-name &quot;JQE.com&quot;;              #域名</span></span><br><span class="line"><span class="string">option routers 192.168.24.1;                   #网关地址</span></span><br><span class="line"><span class="string">option broadcast-address 192.168.24.254;       #广播地址</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">EOF</span></span><br></pre></td></tr></table></figure>
+<h4 id="修改-ip"><a class="markdownIt-Anchor" href="#修改-ip"></a> 修改 IP</h4>
+<ul>
+<li>在 A 中使用<strong>nmtui</strong>命令工具修改 ens33 网卡 IP 为<strong>192.168.24.1</strong>, 然后重新激活网卡</li>
+<li>在 B 中使用<strong>nmtui</strong>命令修改 ens33 网卡 IP 为自动分配</li>
+<li>在 C 中找到网络连接把本地连接 2 改成自动分配 IP</li>
+</ul>
+<h2 id="制作-ssh-服务器"><a class="markdownIt-Anchor" href="#制作-ssh-服务器"></a> 制作 SSH 服务器</h2>
+<ul>
+<li>创建 Docker 虚拟机：<code>docker run -itd  --name nczy --hostname chpw --privileged=true  centos:7  /usr/sbin/init</code></li>
+<li>进入：<code>docker exec -it nczy bash</code></li>
+<li>进入虚拟机可能会没网，所以在进入之前先：<code>systemctl restart docker</code></li>
+<li>如果还是没网，就照下面的输：</li>
+</ul>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在宿主机</span></span><br><span class="line"><span class="built_in">cat</span>&lt;&lt;<span class="string">EOF &gt; /etc/sysctl.conf</span></span><br><span class="line"><span class="string"> net.ipv4.ip_forward = 1</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line">sysctl -p</span><br><span class="line">systemctl restart docker</span><br><span class="line">docker <span class="built_in">exec</span> -it nczy bash <span class="comment"># 启动nczy</span></span><br></pre></td></tr></table></figure>
+<p>虚拟机里输入：</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">yum install openssh-server</span><br><span class="line">systemctl restart sshd --now</span><br><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+<p>在宿主机里输入：<br />
+<code>firewall-cmd --zone=public --add-forward-port=port=2222:proto=tcp:toaddr=172.17.0.2:toport=22</code><br />
+在终端输入：<br />
+<code>ssh root@宿主机IP地址 -p 2222</code></p>
+<h2 id="在-nczy-安装-rdp-服务从校园网访问"><a class="markdownIt-Anchor" href="#在-nczy-安装-rdp-服务从校园网访问"></a> 在 nczy 安装 RDP 服务，从校园网访问</h2>
+<ul>
+<li>在虚拟机中输入：</li>
+</ul>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">yum install -y epel-release   <span class="comment">#添加第三方安装源epel-release</span></span><br><span class="line">yum install -y xrdp</span><br><span class="line">yum groupinstall -y Xfce    <span class="comment"># 基于上面epel-release，得先安装它</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;xfce4-session&quot;</span> &gt; ~/.Xclients</span><br><span class="line"><span class="built_in">chmod</span> +x ~/.Xclients</span><br><span class="line">sed -i <span class="string">&#x27;s/ssl_protocols=.*/ssl_protocols=TLSv1/&#x27;</span> /etc/xrdp/xrdp.ini </span><br><span class="line">systemctl start xrdp --now </span><br><span class="line">systemctl <span class="built_in">enable</span> xrdp --now </span><br></pre></td></tr></table></figure>
+<ul>
+<li>在宿主机中输入：</li>
+</ul>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">firewall-cmd --permanent --add-port=3390/tcp</span><br><span class="line">firewall-cmd --reload</span><br><span class="line">firewall-cmd --zone=public --add-forward-port=port=3390:proto=tcp:toaddr=172.17.0.2:toport=3389</span><br></pre></td></tr></table></figure>
+<h2 id="dns"><a class="markdownIt-Anchor" href="#dns"></a> DNS</h2>
+<h3 id="添加-docker-国内镜像"><a class="markdownIt-Anchor" href="#添加-docker-国内镜像"></a> 添加 Docker 国内镜像</h3>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span>&lt;&lt;<span class="string">EOF &gt; /etc/docker/daemon.json</span></span><br><span class="line"><span class="string">&#123;</span></span><br><span class="line"><span class="string"> &quot;registry-mirrors&quot;: [</span></span><br><span class="line"><span class="string">    &quot;https://9cpn8tt6.mirror.aliyuncs.com&quot;,</span></span><br><span class="line"><span class="string">    &quot;https://dockerproxy.com&quot;,</span></span><br><span class="line"><span class="string">    &quot;https://hub-mirror.c.163.com&quot;,</span></span><br><span class="line"><span class="string">    &quot;https://mirror.baidubce.com&quot;,</span></span><br><span class="line"><span class="string">    &quot;https://ccr.ccs.tencentyun.com&quot;</span></span><br><span class="line"><span class="string">  ]</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"><span class="string">EOF</span></span><br></pre></td></tr></table></figure>
+<h3 id="拉取-bind-服务器"><a class="markdownIt-Anchor" href="#拉取-bind-服务器"></a> 拉取 Bind 服务器</h3>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">systemctl start docker</span><br><span class="line"></span><br><span class="line">docker pull sameersbn/bind</span><br><span class="line"></span><br><span class="line"><span class="built_in">mkdir</span> -p /opt/docker/bind</span><br><span class="line"></span><br><span class="line">lsof -i :53 <span class="comment"># 查看哪些服务监听着53端口</span></span><br><span class="line">systemctl stop dnsmasq <span class="comment"># 暂停dnsmasq服务</span></span><br><span class="line"><span class="built_in">kill</span> -9 PID <span class="comment"># PID在上一条命令显示出了</span></span><br><span class="line"></span><br><span class="line">docker run --name <span class="built_in">bind</span> -d \</span><br><span class="line">--restart=always \</span><br><span class="line">-p 53:53/tcp \</span><br><span class="line">-p 53:53/udp \</span><br><span class="line">-p 10000:10000/tcp \</span><br><span class="line">--volume /opt/docker/bind:/data \</span><br><span class="line">sameersbn/bind</span><br><span class="line"></span><br><span class="line">docker restart <span class="built_in">bind</span></span><br></pre></td></tr></table></figure>
+<h2 id="安装-mysql"><a class="markdownIt-Anchor" href="#安装-mysql"></a> 安装 Mysql</h2>
+<blockquote>
+<p>基于 Ubuntu 20.04</p>
+</blockquote>
+<ul>
+<li>
+<p>安装 Mysql 服务<br />
+<code>sudo apt install mysql-server</code></p>
+</li>
+<li>
+<p>启动服务<br />
+<code>sudo service mysql start</code></p>
+</li>
+<li>
+<p>启动服务<br />
+<code>mysql -u root -p</code></p>
+</li>
+<li>
+<p>修改密码和授予远程访问权限</p>
+</li>
+</ul>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">CREATE USER <span class="string">&#x27;root&#x27;</span>@<span class="string">&#x27;%&#x27;</span> IDENTIFIED BY <span class="string">&#x27;123456&#x27;</span>; <span class="comment"># 创建一个用户为root并且密码设置为123456</span></span><br><span class="line">GRANT ALL PRIVILEGES ON *.* TO <span class="string">&#x27;root&#x27;</span>@<span class="string">&#x27;%&#x27;</span> WITH GRANT OPTION; <span class="comment"># 授予root用户远程访问权限</span></span><br><span class="line">FLUSH PRIVILEGES; <span class="comment"># 刷新配置</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>修改配置文件<br />
+在<code>/etc/mysql/mysql.cnf</code>文件中输入下面两行</li>
+</ul>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">[mysqld]</span><br><span class="line">bind-address = 0.0.0.0</span><br></pre></td></tr></table></figure>
+<p>把<code>/etc/mysql/mysql.conf.d/mysqld.conf</code>中下面两行注释掉</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line">bind-address = 127.0.0.1</span><br><span class="line">mysqlx-bind-address = 127.0.0.1</span><br></pre></td></tr></table></figure>
+<p><code>service mysql restart</code></p>
+<h2 id="使用-python-程序向-linux-系统发送命令"><a class="markdownIt-Anchor" href="#使用-python-程序向-linux-系统发送命令"></a> 使用 Python 程序向 Linux 系统发送命令</h2>
+<figure class="highlight python"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"></span><br><span class="line">result = subprocess.run(</span><br><span class="line">    [<span class="string">&#x27;ssh&#x27;</span>, <span class="string">&#x27;root@172.16.124.24&#x27;</span>, <span class="string">&#x27;ls -l /&#x27;</span>],</span><br><span class="line">    capture_output=<span class="literal">True</span>,</span><br><span class="line">    text=<span class="literal">True</span>,</span><br><span class="line">    encoding=<span class="string">&#x27;utf-8&#x27;</span>  <span class="comment"># 使用 UTF-8 编码</span></span><br><span class="line">)</span><br><span class="line"><span class="built_in">print</span>(result.stdout)</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>笔记</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+</search>

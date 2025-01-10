@@ -1,0 +1,300 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Git本地远程推送 - 小陈の博客</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Blog,"> 
+    <meta name="description" content=" GitHub 本地配置
+ 配置本地 Git 全局设置
+git config --global user.name &amp;quot;your_github_username&amp;quot;``git con,"> 
+    <meta name="author" content="小陈"> 
+    <link rel="alternative" href="atom.xml" title="小陈の博客" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.ico"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="Git本地远程推送 - 小陈の博客"/>
+    <meta name="twitter:description" content=" GitHub 本地配置
+ 配置本地 Git 全局设置
+git config --global user.name &amp;quot;your_github_username&amp;quot;``git con,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="小陈の博客"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="Git本地远程推送 - 小陈の博客"/>
+    <meta property="og:description" content=" GitHub 本地配置
+ 配置本地 Git 全局设置
+git config --global user.name &amp;quot;your_github_username&amp;quot;``git con,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+<link rel="stylesheet" href="/css/add.css">
+
+    <script>window.searchDbPath = "/search.xml";</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap" rel="stylesheet">
+
+    <!-- 代码块复制 -->
+    <script type="text/javascript" src="/js/clipboard.js"></script>
+
+    <!-- 点击效果 -->
+    
+    <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 999; pointer-events: none;" ></canvas>
+    <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script>
+    <script type="text/javascript" src="/js/fireworks.js"></script>
+    
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">小陈の博客</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="https://wcis314.github.io"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">Git本地远程推送</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <!-- 帖子视图 -->
+
+    <div class="post_cover" >
+        
+            <img src="https://raw.githubusercontent.com/wcis314/blog_img/refs/heads/img/p9.png" />
+        
+        <div class="post_cover_mask"></div>
+        <div class="post_text">
+            <h1>Git本地远程推送</h1>
+            <div>
+                <span>一月 05, 2025</span>
+
+                
+  <ul class="post-tags-list" itemprop="keywords"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/Git/" rel="tag">Git</a></li></ul>
+
+
+            </div>
+        </div>
+    </div>
+
+
+<div class="article">
+    <div class='main'>
+
+        <!-- 帖子视图 -->
+        
+        
+        <!-- 更新时间 -->
+        
+            
+                <div class="updated" style="margin-top: 0px">
+            
+                <div></div>
+                <span>该文章更新于 2025.01.11</span>
+            </div>
+        
+
+        
+            <div class="content markdown">
+        
+        
+            <h2 id="github-本地配置"><a class="markdownIt-Anchor" href="#github-本地配置"></a> GitHub 本地配置</h2>
+<h3 id="配置本地-git-全局设置"><a class="markdownIt-Anchor" href="#配置本地-git-全局设置"></a> 配置本地 Git 全局设置</h3>
+<p><code>git config --global user.name &quot;your_github_username&quot;``git config --global user.email &quot;your_github_email@outlook.com&quot;</code></p>
+<h3 id="创建一个-github-本地仓库"><a class="markdownIt-Anchor" href="#创建一个-github-本地仓库"></a> 创建一个 GitHub 本地仓库</h3>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> e:\NoteBook                  <span class="comment"># 新建一个文件夹, 使用cd进入</span></span><br><span class="line">git init                        <span class="comment"># 仓库初始化</span></span><br><span class="line">git add *                       <span class="comment"># 把本地仓库中的内容全添加</span></span><br><span class="line">git commit -m <span class="string">&quot;first commit&quot;</span>    <span class="comment"># 提交内容, &quot;first commit&quot;是描述, 不会写就随便填</span></span><br><span class="line">git branch -M main              <span class="comment"># </span></span><br><span class="line">git remote add origin git@github.com:RestorerOfTheWorld/NoteBook.git</span><br><span class="line">git push -u origin main         <span class="comment"># 把本地仓库推送到GitHub仓库上</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>新建后，以后可以用下面的命令把日常更新的内容推送到 GitHub 仓库中去</p>
+</blockquote>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git add . </span><br><span class="line">git commit -m <span class="string">&quot;commit&quot;</span></span><br><span class="line">git push</span><br></pre></td></tr></table></figure>
+<h3 id="更新同步本地远程-url"><a class="markdownIt-Anchor" href="#更新同步本地远程-url"></a> 更新同步本地/远程 URL</h3>
+<blockquote>
+<p>如果更新了 GitHub 用户名可以使用下面的命令把本地 Git 的用户名同步成 GitHub 上的</p>
+</blockquote>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git remote -v</span><br><span class="line">git remote set-url origin new_url</span><br><span class="line">git pull origin main</span><br></pre></td></tr></table></figure>
+<h2 id="git-下载"><a class="markdownIt-Anchor" href="#git-下载"></a> Git 下载</h2>
+<p>Windows 下载：<code>winget install Git.Git</code></p>
+<h2 id="linux-下载"><a class="markdownIt-Anchor" href="#linux-下载"></a> Linux 下载</h2>
+<ul>
+<li>
+<p>Debian/Ubuntu：<code>sudo apt install git</code></p>
+</li>
+<li>
+<p>CentOS/Fedora：<code>sudo yum install git 或 sudo dnf install git</code></p>
+</li>
+<li>
+<p>Arch/Manjaro：<code>sudo pacman -S git</code></p>
+</li>
+<li>
+<p>MacOS 下载：<code>brew install git</code></p>
+</li>
+</ul>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="/mp3/夏音-優里.mp3">
+            </audio>
+            
+        </div>
+        
+         <!-- 版权声明 -->
+        
+            <div class="statement">
+  <div><span>作者: </span>小陈</div>
+  <div><span>标题: </span>Git本地远程推送</div>
+  <div><span>链接: </span>
+    <a href="/2025/01/05/Git%E6%9C%AC%E5%9C%B0%E8%BF%9C%E7%A8%8B%E6%8E%A8%E9%80%81/">https://wcis314.github.io/2025/01/05/Git%E6%9C%AC%E5%9C%B0%E8%BF%9C%E7%A8%8B%E6%8E%A8%E9%80%81/</a>
+  </div>
+  <div><span>版权声明: </span>本文采用
+    
+    <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh">CC BY 4.0</a>
+    
+    进行声明
+  </div>
+</div>
+        
+
+        <!-- 结束 -->
+        <p class="end" >-&nbsp;&nbsp;&nbsp;END&nbsp;&nbsp;&nbsp;-</p>
+
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci="Ov23ligduczFjVg1qyrT"
+        data-cs="6235f3ef022b2ceed2274fddfe2f53e9cc3d2e43"
+        data-r="comments"
+        data-o="xiaochen477"
+        data-a="xiaochen477"
+        data-d="true"
+    >查看评论</div>
+
+
+    </div>
+
+    <!-- 悬浮 -->
+    
+    <div class="float">
+        <!-- 目录 -->
+        <div class="directory">
+            <div class="directory_btn float_btn"></div>
+            <div class="directory_list">
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#github-%E6%9C%AC%E5%9C%B0%E9%85%8D%E7%BD%AE"><span class="toc-number">1.</span> <span class="toc-text"> GitHub 本地配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0-git-%E5%85%A8%E5%B1%80%E8%AE%BE%E7%BD%AE"><span class="toc-number">1.1.</span> <span class="toc-text"> 配置本地 Git 全局设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA-github-%E6%9C%AC%E5%9C%B0%E4%BB%93%E5%BA%93"><span class="toc-number">1.2.</span> <span class="toc-text"> 创建一个 GitHub 本地仓库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E5%90%8C%E6%AD%A5%E6%9C%AC%E5%9C%B0%E8%BF%9C%E7%A8%8B-url"><span class="toc-number">1.3.</span> <span class="toc-text"> 更新同步本地&#x2F;远程 URL</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#git-%E4%B8%8B%E8%BD%BD"><span class="toc-number">2.</span> <span class="toc-text"> Git 下载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#linux-%E4%B8%8B%E8%BD%BD"><span class="toc-number">3.</span> <span class="toc-text"> Linux 下载</span></a></li></ol>
+            </div>
+        </div>
+    </div>
+    
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/codeCopy.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+
+</html>

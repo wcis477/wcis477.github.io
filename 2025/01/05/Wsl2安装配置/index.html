@@ -1,0 +1,340 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WSL2安装配置 - 小陈の博客</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Blog,"> 
+    <meta name="description" content=" 安装 WSL2
+
+启用适用于 Linux 的 Windows 子系统
+
+1dism.exe /online /enable-feature /featurename:Microsoft-Windo,"> 
+    <meta name="author" content="小陈"> 
+    <link rel="alternative" href="atom.xml" title="小陈の博客" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.ico"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="WSL2安装配置 - 小陈の博客"/>
+    <meta name="twitter:description" content=" 安装 WSL2
+
+启用适用于 Linux 的 Windows 子系统
+
+1dism.exe /online /enable-feature /featurename:Microsoft-Windo,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="小陈の博客"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="WSL2安装配置 - 小陈の博客"/>
+    <meta property="og:description" content=" 安装 WSL2
+
+启用适用于 Linux 的 Windows 子系统
+
+1dism.exe /online /enable-feature /featurename:Microsoft-Windo,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+<link rel="stylesheet" href="/css/add.css">
+
+    <script>window.searchDbPath = "/search.xml";</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap" rel="stylesheet">
+
+    <!-- 代码块复制 -->
+    <script type="text/javascript" src="/js/clipboard.js"></script>
+
+    <!-- 点击效果 -->
+    
+    <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 999; pointer-events: none;" ></canvas>
+    <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script>
+    <script type="text/javascript" src="/js/fireworks.js"></script>
+    
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">小陈の博客</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="https://wcis314.github.io"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">WSL2安装配置</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <!-- 帖子视图 -->
+
+    <div class="post_cover" >
+        
+            <img src="https://raw.githubusercontent.com/wcis314/blog_img/refs/heads/img/p12.png" />
+        
+        <div class="post_cover_mask"></div>
+        <div class="post_text">
+            <h1>WSL2安装配置</h1>
+            <div>
+                <span>一月 05, 2025</span>
+
+                
+  <ul class="post-tags-list" itemprop="keywords"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/Arch/" rel="tag">Arch</a></li><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/WSL2/" rel="tag">WSL2</a></li><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/Windows/" rel="tag">Windows</a></li></ul>
+
+
+            </div>
+        </div>
+    </div>
+
+
+<div class="article">
+    <div class='main'>
+
+        <!-- 帖子视图 -->
+        
+        
+        <!-- 更新时间 -->
+        
+            
+                <div class="updated" style="margin-top: 0px">
+            
+                <div></div>
+                <span>该文章更新于 2025.01.11</span>
+            </div>
+        
+
+        
+            <div class="content markdown">
+        
+        
+            <h2 id="安装-wsl2"><a class="markdownIt-Anchor" href="#安装-wsl2"></a> 安装 WSL2</h2>
+<ul>
+<li>启用适用于 Linux 的 Windows 子系统</li>
+</ul>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart</span><br></pre></td></tr></table></figure>
+<ul>
+<li>启用虚拟化</li>
+</ul>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart</span><br></pre></td></tr></table></figure>
+<ul>
+<li>启动 Hyper-V</li>
+</ul>
+<p>Windows+R 键，调出运行，键入 control，进入控制面板，进入程序，打开启动或关闭 Windows 功能，勾选 Hyper-V，重启</p>
+<p><a target="_blank" rel="noopener" href="https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi" title="把链接拷贝到浏览器上">下载并安装 X64 的 WSL2 linux 内核升级包</a></p>
+<p>设置 WSL 默认版本</p>
+<p><code>wsl --set-default-version 2</code></p>
+<h2 id="安装-linux"><a class="markdownIt-Anchor" href="#安装-linux"></a> 安装 Linux</h2>
+<p>打开 Store 商店，输入 Arch，下载</p>
+<p>下载完了，打开，输入用户名，密码</p>
+<h2 id="配置-arch"><a class="markdownIt-Anchor" href="#配置-arch"></a> 配置 Arch</h2>
+<h3 id="换源"><a class="markdownIt-Anchor" href="#换源"></a> 换源</h3>
+<p>切换 Arch linux、Arch linux CN 源</p>
+<p><a target="_blank" rel="noopener" href="https://mirrors.ustc.edu.cn/help/">中科大软件源</a></p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> pacman -Syyuu</span><br><span class="line"><span class="built_in">sudo</span> pacman-key --lsign-key <span class="string">&quot;farseerfc@archlinux.org&quot;</span></span><br><span class="line"><span class="built_in">sudo</span> pacman -S archlinuxcn-keyring</span><br><span class="line"><span class="built_in">sudo</span> pacman -S yay</span><br><span class="line"><span class="built_in">sudo</span> passwd root <span class="comment"># 修改root密码</span></span><br></pre></td></tr></table></figure>
+<p>下载 nvim、zsh &amp; ohmyzsh、yay</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> /etc/shells <span class="comment"># 查看zsh是否安装</span></span><br><span class="line"><span class="built_in">sudo</span> pacman -S zsh</span><br><span class="line">git <span class="built_in">clone</span> --depth=1 git@github.com:ryanoasis/nerd-fonts.git</span><br><span class="line"><span class="built_in">cd</span> nerd-fonts</span><br><span class="line">./install.sh</span><br></pre></td></tr></table></figure>
+<h3 id="zsh-ohmyzsh"><a class="markdownIt-Anchor" href="#zsh-ohmyzsh"></a> zsh &amp; ohmyzsh</h3>
+<p>ohmyzsh 安装：</p>
+<ul>
+<li>把 oh-my-zsh 项目 Clone 下来：</li>
+</ul>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh</span><br></pre></td></tr></table></figure>
+<ul>
+<li>复制 .zshrc</li>
+</ul>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cp</span> ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc</span><br></pre></td></tr></table></figure>
+<ul>
+<li>更改你的默认 Shell</li>
+</ul>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chsh -s /bin/zsh</span><br></pre></td></tr></table></figure>
+<p>zsh 插件：</p>
+<ul>
+<li>
+<p>powerlevel10k(主题)</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --depth=1 https://gitee.com/romkatv/powerlevel10k.git <span class="variable">$&#123;ZSH_CUSTOM:-<span class="variable">$HOME</span>/.oh-my-zsh/custom&#125;</span>/themes/powerlevel10k</span><br></pre></td></tr></table></figure>
+<p>把.zshrc 打开，找到 ZSH_THEME，把值改为&quot;powerlevel10k/powerlevel10k&quot;</p>
+</li>
+<li>
+<p>auto-suggestion(自动补全)</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-autosuggestions <span class="variable">$&#123;ZSH_CUSTOM:-~/.oh-my-zsh/custom&#125;</span>/plugins/zsh-autosuggestions</span><br></pre></td></tr></table></figure>
+<p>把.zshrc 打开，找到 plugins=(git)，在 git 后面添加 zsh-autosuggestions</p>
+</li>
+<li>
+<p>syntax highlighting(语法高亮)</p>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-syntax-highlighting.git <span class="variable">$&#123;ZSH_CUSTOM:-~/.oh-my-zsh/custom&#125;</span>/plugins/zsh-syntax-highlighting</span><br></pre></td></tr></table></figure>
+<p>把<code>.zshrc</code> 打开，找到 <code>plugins=(git)</code>，在 <code>git</code> 后面添加 <code>zsh-syntax-highlighting</code></p>
+</li>
+</ul>
+<p>最后<code>source ~/.zshrc</code></p>
+<h3 id="nvim"><a class="markdownIt-Anchor" href="#nvim"></a> nvim</h3>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> pacman -S neovim</span><br><span class="line">git <span class="built_in">clone</span> git@github.com:ayamir/nvimdots.git</span><br><span class="line"><span class="built_in">cd</span> nvimdots/scripts</span><br><span class="line">./install.sh</span><br><span class="line"><span class="comment"># 如果始终无法安装成功，则执行下条命令</span></span><br><span class="line"><span class="built_in">rm</span> -fr ~/.local/share/nvim/site/lazy</span><br></pre></td></tr></table></figure>
+<h3 id="nano-编辑器"><a class="markdownIt-Anchor" href="#nano-编辑器"></a> nano 编辑器</h3>
+<p><code>Ctrl+O</code>:保存，按<strong>回车</strong>保存当前文件</p>
+<p><code>Ctrl+X</code>:退出</p>
+<h2 id="迁移-wsl2"><a class="markdownIt-Anchor" href="#迁移-wsl2"></a> 迁移 WSL2</h2>
+<figure class="highlight bash"><input class="btn-copy" type="image" src="/img/copy.svg" alt="复制" /><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">wsl --shutdown <span class="comment">#关闭所有正在运行的实例</span></span><br><span class="line">wsl -l -v <span class="comment">#查看STATE是否为Stopped</span></span><br><span class="line">wsl --<span class="built_in">export</span> Ubuntu  D:\Ubuntu_WSL2\Ubuntu.tar <span class="comment">#导出Ubuntu到D盘的Ubuntu_WSL2目录并创建一个Ubuntu.tar的归档文件</span></span><br><span class="line">wsl --unregister Ubuntu <span class="comment">#注销Ubuntu</span></span><br><span class="line">wsl --import Ubuntu D:\Ubuntu_WSL2 D:\Ubuntu_WSL2\Ubuntu.tar <span class="comment">#把Ubuntu.tar重新注册为linux发行版</span></span><br><span class="line">Ubuntu config --default-user chpw <span class="comment">#新建一个叫chpw用户</span></span><br></pre></td></tr></table></figure>
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="/mp3/夏音-優里.mp3">
+            </audio>
+            
+        </div>
+        
+         <!-- 版权声明 -->
+        
+            <div class="statement">
+  <div><span>作者: </span>小陈</div>
+  <div><span>标题: </span>WSL2安装配置</div>
+  <div><span>链接: </span>
+    <a href="/2025/01/05/Wsl2%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/">https://wcis314.github.io/2025/01/05/Wsl2%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AE/</a>
+  </div>
+  <div><span>版权声明: </span>本文采用
+    
+    <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh">CC BY 4.0</a>
+    
+    进行声明
+  </div>
+</div>
+        
+
+        <!-- 结束 -->
+        <p class="end" >-&nbsp;&nbsp;&nbsp;END&nbsp;&nbsp;&nbsp;-</p>
+
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci="Ov23ligduczFjVg1qyrT"
+        data-cs="6235f3ef022b2ceed2274fddfe2f53e9cc3d2e43"
+        data-r="comments"
+        data-o="xiaochen477"
+        data-a="xiaochen477"
+        data-d="true"
+    >查看评论</div>
+
+
+    </div>
+
+    <!-- 悬浮 -->
+    
+    <div class="float">
+        <!-- 目录 -->
+        <div class="directory">
+            <div class="directory_btn float_btn"></div>
+            <div class="directory_list">
+                <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-wsl2"><span class="toc-number">1.</span> <span class="toc-text"> 安装 WSL2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-linux"><span class="toc-number">2.</span> <span class="toc-text"> 安装 Linux</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE-arch"><span class="toc-number">3.</span> <span class="toc-text"> 配置 Arch</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8D%A2%E6%BA%90"><span class="toc-number">3.1.</span> <span class="toc-text"> 换源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zsh-ohmyzsh"><span class="toc-number">3.2.</span> <span class="toc-text"> zsh &amp; ohmyzsh</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nvim"><span class="toc-number">3.3.</span> <span class="toc-text"> nvim</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nano-%E7%BC%96%E8%BE%91%E5%99%A8"><span class="toc-number">3.4.</span> <span class="toc-text"> nano 编辑器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%81%E7%A7%BB-wsl2"><span class="toc-number">4.</span> <span class="toc-text"> 迁移 WSL2</span></a></li></ol>
+            </div>
+        </div>
+    </div>
+    
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/codeCopy.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"], linebreaks: { automatic:true }, EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50) },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno",skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']},
+        TeX: {  noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } }, Macros: { href: "{}" } },
+        messageStyle: "none"
+    });
+</script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+
+</html>
